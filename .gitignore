@@ -4,7 +4,7 @@
 /storage/*.key
 /vendor
 /bower_components
-.env
+# .env
 .phpunit.result.cache
 Homestead.json
 Homestead.yaml
