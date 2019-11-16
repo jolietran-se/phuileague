@@ -16,7 +16,7 @@ class Club extends Model
         'playeramount',
         'gender',
         'ages',
-        'club_type',
+        'club_type_id',
         'description'
     ];
 }
