@@ -1,0 +1,30 @@
+{
+  "name": "phuileague",
+  "description": "",
+  "main": "",
+  "authors": [
+    "Phuong Tran <phuongtran99.k60@gmail.com>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/phuongyeol/phuileague",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "public/bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "3.3.6",
+    "chart.js": "chartjs#^2.8.0",
+    "font-awesome": "Font-Awesome#4.7.0",
+    "animate.css": "3.4.0",
+    "hover": "^2.3.1",
+    "jquery": "2.1.4",
+    "jquery-ui": "1.11.4",
+    "wow": "WOW#1.1.2",
+    "slick": "*",
+    "masonry-layout": "masonry#4.2.1",
+    "magnific-popup": "Magnific-Popup#1.1.0"
+  }
+}

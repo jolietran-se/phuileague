@@ -18,3 +18,9 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+// ===== Localization - i18n
+    Route::group(['middleware' => 'locale'], function() {
+        Route::get('change-language/{language}', 'HomeController@changeLanguage')
+            ->name('user.change-language');
+    });
