@@ -25,4 +25,12 @@ class HomeController extends Controller
     {
         return view('home');
     }
+
+    // i18n
+    public function changeLanguage($language)
+    {
+        \Session::put('website_language', $language);
+
+        return redirect()->back();
+    }
 }
