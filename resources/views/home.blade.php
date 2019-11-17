@@ -15,7 +15,7 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="slider-text text-center">
-                                    <h3>Giải pháp đơn giản để tổ chức giải đấu bóng đá</h3>
+                                    <span><h3>Giải pháp đơn giản để tổ chức giải đấu bóng đá</h3><span>
                                     <h6>Hỗ trợ nhiều thể thức thi đấu</h6>
                                     <h6>Hướng dẫn chi tiết điều hành giải đấu</h6>
                                 </div>
@@ -68,8 +68,10 @@
                     <img src="{{ asset('images/logo/format02.png') }}">
                     <h6 class="format-title">Đấu Vòng Tròn</h6>
                     <div class="about-widget">
-                        <p>Hay còn gọi là đá league. Mỗi đội bóng sẽ thi đấu lần lượt với tất các đội bóng khác.</p>
-                        <p>Hình thức này cho phép tùy chỉnh điều lệ xếp hạng</p>
+                        <p>
+                            Hay còn gọi là đá league. Mỗi đội bóng sẽ thi đấu lần lượt với tất các đội bóng khác.
+                            Hình thức này cho phép tùy chỉnh điều lệ xếp hạng.
+                        </p>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -94,7 +96,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class = "management-text text-center">
-                        <h3>Các giải đoạn cơ bản để điều hành một giải đấu</h3>
+                        <h3>Các giai đoạn cơ bản để điều hành một giải đấu</h3>
                     </div>
                     <div class="col-md-4">
                         <span><i class="fa fa-plus-square icon-parent"></i></span>

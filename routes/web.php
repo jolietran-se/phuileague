@@ -15,8 +15,5 @@ Route::get('/', 'HomeController@index')->name('home');
 
 Auth::routes();
 
-// ===== Localization - i18n
-    Route::group(['middleware' => 'locale'], function() {
-        Route::get('change-language/{language}', 'HomeController@changeLanguage')
-            ->name('user.change-language');
-    });
+// ===== Authentication 
+   
