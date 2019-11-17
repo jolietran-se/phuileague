@@ -1,0 +1,93 @@
+/* ------------------------------------
+1. Home Format Area Start Here 
+---------------------------------------*/
+.format-main,
+.format-section {
+    position: relative;
+    overflow: hidden;
+}
+.format-section,
+.format-main .container{
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+.format-main.format-section img{
+    border-radius: 50%;
+    border: 1px solid #ddd;
+    padding: 5px;
+    width: 150px;
+    height: 150px;
+    margin-left: 28%;
+    margin-bottom: 20px;
+}
+.format-main.format-section button{
+    background: #326295;
+    border: 0px;
+    border-radius: 5%;
+    margin-left: 45%;
+    padding: 10px;
+}
+.format-main.format-section button a{
+    color: #fff;
+}
+.format-main.format-section .format-text {
+    margin: 25px;
+}
+.format-main.format-section .format-text p{
+    font-size: 16px;
+    margin: 0;
+}
+.format-main.format-section .format-title{
+    font-size: 20px;
+    text-align: center;
+}
+
+/* ------------------------------------
+ Home Management Area Start Here 
+---------------------------------------*/
+.management-section
+.management-main{
+    position: relative;
+    overflow: hidden;
+}
+.management-section .container{
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+.management-main.management-section .management-text {
+    margin: 25px;
+}
+.management-main.management-section .management-text p{
+    font-size: 16px;
+    margin: 0;
+}
+.management-main.management-section .management-title{
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+.management-main.management-section button{
+    background: #326295;
+    border: 0px;
+    border-radius: 5%;
+    margin-left: 45%;
+    padding: 10px;
+}
+.management-main.management-section button a{
+    color: #fff;
+}
+.management-main.management-section .col-md-12{
+    padding-bottom: 20px;
+}
+.management-main.management-section span i{
+    padding-left: 20%;
+    font-size: 80px;
+    color: #3bbf1a;
+    margin-bottom: 20px;
+}
+.management-main.management-section .about-widget ul li{
+    padding: 5px;
+}
+.management-main.management-section .about-widget ul i{
+    margin-left: 20px;
+    margin-right: 5px;
+}

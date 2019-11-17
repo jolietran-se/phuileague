@@ -605,7 +605,6 @@ ul {
   margin-bottom: 30px;
 }
 .menu-sticky.sticky {
-  background-color: rgba(0, 0, 0, 0.95);
   position: fixed !important;
   z-index: 9999;
   width: 100%;
@@ -1229,9 +1228,9 @@ body .modal-backdrop {
 .rs-menu ul ul li a {
   color: #ffffff;
 }
-.rs-menu {
+/* .rs-menu {
   padding-right: 35px;
-}
+} */
 .search {
   position: absolute;
   right: 0;
@@ -1437,10 +1436,14 @@ body .modal-backdrop {
   margin-top: 20%;
 }
 .slider-main.slider-section4 .slider-text {
+  color: #fff;
   margin-top: 0;
 }
-.slider-main.slider-section4 .slider-text h1 {
-  font-size: 60px;
+.slider-main.slider-section4 .slider-text h3 {
+  color: #fff;
+}
+.slider-main.slider-section4 .slider-text h6 {
+  color: #fff;
 }
 .slider-main.slider-section4 .slider-text h1 span {
   color: #fbc02d;
