@@ -1,0 +1,20 @@
+/* ------------------------------------
+User Profile Area Start Here 
+---------------------------------------*/
+.profile-section
+.profile-main{
+    position: relative;
+    overflow: hidden;
+}
+.profile-section.profile-main .profile-text h4{
+    margin-top: 26px;
+}
+.profile-section.profile-section .profile-avatar img{
+    border-radius: 50%;
+    border: 1px solid #ddd;
+    padding: 5px;
+    width: 150px;
+    height: 150px;
+    margin-left: 28%;
+    margin-bottom: 20px;
+}

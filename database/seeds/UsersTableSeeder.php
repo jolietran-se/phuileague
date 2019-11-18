@@ -18,9 +18,10 @@ class UsersTableSeeder extends Seeder
         // ]);
 
         DB::table('users')->insert([
-            'name' => 'Phuong tran',
+            'username' => 'phuongtran',
             'email' => 'phuongtran99.k60@gmail.com',
             'password' => bcrypt('12345678'),
+            'facebook_link' => 'https://www.facebook.com/phuongyeol'
         ]);
     }
 }

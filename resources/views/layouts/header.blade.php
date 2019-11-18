@@ -6,13 +6,14 @@
                     <div class="header-top-left">                            
                         <ul>
                             <li><a href="mailto:{{ trans('header.owner_mail') }}"><i class="fa fa-envelope-o" aria-hidden="true"></i> {{ trans('header.owner_mail') }}</a></li>
-                            <li><img src="images/logo/flag_vietnam.jpg" alt="Logo">
-                                <a href="{!! route('user.change-language', ['vi']) !!}">Việt Nam
+                            <li><img src="{{ asset('images/logo/flag_vietnam.jpg') }}" alt="Logo">
+                                {{-- <a href="{!! route('user.change-language', ['vi']) !!}"> --}}
+                                <a href="#">Việt Nam
                                     <i class="fa fa-angle-down" aria-hidden="true"></i>
                                 </a>
                                 <ul>
-                                    <li><img src="images/logo/flag_england.png" alt="Logo">
-                                        <a href="{!! route('user.change-language', ['en']) !!}">English</a>
+                                    <li><img src="{{ asset('images/logo/flag_england.png') }}" alt="Logo">
+                                        <a href="#">English</a>
                                     </li>
                                 </ul>
                             </li>
@@ -75,16 +76,16 @@
                                     @endif
                                 @else
                                     <li class="menu-item-has-children">
-                                        <a>{{ Auth::user()->name }}</a>
+                                        <a>{{ Auth::user()->username }}</a>
                                         <ul class="sub-menu">
-                                            <li><a href="#">{{ trans('header.your_account') }}</a></li> 
+                                            <li><a href="{{ route('user.detail', ['username' => Auth::user()->username]) }}">{{ trans('header.your_account') }}</a></li> 
                                             <li><a href="#">{{ trans('header.your_tournament') }}</a></li> 
                                             <li><a href="#">{{ trans('header.your_club') }}</a></li>
                                             <li>
                                                 <a href="{{ route('logout') }}"
                                                     onclick="event.preventDefault();
                                                                     document.getElementById('logout-form').submit();">
-                                                    {{ __('Logout') }}
+                                                    {{ __('Đăng xuất') }}
                                                 </a>
                                                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                                     @csrf
@@ -93,9 +94,6 @@
                                         </ul>
                                     </li>
                                 @endguest
-
-                                <!-- Liên hệ --> 
-                                {{-- <li><a href="#">{{ trans('header.contact') }}</a></li> --}}
                             </ul>
                        </nav>
                    </div>
