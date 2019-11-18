@@ -99,38 +99,44 @@
                         <h3>Các giai đoạn cơ bản để điều hành một giải đấu</h3>
                     </div>
                     <div class="col-md-4">
-                        <span><i class="fa fa-plus-square icon-parent"></i></span>
-                        <h6 class="management-title">Giai đoạn 1: Tạo giải đấu</h6>
-                        <div class="about-widget">
-                            <ul>
-                                <li><i class="fa fa-angle-right"></i>Loại trực tiếp</li>
-                                <li><i class="fa fa-angle-right"></i>Đấu vòng tròn</li>
-                                <li><i class="fa fa-angle-right"></i>Hai giai đoạn</li>
-                            </ul>
+                        <div>
+                            <span><i class="fa fa-plus-square icon-parent"></i></span>
+                            <h6 class="management-title">Giai đoạn 1: Tạo giải đấu</h6>
+                            <div class="about-widget">
+                                <ul>
+                                    <li><i class="fa fa-angle-right"></i>Loại trực tiếp</li>
+                                    <li><i class="fa fa-angle-right"></i>Đấu vòng tròn</li>
+                                    <li><i class="fa fa-angle-right"></i>Hai giai đoạn</li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <span><i class="icon-parent fa fa-cogs"></i></span>
-                        <h6 class="management-title">Giai đoạn 2: Tùy chỉnh giải đấu</h6>
-                        <div class="about-widget">
-                            <ul>
-                                <li><i class="fa fa-angle-right"></i>Nhập điều lệ, hình và đia điểm</li>
-                                <li><i class="fa fa-angle-right"></i>Nhập thông tin của đội/cầu thủ</li>
-                                <li><i class="fa fa-angle-right"></i>Mời người tham gia</li>
-                                <li><i class="fa fa-angle-right"></i>Lập lịch đấu</li>
-                                <li><i class="fa fa-angle-right"></i>Tùy chỉnh giai đoạn</li>
-                            </ul>
+                        <div>
+                            <span><i class="icon-parent fa fa-cogs"></i></span>
+                            <h6 class="management-title">Giai đoạn 2: Tùy chỉnh giải đấu</h6>
+                            <div class="about-widget">
+                                <ul>
+                                    <li><i class="fa fa-angle-right"></i>Nhập điều lệ, hình và đia điểm</li>
+                                    <li><i class="fa fa-angle-right"></i>Nhập thông tin của đội/cầu thủ</li>
+                                    <li><i class="fa fa-angle-right"></i>Mời người tham gia</li>
+                                    <li><i class="fa fa-angle-right"></i>Lập lịch đấu</li>
+                                    <li><i class="fa fa-angle-right"></i>Tùy chỉnh giai đoạn</li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <span><i class="icon-parent fa fa-tasks"></i></span>
-                        <h6 class="management-title">Giai đoạn 3: Điều hành</h6>
-                        <div class="about-widget">
-                            <ul>
-                                <li><i class="fa fa-angle-right"></i>Kích hoạt</li>
-                                <li><i class="fa fa-angle-right"></i>Nhập tỷ số</li>
-                                <li><i class="fa fa-angle-right"></i>Xem thống kê</li>
-                            </ul>   
+                        <div>
+                            <span><i class="icon-parent fa fa-tasks"></i></span>
+                            <h6 class="management-title">Giai đoạn 3: Điều hành</h6>
+                            <div class="about-widget">
+                                <ul>
+                                    <li><i class="fa fa-angle-right"></i>Kích hoạt</li>
+                                    <li><i class="fa fa-angle-right"></i>Nhập tỷ số</li>
+                                    <li><i class="fa fa-angle-right"></i>Xem thống kê</li>
+                                </ul>   
+                            </div>
                         </div>
                     </div>
                 </div>

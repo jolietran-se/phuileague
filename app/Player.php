@@ -18,7 +18,6 @@ class Player extends Model
         'country',
         'uniform_number',
         'uniform_name'
-
     ];
     
 

@@ -21,8 +21,9 @@ mix.styles(['resources/sass/magnific-popup.css'], 'public/css/magnific-popup.css
    .styles(['resources/sass/rsmenu-transitions.css'], 'public/css/rsmenu-transitions.css')
    .styles(['resources/sass/slick.css'], 'public/css/slick.css')
    .styles(['resources/sass/style.css'], 'public/css/style.css')
+   .styles(['resources/sass/time-circles.css'], 'public/css/time-circles.css')
    .styles(['resources/sass/home.css'], 'public/css/home.css')
-   .styles(['resources/sass/time-circles.css'], 'public/css/time-circles.css');
+   .styles(['resources/sass/user.css'], 'public/css/user.css');
 
 mix.js('resources/js/main.js', 'public/js/main.js')
    .js('resources/js/owl.carousel.min.js', 'public/js/owl.carousel.min.js')
