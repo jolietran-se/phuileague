@@ -20,9 +20,9 @@ Auth::routes();
         Route::group(['middleware' => 'auth'], function () {
             Route::get('/{username}', 'UserController@detail')->name('user.detail');
             Route::post('/cap-nhat/{username}', 'UserController@update')->name('user.update');
+            Route::post('/crop-image', 'UserController@imageCrop')->name('image.crop');
         });
     });
-    Route::post('/crop-image', 'UserController@imageCrop')->name('image.crop');
 
 /* =====Giải đấu===== */
     Route::group(['prefix' => 'league'], function () {

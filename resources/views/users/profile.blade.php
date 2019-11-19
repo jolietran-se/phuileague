@@ -4,7 +4,6 @@
     <link rel="stylesheet" href="{{ asset('css/user.css') }}">
     <link rel="stylesheet" href="{{ asset('bower_components/Croppie/croppie.css') }}">
     <link rel="stylesheet" href="{{ asset('bower_components/toastr/toastr.min.css') }}">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
 @endsection
 
 @section('content')
@@ -55,7 +54,7 @@
                                 {{ csrf_field() }}
 
                                 <div class="col-md-4">
-                                    <div class="profile-avatar"> <!-- class="profile-avatar" -->
+                                    <div class="profile-avatar">
                                         @if(isset($user->avatar))
                                             <div id="preview-crop-image">
                                                 <img  src="{{ asset('/storage/avatars').'/'.$user->avatar }}" >
@@ -181,8 +180,6 @@
                 });
             });
         });
-
-        
     </script>
     <script>
         /* Notification with Toastr*/
