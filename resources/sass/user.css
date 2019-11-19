@@ -1,20 +1,63 @@
 /* ------------------------------------
 User Profile Area Start Here 
 ---------------------------------------*/
-.profile-section
-.profile-main{
+div.profile-section.profile-main{
     position: relative;
     overflow: hidden;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 .profile-section.profile-main .profile-text h4{
     margin-top: 26px;
 }
+.profile-section.profile-section .profile-avatar{
+    margin-left: 30% ;
+}
+.profile-section.profile-section button.set-avatar{
+    margin-left: 21% ;
+    margin-top: 10px;
+    background: none;
+    color: #326295;
+}
 .profile-section.profile-section .profile-avatar img{
     border-radius: 50%;
-    border: 1px solid #ddd;
+    border: 1px solid #326295;
     padding: 5px;
-    width: 150px;
-    height: 150px;
-    margin-left: 28%;
+    width: 250px;
+    height: 250px;
+}
+p.error-danger{
+    color:red;
+    font-size: 13px;
+}
+a.btn.btn-link {
+    width: 300px;
+    line-height: 20px;
+    text-decoration: none;
+    padding: 5px;
+}
+.profile-section.profile-section .submit{
+    margin-left: 34.5%;
+}
+strong.text-center{
+    margin-left: 190px;
+}
+input[type=file] {
+    width: 100px;
+    overflow: hidden;
+    margin-top: 10px;
+    margin-left: 220px;
+}
+p.error-danger.error-avatar {
+    margin-left: 45px;
+}
+
+/* ------------------------------------
+Create Tourament Area Start Here 
+---------------------------------------*/
+div.tournament-section.tournament-main{
+    position: relative;
+    overflow: hidden;
+    margin-top: 20px;
     margin-bottom: 20px;
 }
