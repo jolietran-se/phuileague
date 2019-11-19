@@ -30,18 +30,9 @@
     <!-- style css -->
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <!-- responsive css -->
+    
     {{-- <link rel="shortcut icon" type="image/x-icon" href="'images/fav.png') }}">     --}}
     <link rel="stylesheet" href="{{ asset('css/responsive.css') }}">
-    
-    {{-- Scripts, Fonts, Styles Header in View --}}
-    @yield('head')
-</head>
-<body>
-    @include('layouts.header') <!-- Header Menu -->
-    <div class="main">
-        @yield('content')
-    </div>
-
     <!-- Jquery js -->
     <script src="{{ asset('bower_components/jquery/dist/jquery.min.js') }}"></script>
     <!-- Menu js -->
@@ -57,7 +48,7 @@
     <!-- Slick js ******************* -->
     <script src="{{ asset('bower_components/slick/dist/slick.min.js') }}"></script> 
     <!-- masonry js -->
-    <script src="{{ asset('bower_components/masonry-layout/masonry.js') }}"></script>
+    {{-- <script src="{{ asset('bower_components/masonry-layout/masonry.js') }}"></script> --}}
     <!-- magnific-popup js -->
     <!-- owl.carousel js -->
     <script src="{{ asset('js/owl.carousel.min.js') }}"></script>
@@ -67,6 +58,14 @@
     <!-- main js -->
     <script src="{{ asset('js/main.js') }}"></script>
     
+    {{-- Scripts, Fonts, Styles Header in View --}}
+    @yield('head')
+</head>
+<body>
+    @include('layouts.header') <!-- Header Menu -->
+    <div class="main">
+        @yield('content')
+    </div>
     @include('layouts.footer')
     @yield('foot')
 </body>
