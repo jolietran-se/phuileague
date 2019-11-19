@@ -50,9 +50,9 @@
                                 <li class="current-menu-item current_page_item"><a href="{{ route('home') }}">{{ trans('header.home') }}</a></li>
                                 
                                 <!-- Tìm giải đấu -->
-                                <li><a href="#">{{ trans('header.tournament_search') }}</a></li>
+                                <li><a href="{{ route('tournament.list') }}">{{ trans('header.tournament_search') }}</a></li>
                                 <!-- Tạo giải đấu -->
-                                <li><a href="#">{{ trans('header.tournament_create') }}</a></li>
+                                <li><a href="{{ route('tournament.create') }}">{{ trans('header.tournament_create') }}</a></li>
                                 <!-- Tìm đội bóng -->
                                 <li><a href="#">{{ trans('header.club_search') }}</a></li>
                                 <!-- Tạo đội bóng -->

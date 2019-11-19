@@ -15,13 +15,24 @@ Route::get('/', 'HomeController@index')->name('home');
 
 Auth::routes();
 
-// ===== Authentication 
-Route::group(['middleware' => 'auth'], function () {
-
-    /* Thông tin cá nhân */
-    Route::group(['prefix' => 'tai-khoan-ca-nhan'], function () {
-        Route::get('/{username}', 'UserController@detail')->name('user.detail');
-        Route::post('/cap-nhat/{username}', 'UserController@update')->name('user.update');
+/* =====Thông tin cá nhân===== */
+    Route::group(['prefix' => 'account'], function () {
+        Route::group(['middleware' => 'auth'], function () {
+            Route::get('/{username}', 'UserController@detail')->name('user.detail');
+            Route::post('/cap-nhat/{username}', 'UserController@update')->name('user.update');
+        });
     });
-});
+    Route::post('/crop-image', 'UserController@imageCrop')->name('image.crop');
+
+/* =====Giải đấu===== */
+    Route::group(['prefix' => 'league'], function () {
+        // list tournament
+        Route::get('/', 'TournamentController@index')->name('tournament.list');
+        // create tournament
+        Route::group(['middleware' => 'auth'], function () {
+            Route::get('/create-tournament', 'TournamentController@create')->name('tournament.create');
+        });
+    });
+
+
    
