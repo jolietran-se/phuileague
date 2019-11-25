@@ -162,7 +162,7 @@
             }).then(function (img) {
                 // console.log(username);
                 $.ajax({
-                    url: '{!! route("image.crop") !!}',
+                    url: '{!! route("user.crop-avatar") !!}',
                     dataType : 'json',
                     type: 'post',
                     data: {
@@ -186,6 +186,9 @@
         toastr.options.positionClass = 'toast-bottom-right';
         @if(Session::has('update-account'))
             toastr.success("{{ Session::get('update-account') }}");
+        @endif 
+        @if(Session::has('update-avatar'))
+            toastr.success("{{ Session::get('update-avatar') }}");
         @endif    
     </script>
 @endsection

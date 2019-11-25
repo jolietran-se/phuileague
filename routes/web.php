@@ -20,7 +20,11 @@ Auth::routes();
         Route::group(['middleware' => 'auth'], function () {
             Route::get('/{username}', 'UserController@detail')->name('user.detail');
             Route::post('/cap-nhat/{username}', 'UserController@update')->name('user.update');
-            Route::post('/crop-image', 'UserController@imageCrop')->name('image.crop');
+            Route::post('/crop-avatar', 'UserController@imageCrop')->name('user.crop-avatar');
+
+            Route::get('/{username}/tournaments', 'UserController@getTournaments')->name('user.tournaments');
+            Route::get('/{username}/clubs', 'UserController@getClubs')->name('user.clubs');
+
         });
     });
 
@@ -30,7 +34,9 @@ Auth::routes();
         Route::get('/', 'TournamentController@index')->name('tournament.list');
         // create tournament
         Route::group(['middleware' => 'auth'], function () {
+            Route::post('/crop-logo', 'TournamentController@imageCrop')->name('tournament.crop-logo');
             Route::get('/create-tournament', 'TournamentController@create')->name('tournament.create');
+            Route::post('/create-tournament', 'TournamentController@store')->name('tournament.store');
         });
     });
 

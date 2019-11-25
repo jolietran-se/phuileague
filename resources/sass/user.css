@@ -61,3 +61,134 @@ div.tournament-section.tournament-main{
     margin-top: 20px;
     margin-bottom: 20px;
 }
+div.create-tournament {
+    margin-left:170px;
+}
+.page-header{
+    margin-top: 0px;
+}
+.page-header small{
+    font-size: 16px;
+}
+.page-header h4{
+    margin-bottom: 10px;
+}
+label{
+    margin-bottom: 0px;
+}
+.logo-tournament img{
+    width: 300px;
+    border-radius: 50%;
+    border: 1px solid #326295;
+    padding: 5px;
+}
+.set-logo-tournament{
+    margin-top: 5px;
+    width: 100%;
+}
+div.tournament-section.tournament-main .submit{
+    width: 100%;
+}
+    /* Style tab links */
+    .tablink {
+        background-color: #d87474;
+        /* color: white; */
+        float: left;
+        border: 1px solid #fff ;
+        outline: none;
+        cursor: pointer;
+        /* padding: 5px; */
+        font-size: 17px;
+        width: 33.333%;
+    }
+    
+    .tablink img{
+        width: 50px;
+    }
+    
+    /* .tablink:hover {
+        background-color: #777;
+    } */
+  
+    /* Style the tab content (and add height:100% for full page content) */
+    .tabcontent {
+        color: #505050;
+        display: none;
+        padding: 80px 20px 20px 20px;
+        height: 100%;
+        font-size: 14px;
+        border:1px solid #326295;
+    }
+    
+    #Home {background-color: #fff;}
+    #News {background-color: #fff;}
+    #Contact {background-color: #fff;}
+
+    /* optionsRound CSS  */
+    label.tabOption{
+        background-color: #fff;
+        color: #111111;
+        float: left;
+        border: 1px solid #326295 ;
+        outline: none;
+        cursor: pointer;
+        padding: 5px;
+        font-size: 17px;
+    }
+    label.btn.active{
+        background-color: #326295;
+        color: #fff;
+    }
+
+    /* allowRegister CSS for checkbox */
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+    }
+    .switch input { 
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 26px;
+        width: 26px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+    input:checked + .slider {
+        background-color: #2196F3;
+    }
+    input:focus + .slider {
+        box-shadow: 0 0 1px #2196F3;
+    }
+    input:checked + .slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+    }
+    /* Rounded sliders */
+    .slider.round {
+        border-radius: 34px;
+    }
+    .slider.round:before {
+        border-radius: 50%;
+    }

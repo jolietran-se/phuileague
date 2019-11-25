@@ -7,14 +7,12 @@ use App\User;
 use App\Http\Requests\ProfileRequest;
 use Image;
 use Log;
-use Alert;
 use Session;
 
 class UserController extends Controller
 {
     public function detail($username)
     {
-        
         $user = User::where('username', $username)->first();
 
         return view('users.profile', compact('user'));
@@ -28,7 +26,6 @@ class UserController extends Controller
         $user->phone = $request->phone;
         $user->email = $request->email;
         $user->facebook_link = $request->facebook_link;
-
         $user->save();
 
         if($user){
@@ -41,7 +38,6 @@ class UserController extends Controller
     public function imageCrop(Request $request)
     {   
 		// Log::info('start ');
-
         $image_file = $request->image;
         list($type, $image_file) = explode(';', $image_file);
         list(, $image_file)      = explode(',', $image_file);
@@ -54,10 +50,7 @@ class UserController extends Controller
         $user->avatar = $image_name;
         $user->save();
 
-		// Log::info('end ');
-        if($image_name){
-            Session::flash('update-avatar', 'Cập nhật thành công!');
-        }
+        Session::flash('update-avatar', 'Cập nhật thành công!');
 
         return response()->json(['status'=>true]);
     }
