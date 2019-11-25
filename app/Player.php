@@ -19,6 +19,9 @@ class Player extends Model
         'uniform_number',
         'uniform_name'
     ];
-    
+    //Player n-1 Club
+    public function club(){
+        return $this->belongsTo('App\User', 'owner_id');
+    }
 
 }

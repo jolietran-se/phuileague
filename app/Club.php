@@ -19,4 +19,15 @@ class Club extends Model
         'club_type_id',
         'description'
     ];
+
+    // Club 1-n Player
+    public function players(){
+        return $this->hasMany('App\Player');
+    }
+
+    // Club n - 1 User
+    public function user(){
+        return $this->belongsTo('App\User', 'owner_id');
+    }
+
 }
