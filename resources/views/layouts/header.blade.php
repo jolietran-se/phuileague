@@ -79,8 +79,8 @@
                                         <a>{{ Auth::user()->username }}</a>
                                         <ul class="sub-menu">
                                             <li><a href="{{ route('user.detail', ['username' => Auth::user()->username]) }}">{{ trans('header.your_account') }}</a></li> 
-                                            <li><a href="#">{{ trans('header.your_tournament') }}</a></li> 
-                                            <li><a href="#">{{ trans('header.your_club') }}</a></li>
+                                            <li><a href="{{ route('user.tournaments',['username' => Auth::user()->username]) }}">{{ trans('header.your_tournament') }}</a></li> 
+                                            <li><a href="{{ route('user.clubs',['username' => Auth::user()->username]) }}">{{ trans('header.your_club') }}</a></li>
                                             <li>
                                                 <a href="{{ route('logout') }}"
                                                     onclick="event.preventDefault();

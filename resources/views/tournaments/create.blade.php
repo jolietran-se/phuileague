@@ -351,7 +351,7 @@
                 y.style.background = "#326295";
                 z.style.background = "#d87474";
                 $("#02").slideDown();
-                $("#03").text();
+                $("#03").hide();
                 var type = $("#02").attr("id");
                 tournament_type = "<input type='number' name='tournament_type_id' value='"+type+"' hidden>";
                 console.log(tournament_type);
@@ -374,14 +374,14 @@
         /*Register Permission*/
         $("#register_permission").click(function () {
             if ($(this).is(":checked")) {
-                $("#allow").show();
+                $("#allow").slideDown();
                 $("#reject").hide();
             } else {
                 $("#allow").hide();
                 $("#reject").show();
             }
         });
-
+        /* Register Date Format */
         $(document).ready(function(){
             var date_input=$('input[name="register_date"]'); //our date input has the name "date"
             var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";

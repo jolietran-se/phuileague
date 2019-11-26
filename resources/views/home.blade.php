@@ -82,7 +82,7 @@
                     </div>
                 </div>
                 <div class="col-md-12">
-                    <button type="submit"><a href="#">Tạo giải đấu</a></button>
+                    <button type="submit"><a href="{{ route('tournament.create') }}">Tạo giải đấu</a></button>
                 </div>
             </div>
         </div>
