@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\User;
 use App\Http\Requests\ProfileRequest;
+use App\User;
+use App\Tournament;
+use App\Club;
 use Image;
 use Log;
 use Session;
@@ -18,6 +20,7 @@ class UserController extends Controller
         return view('users.profile', compact('user'));
     }
 
+    /* Cập nhật thông tin */ 
     public function update($username, ProfileRequest $request)
     {
         $user = User::where('username', $username)->first();
@@ -35,9 +38,9 @@ class UserController extends Controller
         return redirect()->route('user.detail', ['username' => $user->username]);
     }
 
+    /* Cắt và tải lên avatar */
     public function imageCrop(Request $request)
     {   
-		// Log::info('start ');
         $image_file = $request->image;
         list($type, $image_file) = explode(';', $image_file);
         list(, $image_file)      = explode(',', $image_file);
@@ -55,4 +58,23 @@ class UserController extends Controller
         return response()->json(['status'=>true]);
     }
 
+    /* Hiển thị danh sách giải đấu */
+    public function getTournaments($username)
+    {
+        $user = User::where('username', $username)->first();
+
+        $tournaments = Tournament::where('owner_id', $user->id)->get();
+
+        return view('users.tournaments', compact('user', 'tournaments'));
+    }
+
+    /* Hiển thị danh sách câu lạc bộ */
+    public function getClubs($username)
+    {
+        $user = User::where('username', $username)->first();
+
+        $clubs = Club::where('owner_id', $user->id)->get();
+
+        return view('users.clubs', compact('user', 'clubs'));
+    }
 }

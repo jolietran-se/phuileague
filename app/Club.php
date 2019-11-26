@@ -17,7 +17,8 @@ class Club extends Model
         'gender',
         'ages',
         'club_type_id',
-        'description'
+        'description',
+        'slug',
     ];
 
     // Club 1-n Player

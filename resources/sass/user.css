@@ -86,44 +86,37 @@ label{
     margin-top: 5px;
     width: 100%;
 }
-div.tournament-section.tournament-main .submit{
+div.tournament-section.tournament-main .submit-create{
     width: 100%;
 }
     /* Style tab links */
     .tablink {
         background-color: #d87474;
-        /* color: white; */
+        color: white;
         float: left;
         border: 1px solid #fff ;
         outline: none;
         cursor: pointer;
-        /* padding: 5px; */
-        font-size: 17px;
+        font-size: 16px;
         width: 33.333%;
+        padding:5px;
     }
-    
     .tablink img{
         width: 50px;
     }
     
-    /* .tablink:hover {
-        background-color: #777;
-    } */
-  
     /* Style the tab content (and add height:100% for full page content) */
-    .tabcontent {
+    div#tabcontent {
         color: #505050;
-        display: none;
-        padding: 80px 20px 20px 20px;
+        padding: 20px 20px 20px 20px;
+        margin-bottom: 20px;
         height: 100%;
         font-size: 14px;
-        border:1px solid #326295;
+        border-left:1px solid #326295;
+        border-right:1px solid #326295;
+        border-bottom:1px solid #326295;
     }
     
-    #Home {background-color: #fff;}
-    #News {background-color: #fff;}
-    #Contact {background-color: #fff;}
-
     /* optionsRound CSS  */
     label.tabOption{
         background-color: #fff;
@@ -192,3 +185,148 @@ div.tournament-section.tournament-main .submit{
     .slider.round:before {
         border-radius: 50%;
     }
+    /* Input checked show */
+    .required{
+        color:#b80000d6;
+    }
+    .none{
+        display: none;
+    }
+    input#register_permission{
+        height: 20px;
+        width: 20px;
+    }
+    input:checked {
+        height: 20px;
+        width: 20px;
+    }
+/* ------------------------------------
+List Tournament Area Start Here 
+---------------------------------------*/
+.header-profile{
+    color: #111;
+    padding: 10px 10px 0px 10px;
+}
+.header-profile #header-information {
+    margin-bottom: 10px;
+}
+.header-profile a h5 strong{ 
+    color: #337ab7;
+}
+.header-avatar{
+    width: 150px;
+    border-radius: 50%;
+    border: 1px solid #326295;
+    padding: 5px;
+}
+.header-detail{
+    padding-top: 30px;
+}
+.tablist{
+    margin-top: 10px;
+}
+.tablist .nav-tabs li a{
+    color: #337ab7;
+}
+.list-section.list-main .container .media{
+    margin: 10px;
+    padding: 5px;
+    border: 1px solid #337ab7;
+}
+div.media-left{
+    width: 10%;
+}
+h1, h2, h3, h4, h5, h6{
+    margin-bottom: 5px;
+}
+p{
+    margin-bottom: 5px;
+}
+
+/* ------------------------------------
+Setting Tournament Area Start Here 
+---------------------------------------*/
+.setting-section.setting-main{
+    padding: 35px 0px 35px 0px;
+}
+.nav>li>a {
+    padding: 10px 10px;
+}
+.header-tournament{
+    padding: 10px 0px 0px 0px;
+    background-color: #ece1df47;
+}
+.header-logo{
+    border: 1px solid #ccc;
+    padding: 5px;
+}
+small.header-text{
+    font-size: 14px;
+}
+
+/* Tablist header Style*/
+#tablist-header ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    background-color: #fff;
+}
+#tablist-header .nav-tabs {
+    border-bottom: 3px solid #326295;
+}
+#tablist-header ul li a {
+    display: block;
+    color: #000;
+    text-decoration: none;
+    border: none;
+    border-radius: 0px;
+}
+  
+/* Change the link color on hover */
+#tablist-header ul li a:hover {
+    background-color: #555;
+    color: white;
+}
+#tablist-header ul li.active {
+    background-color: #326295;
+    color: white;
+}
+#tablist-header ul li.active a{
+    background-color: #326295;
+    color: white;
+}
+
+/* Tablist Stting Style*/
+#tablist-setting ul {
+    list-style-type: none;
+    margin: -15px;
+    padding: 0;
+    background-color: #fff;
+    border: 1px solid #555;
+}
+#tablist-setting ul li {
+    border-bottom: 1px solid #555;
+}
+#tablist-setting ul li:last-child{
+    border-bottom: none;
+}
+#tablist-setting ul li a {
+    display: block;
+    color: #000;
+    text-decoration: none;
+    border: none;
+    border-radius: 0px;
+}
+  
+/* Change the link color on hover */
+#tablist-setting ul li a:hover {
+    background-color: #555;
+    color: white;
+    
+}
+#tablist-setting ul li.active {
+    background-color: #fbc02d;
+}
+#tablist-setting ul li.active a{
+    background-color: #fbc02d;
+}

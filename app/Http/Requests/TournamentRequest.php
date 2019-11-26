@@ -37,6 +37,7 @@ class TournamentRequest extends FormRequest
             'score_win' => 'bail|required_unless:tournament_type_id,01',
             'score_draw' => 'bail|required_unless:tournament_type_id,01',
             'score_lose' => 'bail|required_unless:tournament_type_id,01',
+            'register_date'=> 'bail|required_if:register_permission, on',
         ];
     }
 }

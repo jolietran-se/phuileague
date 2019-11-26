@@ -25,7 +25,9 @@ class Tournament extends Model
         'score_draw',
         'score_lose',
         'register_permission',
-        'register_date'
+        'register_date',
+        'status',
+        'slug',
     ];
 
     // Tournament n-1 User
