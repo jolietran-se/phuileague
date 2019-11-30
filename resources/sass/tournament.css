@@ -1,0 +1,275 @@
+/* ------------------------------------
+Create Tourament Area Start Here 
+---------------------------------------*/
+div.tournament-section.tournament-main{
+    position: relative;
+    overflow: hidden;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+div.create-tournament {
+    margin-left:170px;
+}
+.page-header{
+    margin-top: 0px;
+}
+.page-header small{
+    font-size: 16px;
+}
+.page-header h4{
+    margin-bottom: 10px;
+}
+label{
+    margin-bottom: 0px;
+}
+.logo-tournament img{
+    width: 300px;
+    border-radius: 50%;
+    border: 1px solid #326295;
+    padding: 5px;
+}
+.set-logo-tournament{
+    margin-top: 5px;
+    width: 100%;
+}
+div.tournament-section.tournament-main .submit-create{
+    width: 100%;
+}
+    /* Style tab links */
+    .tablink {
+        background-color: #d87474;
+        color: white;
+        float: left;
+        border: 1px solid #fff ;
+        outline: none;
+        cursor: pointer;
+        font-size: 16px;
+        width: 33.333%;
+        padding:5px;
+    }
+    .tablink img{
+        width: 50px;
+    }
+    
+    /* Style the tab content (and add height:100% for full page content) */
+    div#tabcontent {
+        color: #505050;
+        padding: 20px 20px 20px 20px;
+        margin-bottom: 20px;
+        height: 100%;
+        font-size: 14px;
+        border-left:1px solid #326295;
+        border-right:1px solid #326295;
+        border-bottom:1px solid #326295;
+    }
+    
+    /* optionsRound CSS  */
+    label.tabOption{
+        background-color: #fff;
+        color: #111111;
+        float: left;
+        border: 1px solid #326295 ;
+        outline: none;
+        cursor: pointer;
+        padding: 5px;
+        font-size: 17px;
+    }
+    label.btn.active{
+        background-color: #326295;
+        color: #fff;
+    }
+
+    /* allowRegister CSS for checkbox */
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+    }
+    .switch input { 
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 26px;
+        width: 26px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+    input:checked + .slider {
+        background-color: #2196F3;
+    }
+    input:focus + .slider {
+        box-shadow: 0 0 1px #2196F3;
+    }
+    input:checked + .slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+    }
+    /* Rounded sliders */
+    .slider.round {
+        border-radius: 34px;
+    }
+    .slider.round:before {
+        border-radius: 50%;
+    }
+    /* Input checked show */
+    .required{
+        color:#b80000d6;
+    }
+    .none{
+        display: none;
+    }
+    input#register_permission{
+        height: 20px;
+        width: 20px;
+    }
+    input:checked {
+        height: 20px;
+        width: 20px;
+    }
+/* ------------------------------------
+List Tournament Area Start Here 
+---------------------------------------*/
+.header-profile{
+    color: #111;
+    padding: 10px 10px 0px 10px;
+}
+.header-profile #header-information {
+    margin-bottom: 10px;
+}
+.header-profile a h5 strong{ 
+    color: #337ab7;
+}
+.header-avatar{
+    width: 150px;
+    border-radius: 50%;
+    border: 1px solid #326295;
+    padding: 5px;
+}
+.header-detail{
+    padding-top: 30px;
+}
+.tablist{
+    margin-top: 10px;
+}
+.tablist .nav-tabs li a{
+    color: #337ab7;
+}
+.list-section.list-main .container .media{
+    margin: 10px;
+    padding: 5px;
+    border: 1px solid #337ab7;
+}
+div.media-left{
+    width: 10%;
+}
+h1, h2, h3, h4, h5, h6{
+    margin-bottom: 5px;
+}
+p{
+    margin-bottom: 5px;
+}
+
+/* ------------------------------------
+Setting Tournament Area Start Here 
+---------------------------------------*/
+.setting-section.setting-main{
+    padding: 35px 0px 35px 0px;
+}
+.nav>li>a {
+    padding: 10px 10px;
+}
+.header-tournament{
+    padding: 10px 0px 0px 0px;
+    background-color: #ece1df47;
+}
+
+small.header-text{
+    font-size: 14px;
+}
+
+/* Tablist header Style*/
+#tablist-header ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    background-color: #fff;
+}
+#tablist-header .nav-tabs {
+    border-bottom: 3px solid #326295;
+}
+#tablist-header ul li a {
+    display: block;
+    color: #000;
+    text-decoration: none;
+    border: none;
+    border-radius: 0px;
+}
+  
+/* Change the link color on hover */
+#tablist-header ul li a:hover {
+    background-color: #555;
+    color: white;
+}
+#tablist-header ul li.active {
+    background-color: #326295;
+    color: white;
+}
+#tablist-header ul li.active a{
+    background-color: #326295;
+    color: white;
+}
+
+/* Tablist Stting Style*/
+#tablist-setting ul {
+    list-style-type: none;
+    margin: -15px;
+    padding: 0;
+    background-color: #fff;
+    border: 1px solid #555;
+}
+#tablist-setting ul li {
+    border-bottom: 1px solid #555;
+}
+#tablist-setting ul li:last-child{
+    border-bottom: none;
+}
+#tablist-setting ul li a {
+    display: block;
+    color: #000;
+    text-decoration: none;
+    border: none;
+    border-radius: 0px;
+}
+  
+/* Change the link color on hover */
+#tablist-setting ul li a:hover {
+    background-color: #555;
+    color: white;
+    
+}
+#tablist-setting ul li.active {
+    background-color: #fbc02d;
+}
+#tablist-setting ul li.active a{
+    background-color: #fbc02d;
+}

@@ -2,13 +2,13 @@
     <div class="col-md-2">
         <div class="header-logo">
             @if(isset($tournament->logo))
-                <img class="img-rounded" src="{{ asset('/storage/logos').'/'.$tournament->logo }}" >
+                <img class="img-thumbnail" src="{{ asset('/storage/logos').'/'.$tournament->logo }}" >
             @else
-                <img class="img-rounded" src="{{ asset('/storage/logos/avatar_default.jpg') }}">
+                <img class="img-thumbnail" src="{{ asset('/storage/logos/banner_default.png') }}">
             @endif
         </div>
     </div>
-    <div class="col-md-10">
+    <div class="col-md-8">
         <div class="header-detail">
             <!-- Tên giải đấu -->
             <h5><strong>{{ $tournament->name }} </strong></h5>

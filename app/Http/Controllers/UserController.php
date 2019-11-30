@@ -63,7 +63,9 @@ class UserController extends Controller
     {
         $user = User::where('username', $username)->first();
 
-        $tournaments = Tournament::where('owner_id', $user->id)->get();
+        $tournaments = Tournament::where('owner_id', $user->id)
+                                ->orderBy('created_at', 'desc')
+                                ->get();
 
         return view('users.tournaments', compact('user', 'tournaments'));
     }

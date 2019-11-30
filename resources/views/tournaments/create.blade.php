@@ -4,6 +4,8 @@
     <link rel="stylesheet" href="{{ asset('bower_components/Croppie/croppie.css') }}">
     <link rel="stylesheet" href="{{ asset('bower_components/toastr/toastr.min.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+    <link rel="stylesheet" href="{{ asset('css/tournament.css') }}">
+
 @endsection
 
 @section('content')
@@ -19,14 +21,14 @@
                     <div class="row">
                         <div class="col-md-8 create-tournament">
                             <!-- Loho giải đấu -->
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <div class="text-center">
-                                    <label>Logo giải đấu</label>
+                                    <label>Ảnh bìa giải đấu</label>
                                     <br><small>(banner, poster, logo)</small>
                                 </div>
                                 <div class="logo-tournament">
                                     <div id="preview-crop-logo">
-                                        <img src="{{ asset('/storage/avatars/avatar_default.jpg') }}">
+                                        <img src="{{ asset('/storage/logos/banner_default.png') }}">
                                     </div>
                                     <button type="button" class="btn btn-submit set-logo-tournament" data-toggle="modal" data-target="#logoModal">
                                         Thêm ảnh
@@ -63,7 +65,7 @@
                             <form action="{{ route('tournament.store') }}" method="post" id="tournament-create">
                                 {{ csrf_field() }}
                                 <!-- Thông tin cơ bản -->
-                                <div class="col-md-8"><br>
+                                <div class="col-md-6"><br>
                                     <div class="form-group">
                                         <label>Tên giải đấu</label><span class="required"> *</span>
                                         <input class="form-control" type="text" name="name" placeholder="World Cup 2019">
@@ -109,6 +111,7 @@
                                 <div class="col-md-12">
                                     <div class="tournament-type">
                                         <label for="">Hình thức thi đấu:</label><span class="required"> *</span>
+                                        <small>(Hình thức thi đấu không thể thay đổi sau khi tạo giải đấu)</small>
                                         <div id="tournament_type">
                                             <input type="number" name="tournament_type" value="" hidden>
                                         </div>
@@ -168,16 +171,16 @@
                                                     <label>Số lượt đá vòng tròn</label><span class="required"> *</span>
                                                     <small>(lượt đi, lượt về)</small>
                                                     <div class="btn-group btn-group-justified btn-group-outline"  data-toggle="buttons">
-                                                        <label class="btn tabOption active" for="single">
+                                                        <label class="btn tabOption active">
                                                             <input id="single" checked="checked" name="number_round" type="radio" value="1">1 lượt
                                                         </label>
-                                                        <label class="btn tabOption" for="single">
+                                                        <label class="btn tabOption">
                                                             <input id="single" name="number_round" type="radio" value="2">2 lượt
                                                         </label>
-                                                        <label class="btn tabOption" for="single">
+                                                        <label class="btn tabOption">
                                                             <input id="single" name="number_round" type="radio" value="3">3 lượt
                                                         </label>
-                                                        <label class="btn tabOption" for="single">
+                                                        <label class="btn tabOption">
                                                             <input id="single" name="number_round" type="radio" value="4">4 lượt
                                                         </label>
                                                     </div>
@@ -214,16 +217,16 @@
                                     <div id="number-member" class="form-group">
                                         <label>Số cầu thủ thi đấu trên sân:</label>
                                         <div class="btn-group btn-group-justified btn-group-outline"  data-toggle="buttons">
-                                            <label class="btn tabOption active" for="single">
+                                            <label class="btn tabOption active">
                                                 <input id="single" checked="checked" name="number_player" type="radio" value="5">5
                                             </label>
-                                            <label class="btn tabOption" for="single">
+                                            <label class="btn tabOption">
                                                 <input id="single" name="number_player" type="radio" value="7">7
                                             </label>
-                                            <label class="btn tabOption" for="single">
+                                            <label class="btn tabOption">
                                                 <input id="single" name="number_player" type="radio" value="9">9
                                             </label>
-                                            <label class="btn tabOption" for="single">
+                                            <label class="btn tabOption">
                                                 <input id="single" name="number_player" type="radio" value="11">11
                                             </label>
                                         </div>
@@ -277,12 +280,12 @@
                 enableExif: true,
                 enableOrientation: true,    
                 viewport: { // Default { width: 100, height: 100, type: 'square' } 
-                    width: 250,
-                    height: 250,
-                    type: 'circle' //square
+                    width: 335,
+                    height: 200,
+                    type: 'square' //square
                 },
                 boundary: {
-                    width: 300,
+                    width: 400,
                     height: 300
                 }
             });
@@ -300,7 +303,7 @@
             });
             // Demo image
             $('.upload-image').on('click', function (ev) {
-                var username = $('#username').val();
+                // var username = $('#username').val();
                 resize.croppie('result', {
                     type: 'canvas',
                     size: 'viewport'
@@ -312,7 +315,7 @@
                         type: 'post',
                         data: {
                             'image':img,
-                            'username': username,
+                            // 'username': username,
                         },
                         success: function (data) {
                             var image_name = data.image_name;

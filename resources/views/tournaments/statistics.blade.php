@@ -1,13 +1,15 @@
 @extends('layouts.master')
 @section('head')
     <link rel="stylesheet" href="{{ asset('css/user.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/tournament.css') }}">
+
 @endsection
 
 @section('content')
     <div class="header-tournament">
         <div class="container">
             <!-- Tournament Information Title-->
-            @include('layouts.tournament_header')
+            @include('layouts.tournament')
             <!-- Header TabList -->
             <div id="tablist-header" class="tablist">
                 <ul class="nav nav-tabs">

@@ -1,6 +1,7 @@
 @extends('layouts.master')
 @section('head')
     <link rel="stylesheet" href="{{ asset('css/user.css') }}">
+
 @endsection
 
 @section('content')

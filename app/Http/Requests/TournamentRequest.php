@@ -24,7 +24,6 @@ class TournamentRequest extends FormRequest
     public function rules()
     {
         return [
-            'owner_id' => 'bail|required',
             'name' => 'bail|required|unique:tournaments|max:255',
             'tournament_type_id' => 'bail|required',
 
@@ -38,6 +37,7 @@ class TournamentRequest extends FormRequest
             'score_draw' => 'bail|required_unless:tournament_type_id,01',
             'score_lose' => 'bail|required_unless:tournament_type_id,01',
             'register_date'=> 'bail|required_if:register_permission, on',
+            'charter' => 'mimes:doc,docx,pdf'
         ];
     }
 }

@@ -24,7 +24,7 @@ class TournamentController extends Controller
 		// Log::info('start ');
         $image_file = $request->image;
         list($type, $image_file) = explode(';', $image_file);
-        list(, $image_file)      = explode(',', $image_file);
+        list(, $image_file) = explode(',', $image_file);
         $image_file = base64_decode($image_file);
         $image_name= time().'_'.rand(100,999).'.png';   
         $path = public_path('storage/logos/'.$image_name);
@@ -72,8 +72,10 @@ class TournamentController extends Controller
         if(isset($request->register_permission)){
             $tournament->register_permission = $request->register_permission;
             $tournament->register_date = $request->register_date;
+            $tournament->status = 3;    // trạng thái cho đăng ký
         }else{
             $tournament->register_permission = "off";
+            $tournament->status = 2;    // trạng thái chưa kích hoạt
         }
         // Lưu
         $tournament->save();

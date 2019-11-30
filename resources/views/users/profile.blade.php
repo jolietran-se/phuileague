@@ -52,17 +52,15 @@
                         <div class="panel-body">
                             <form action="{{ route('user.update', $user->username) }}" method="post" enctype="multipart/form-data">
                                 {{ csrf_field() }}
-
                                 <div class="col-md-4">
                                     <div class="profile-avatar">
-                                        @if(isset($user->avatar))
-                                            <div id="preview-crop-image">
+                                        <div id="preview-crop-image">
+                                            @if(isset($user->avatar) && $user->avatar != null)
                                                 <img  src="{{ asset('/storage/avatars').'/'.$user->avatar }}" >
-                                            </div>
-                                        @else
-                                            <img src="{{ asset('/storage/avatars/avatar_default.jpg') }}">
-                                        @endif
-
+                                            @else
+                                                <img src="{{ asset('/storage/avatars/avatar_default.jpg') }}">
+                                            @endif
+                                        </div>
                                         <button type="button" class="btn btn-submit set-avatar" data-toggle="modal" data-target="#avatarModal">
                                             Đặt ảnh đại diện
                                         </button>
