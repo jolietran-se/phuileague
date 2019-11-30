@@ -38,7 +38,7 @@
                             <!-- Modal Upload -->
                             <div class="modal fade" id="logoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                                 <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
+                                    <div class="modal-content update-banner">
                                         <div class="modal-header">
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                         <h6 class="modal-title" id="myModalLabel">Đặt lại Logo</h6>
@@ -49,7 +49,7 @@
                                                     <div id="upload-demo"></div>
                                                 </div>
                                                 <div>
-                                                    <strong class="text-center">Select image to crop:</strong>
+                                                    <strong class="text-center text-select">Select image to crop:</strong>
                                                     <input type="file" id="image">
                                                 </div>
                                             </div>
@@ -280,13 +280,13 @@
                 enableExif: true,
                 enableOrientation: true,    
                 viewport: { // Default { width: 100, height: 100, type: 'square' } 
-                    width: 335,
-                    height: 200,
+                    width: 770.5,
+                    height: 460,
                     type: 'square' //square
                 },
                 boundary: {
-                    width: 400,
-                    height: 300
+                    width: 790,
+                    height: 480
                 }
             });
             // Upload image cut
@@ -396,5 +396,13 @@
             };
             date_input.datepicker(options);
         })
+    </script>
+
+    <script>
+        /* Notification with Toastr*/
+        toastr.options.positionClass = 'toast-bottom-right';
+        @if(Session::has('create_tournament'))
+            toastr.success("{{ Session::get('create_tournament') }}");
+        @endif    
     </script>
 @endsection

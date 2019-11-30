@@ -28,6 +28,8 @@ class Tournament extends Model
         'register_date',
         'status',
         'slug',
+        'charter',
+        'introduce',
     ];
 
     // Tournament n-1 User
