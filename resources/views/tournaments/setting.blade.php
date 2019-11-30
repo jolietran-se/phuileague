@@ -41,6 +41,7 @@
                     <input id="input-gender" value="{{ $tournament->gender}}" hidden>
                     <input id="input-player" value="{{ $tournament->number_player }}" hidden>
                     <input id="input-round" value="{{ $tournament->number_round }}" hidden>
+                    <input id="input-introduce" value="{{ $tournament->introduce }}" hidden>
                     <div class="col-md-6">
                         <!-- Thông tin cơ bản -->
                         <div class="form-group">
@@ -165,8 +166,15 @@
                         </div>
                         <!-- Thông tin và điều lệ giải -->
                         <div class="form-group" id="charter" >
-                            <label for="charter">Giới thiệu và điều lệ giải:</label>
-                            <input type="file" name="charter">
+                            <label for="charter">Điều lệ giải:</label>
+                            @if (isset($tournament->charter))
+                                <a href="{{ route('tournament.charter', [ $tournament->slug, $tournament->charter]) }}"  target="_blank"> Tải xuống </a>
+                            @endif
+                            <input type="file" name="charter"><small>(Chỉ có thể tải lên file pdf)</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Giới thiệu giải: </label>
+                            <textarea name="introduce" id="introduce" cols="30" rows="10">{{ $tournament->introduce }}</textarea>
                         </div>
                     </div>
 
@@ -179,7 +187,7 @@
                 <!-- Modal Upload -->
                 <div class="modal fade" id="logoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                     <div class="modal-dialog" role="document">
-                        <div class="modal-content"   style="width:1000px; margin-left: -200px">
+                        <div class="modal-content update-banner"   style="">
                             <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                             <h6 class="modal-title" id="myModalLabel">Đặt lại Logo</h6>
@@ -208,13 +216,13 @@
 @section('foot')
     <script src="{{ asset('bower_components/Croppie/croppie.js') }}"></script>
     <script src="{{ asset('bower_components/toastr/toastr.min.js') }}"></script>
-
+    <script src={{ url('bower_components/ckeditor/ckeditor.js') }}></script>
     <!-- Selected Option và Input Radio checked -->
     <script type="text/javascript">
         var gender = $('#input-gender').val();
         var number_player = $('#input-player').val();
         var numer_round = $('#input-round').val();
-		
+		var introduce = $('#input-introduce').val();
         $("select#gender").val(gender);
 
         console.log(number_player);
@@ -238,8 +246,11 @@
 		}else if(numer_round == 4){
 			$("#4rounds" ).addClass('active');
 		}
+        // Hiển thị introduce
+
     </script>
 
+    <!-- Upload Banner -->
     <script type="text/javascript">
          $.ajaxSetup({
         headers: {
@@ -305,6 +316,23 @@
                 });
             });
         /*End Upload logo*/
+    </script>
+
+    <!-- CKFinder và CKEditor -->
+    <script>
+        CKEDITOR.replace( 'introduce', {
+            filebrowserBrowseUrl: '{{ route('ckfinder_browser') }}',
+
+        } );
+    </script>
+    @include('ckfinder::setup')
+
+    <script>
+        /* Notification with Toastr*/
+        toastr.options.positionClass = 'toast-bottom-right';
+        @if(Session::has('update_tournament'))
+            toastr.success("{{ Session::get('update_tournament') }}");
+        @endif    
     </script>
 @endsection
 

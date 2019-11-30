@@ -44,6 +44,7 @@ Auth::routes();
                 Route::group(['prefix' => 'setting'], function () {
                     Route::get('/', 'TournamentSettingController@setting')->name('tournament.setting');                  // thông tin chung
                     Route::post('/', 'TournamentSettingController@updateSetting')->name('tournament.update');              // cập nhật thông tin chung
+                    Route::get('/{charter}', 'TournamentSettingController@exportChater')->name('tournament.charter');              // cập nhật thông tin chung
                     
                     Route::get('/status', 'TournamentSettingController@status')->name('setting.status');                 // trạng thái
                     Route::get('/clubs', 'TournamentSettingController@clubs')->name('setting.clubs');                    // quản lý các đội bóng

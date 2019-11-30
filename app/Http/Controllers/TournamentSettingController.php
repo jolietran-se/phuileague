@@ -11,7 +11,8 @@ use Image;
 use Log;
 use Auth;
 use Session;
-
+use Response;
+use Validator;
 class TournamentSettingController extends Controller
 {
 
@@ -21,16 +22,23 @@ class TournamentSettingController extends Controller
         $tournament = Tournament::where('slug', $slug)->first();
         return view('tournaments.setting', compact('tournament'));
     }
+    public function exportChater($slug, $charter){
+        // dd(1);
+        $pathToFile = public_path('storage/charters/'.$charter);
+        
+        return Response::make(file_get_contents($pathToFile), 200, [
+            'Content-Type'=> 'application/pdf',
+            'Content-Disposition' => 'inline; filename="'.$charter.'"'
+        ]);
+    }
     public function updateSetting(Request $request, $slug)
     {   
-        // dd($request->all());
         $tournament = Tournament::where('slug', $slug)->first();
         // Thông tin cơ bản
         $tournament->name = $request->name;
         $tournament->gender = $request->gender;
         $tournament->stadium = $request->stadium;
         $tournament->address = $request->address;
-
         // Điểm
         $tournament->score_win = $request->score_win;
         $tournament->score_draw = $request->score_draw;
@@ -39,11 +47,22 @@ class TournamentSettingController extends Controller
         if(isset($request->number_player)) $tournament->number_player = $request->number_player;
         if(isset($request->number_round)) $tournament->number_round = $request->number_round;
         if(isset($request->logo)) $tournament->logo = $request->logo;
-        
-        // File điều lệ
+        if(isset($request->introduce)) $tournament->introduce = $request->introduce;
         $tournament->save();
-        return redirect()->back();
+
+        // File điều lệ
+        if($request->file('charter')){
+            $file = $request->file('charter');
+            $type = $file->getClientMimeType();
+            if($type = "application/pdf"){
+                $filename = time().'_'.$file->getClientOriginalName();
+                $file->move(public_path('storage/charters/'), $filename);
+                $tournament->charter = $filename;
+            }
+        }
+        Session::flash('update_tournament', 'Cập nhật thành công!');
         
+        return redirect()->back();
     }
     public function pdf(){
         $data['title'] = 'Charter List';
