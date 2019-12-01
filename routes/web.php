@@ -43,8 +43,7 @@ Auth::routes();
                 // Tùy chỉnh giải đấu
                 Route::group(['prefix' => 'setting'], function () {
                     Route::get('/', 'TournamentSettingController@setting')->name('tournament.setting');                  // thông tin chung
-                    Route::post('/', 'TournamentSettingController@updateSetting')->name('tournament.update');              // cập nhật thông tin chung
-                    Route::get('/{charter}', 'TournamentSettingController@exportChater')->name('tournament.charter');              // cập nhật thông tin chung
+                    Route::post('/', 'TournamentSettingController@updateSetting')->name('tournament.update');            // cập nhật thông tin chung
                     
                     Route::get('/status', 'TournamentSettingController@status')->name('setting.status');                 // trạng thái
                     Route::get('/clubs', 'TournamentSettingController@clubs')->name('setting.clubs');                    // quản lý các đội bóng
@@ -53,6 +52,9 @@ Auth::routes();
                     Route::get('/schedule', 'TournamentSettingController@schedule')->name('setting.schedule');           // quản lý lịch đấu
                     Route::get('/ranking-rule', 'TournamentSettingController@rankingrule')->name('setting.rankingrule'); // quy tắc xếp hạng
                     Route::get('/supporter', 'TournamentSettingController@supporter')->name('setting.supporter');        // nhà tài trợ
+                    
+                    Route::get('/{charter}', 'TournamentSettingController@exportChater')->name('tournament.charter');    // cập nhật thông tin chung
+                    Route::post('/status/{status}', 'TournamentSettingController@updateStatus')->name('tournament.update-status');    // cập nhật thông tin chung
                 });
 
                 // Other

@@ -48,36 +48,46 @@ class TournamentSettingController extends Controller
         if(isset($request->number_round)) $tournament->number_round = $request->number_round;
         if(isset($request->logo)) $tournament->logo = $request->logo;
         if(isset($request->introduce)) $tournament->introduce = $request->introduce;
-        $tournament->save();
 
+        $tournament->save();
         // File điều lệ
-        if($request->file('charter')){
+        if($request->file('charter') != null){
             $file = $request->file('charter');
             $type = $file->getClientMimeType();
-            if($type = "application/pdf"){
+            
+            if($type == "application/pdf"){
                 $filename = time().'_'.$file->getClientOriginalName();
                 $file->move(public_path('storage/charters/'), $filename);
                 $tournament->charter = $filename;
+                $tournament->save();
+                Session::flash('update_tournament', 'Cập nhật thành công!');
+            
+            }else if($type != "application/pdf"){
+                Session::flash('error_type', 'Định dạng tệp không phải PDF!');
             }
+        }else{
+            Session::flash('update_tournament', 'Cập nhật thành công!');
         }
-        Session::flash('update_tournament', 'Cập nhật thành công!');
-        
+
         return redirect()->back();
-    }
-    public function pdf(){
-        $data['title'] = 'Charter List';
-        $data['notes'] =  Tournament::get();
-    
-        $pdf = PDF::loadView('notes', $data);
-      
-        return $pdf->download('tuts_notes.pdf');
     }
 
     /* 2. View Trạng thái */ 
     public function status($slug)
     {
         $tournament = Tournament::where('slug', $slug)->first();
+
         return view('settings.status', compact('tournament'));
+    }
+
+    public function updateStatus($slug, $status){
+        $tournament = Tournament::where('slug', $slug)->first();
+        $tournament->status = $status;
+        $tournament->save();
+        
+        Session::flash('update_status', 'Đã thay đổi trạng thái!');
+
+        return response()->json(['status'=>true]);
     }
     /* 3. View quản lý đội bóng */ 
     public function clubs($slug)
