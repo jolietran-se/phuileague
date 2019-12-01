@@ -387,7 +387,7 @@ img {
   overflow: hidden;
 }
 p {
-  margin: 0 0 26px;
+  margin: 0 0 5px;
 }
 h1,
 h2,
@@ -395,7 +395,7 @@ h3,
 h4,
 h5,
 h6 {
-  margin: 0 0 26px;
+  margin: 0 0 5px;
   font-weight: 600;
   font-family: 'Poppins', sans-serif;
   color: #111111;
