@@ -140,6 +140,7 @@ class TournamentController extends Controller
     public function about($slug)
     {
         $tournament = Tournament::where('slug', $slug)->first();
+
         return view('tournaments.about', compact('tournament'));
     }
 }

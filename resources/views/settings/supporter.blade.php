@@ -11,7 +11,7 @@
 
     <div class="setting-section setting-main">
         <div class="container">
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <div id="tablist-setting">
                     <ul class="nav nav-pills nav-stacked">
                         <li><a href="{{ route('tournament.setting', $tournament->slug)}}">Thông tin chung</a></li>
@@ -25,7 +25,7 @@
                     </ul>
                 </div>
             </div>
-            <div class="col-md-10">
+            <div class="col-md-8">
                 Nhà tài trợ
             </div>
         </div>

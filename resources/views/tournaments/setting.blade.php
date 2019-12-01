@@ -27,10 +27,28 @@
                     </ul>
                 </div>
             </div>
+            
             <!-- Content: thông tin chung -->
             <div id="content" class="col-md-8">
                 <div class="page-header profile-text text-center">
                     <h6><strong>Thông tin chung</strong></h6>
+                    <small class="header-text">
+                        @switch($tournament->tournament_type_id)
+                            @case(1)
+                                Đấu loại trực tiếp |
+                                @break
+                            @case(2)
+                                Đấu vòng tròn |
+                                @break
+                            @case(3)
+                                Hai giai đoạn |
+                                @break
+                            @default
+                        @endswitch
+                    </small>
+                    <small class="header-text">Bóng đá sân {{ $tournament->number_player }} | </small>
+                    <small class="header-text">{{ $tournament->stadium }} |</small>
+                    <small class="header-text">{{ $tournament->address }}</small>
                 </div>
                 <!-- Form cập nhật thông tin -->
                 
@@ -96,8 +114,8 @@
                                         <img src="{{ asset('/storage/logos/banner_default.png') }}">
                                     @endif
                                 </div>
-                                <button type="button" class="btn btn-submit update-logo-tournament" data-toggle="modal" data-target="#logoModal">
-                                    Cập nhật
+                                <button type="button" class="btn btn-submit btn-update-logo" data-toggle="modal" data-target="#logoModal">
+                                    Thay ảnh bìa
                                 </button>
                             </div>
                         </div>
@@ -187,7 +205,7 @@
                 <!-- Modal Upload -->
                 <div class="modal fade" id="logoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                     <div class="modal-dialog" role="document">
-                        <div class="modal-content update-banner"   style="">
+                        <div class="modal-content update-banner">
                             <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                             <h6 class="modal-title" id="myModalLabel">Đặt lại Logo</h6>
@@ -258,7 +276,7 @@
         }
         });
         /* Show Modal Update Logo*/
-        $(document).on('click', '.btn-lg', function(){
+        $(document).on('click', '.btn-update-logo', function(){
             $('#logoModal').modal('show');
         });
 
@@ -290,7 +308,7 @@
                 reader.readAsDataURL(this.files[0]);
             });
             // Demo image
-            $('.upload-image').on('click', function (ev) {
+            $('.upload-image').on('click', function () {
                 resize.croppie('result', {
                     type: 'canvas',
                     size: 'viewport'
@@ -332,6 +350,9 @@
         toastr.options.positionClass = 'toast-bottom-right';
         @if(Session::has('update_tournament'))
             toastr.success("{{ Session::get('update_tournament') }}");
+        @endif
+        @if(Session::has('error_type'))
+            toastr.error("{{ Session::get('error_type') }}");
         @endif    
     </script>
 @endsection

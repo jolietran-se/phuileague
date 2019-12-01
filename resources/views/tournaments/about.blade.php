@@ -23,7 +23,29 @@
                     <li role="presentation" class="active"><a href="{{ route('tournament.about', $tournament->slug)}}">Giới thiệu và điều lệ</a></li>
                 </ul>
             </div>
-            Điều lệ và giới thiệu giải
+            <!--================-->
+            <!--    CONTENT     -->
+            <!--================-->
+            <div id="content-about" class="col-md-12">
+                <div class="page-header">
+                    <h6><strong>Giới thiệu giải</strong></h6>
+                </div>
+                <div id="introduce">
+                    @if(isset($tournament->introduce)) 
+                        {{ strip_tags($tournament->introduce) }}
+                    @else
+                        <p><small>Giải đấu hiện chưa có điều lệ</small></p>
+                    @endif
+                </div>
+                <div class="page-header">
+                    <h6>
+                        <strong>Điều lệ giải: </strong>
+                        @if (isset($tournament->charter))
+                            <a href="{{ route('tournament.charter', [ $tournament->slug, $tournament->charter]) }}"  target="_blank"> Tải xuống </a>
+                        @endif
+                    </h6>
+                </div>
+            </div>
         </div>
     </div>
 @endsection
