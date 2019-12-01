@@ -15,16 +15,19 @@ class CreateClubsTable extends Migration
     {
         Schema::create('clubs', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->timestamps();
+            $table->integer('owner_id')->usigned();
             $table->string('name')->unique();
             $table->string('logo')->nullable();
-            $table->integer('owner_id')->usigned();
             $table->string('uniform')->nullable();
-            $table->integer('player_amount')->usigned();
+            $table->string('phone')->nullable();
+            $table->string('email')->nullable();
+            $table->integer('numer_player')->nullable();
             $table->boolean('gender');
             $table->string('ages');
+            $table->integer('club_type')->nullable();
+            $table->string('slug')->nullable();
             $table->text('description')->nullable();
-            $table->integer('club_type_id')->nullable();
+            $table->timestamps();
         });
     }
 

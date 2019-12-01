@@ -13,12 +13,14 @@ class Club extends Model
         'owner_id',
         'logo',
         'uniform',
-        'playeramount',
         'gender',
         'ages',
-        'club_type_id',
-        'description',
+        'phone',
+        'email',
+        'club_type',
+        'number_player',
         'slug',
+        'description',
     ];
 
     // Club 1-n Player

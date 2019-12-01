@@ -71,5 +71,19 @@ Auth::routes();
         });
     });
 
+/* =====Đội bóng===== */
+    Route::group(['prefix' => 'club'], function(){
+        // list club
+        Route::get('/', 'ClubController@index')->name('club.list');
+
+        Route::group(['middleware' => ['auth']], function () {
+            Route::post('/crop-logo', 'ClubController@logoCrop')->name('club.crop-logo');
+            Route::post('/crop-uniform', 'ClubController@uniformCrop')->name('club.crop-uniform');
+            // Tạo giải đấu
+            Route::get('/create-club', 'ClubController@create')->name('club.create');
+            Route::post('/create-club', 'ClubController@store')->name('club.store');
+        });
+        
+    });
 
    

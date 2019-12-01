@@ -54,9 +54,9 @@
                                 <!-- Tạo giải đấu -->
                                 <li><a href="{{ route('tournament.create') }}">{{ trans('header.tournament_create') }}</a></li>
                                 <!-- Tìm đội bóng -->
-                                <li><a href="#">{{ trans('header.club_search') }}</a></li>
+                                <li><a href="{{ route('club.list') }}">{{ trans('header.club_search') }}</a></li>
                                 <!-- Tạo đội bóng -->
-                                <li><a href="#">{{ trans('header.club_create') }}</a></li>
+                                <li><a href="{{ route('club.create') }}">{{ trans('header.club_create') }}</a></li>
 
                                 <!-- Drop Down - Hướng dẫn-->
                                 <li class="menu-item-has-children">
