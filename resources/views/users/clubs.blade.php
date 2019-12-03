@@ -24,7 +24,7 @@
                     <div class="col-md-3 col-sm-3">
                         <div class="thumbnail">
                             <div id="logo" class="club-logo">
-                                <a href="#">
+                                <a href="{{ route('club.profile', $club->slug) }}">
                                     @if (isset($club->logo))
                                         <img src="{{ asset('/storage/club-logos').'/'.$club->logo }}" alt=""></a>
                                     @else 
@@ -33,7 +33,7 @@
                                 </a>
                             </div>
                             <div class="caption">
-                                <a href="#" class="media-heading"><h5 class="text-center">{{ $club->name }}</h5></a>
+                                <a href="{{ route('club.profile', $club->slug) }}" class="media-heading"><h5 class="text-center">{{ $club->name }}</h5></a>
                                 <hr>
                                 <div id="media-detail">
                                     <p class="text-center">

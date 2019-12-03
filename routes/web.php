@@ -82,6 +82,13 @@ Auth::routes();
             // Tạo giải đấu
             Route::get('/create-club', 'ClubController@create')->name('club.create');
             Route::post('/create-club', 'ClubController@store')->name('club.store');
+
+            Route::group(['prefix' => '{slug}'], function () {
+                Route::get('/profile', 'ClubController@profile')->name('club.profile');         // hồ sơ đội bóng
+                Route::get('/member', 'ClubController@member')->name('club.member');            // thành viên
+                Route::get('/statistic', 'ClubController@statistic')->name('club.statistic');   // thống kê
+            });
+            
         });
         
     });

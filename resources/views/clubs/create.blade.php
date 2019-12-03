@@ -127,7 +127,7 @@
 
                                 <!-- Submit Button  -->
                                 <div class="col-md-12">
-                                    <button id="club-create" type="submit" class="btn btn-primary submit-create">Tạo giải đấu</button>
+                                    <button id="club-create" type="submit" class="btn btn-primary submit-create">Tạo đội</button>
                                 </div>
                             </form>
 

@@ -70,4 +70,25 @@ class ClubController extends Controller
 
         return response()->json(['status'=>true, 'uniform_name'=>$uniform_name]);
     }
+
+    public function profile($slug)
+    {
+        $club = Club::where('slug', $slug)->first();
+
+        return view('clubs.profile', compact('club'));
+    }
+
+    public function member($slug)
+    {
+        $club = Club::where('slug', $slug)->first();
+
+        return view('clubs.member', compact('club'));
+    }
+
+    public function statistic($slug)
+    {
+        $club = Club::where('slug', $slug)->first();
+
+        return view('clubs.statistic', compact('club'));
+    }
 }
