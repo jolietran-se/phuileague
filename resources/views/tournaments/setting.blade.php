@@ -353,6 +353,9 @@
         @endif
         @if(Session::has('error_type'))
             toastr.error("{{ Session::get('error_type') }}");
+        @endif  
+        @if(Session::has('name_false'))
+            toastr.error("{{ Session::get('name_false') }}");
         @endif    
     </script>
 @endsection

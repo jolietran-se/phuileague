@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePlayerPositionsTable extends Migration
+class CreateOptionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,12 @@ class CreatePlayerPositionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('player_positions', function (Blueprint $table) {
+        Schema::create('options', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->timestamps();
+            $table->string('type_code');
+            $table->integer('type_id');
             $table->string('name');
-            $table->string('description');
+            $table->timestamps();
         });
     }
 
@@ -28,6 +29,6 @@ class CreatePlayerPositionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('player_positions');
+        Schema::dropIfExists('options');
     }
 }

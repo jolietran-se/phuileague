@@ -34,42 +34,58 @@ class TournamentSettingController extends Controller
     public function updateSetting(Request $request, $slug)
     {   
         $tournament = Tournament::where('slug', $slug)->first();
-        // Thông tin cơ bản
-        $tournament->name = $request->name;
-        $tournament->gender = $request->gender;
-        $tournament->stadium = $request->stadium;
-        $tournament->address = $request->address;
-        // Điểm
-        $tournament->score_win = $request->score_win;
-        $tournament->score_draw = $request->score_draw;
-        $tournament->score_lose = $request->score_lose;
-        // Số cầu thủ/ vòng
-        if(isset($request->number_player)) $tournament->number_player = $request->number_player;
-        if(isset($request->number_round)) $tournament->number_round = $request->number_round;
-        if(isset($request->logo)) $tournament->logo = $request->logo;
-        if(isset($request->introduce)) $tournament->introduce = $request->introduce;
+        $tournaments = Tournament::whereNotNull('slug')->get();
+        
+        $flag = true;
 
-        $tournament->save();
-        // File điều lệ
-        if($request->file('charter') != null){
-            $file = $request->file('charter');
-            $type = $file->getClientMimeType();
-            
-            if($type == "application/pdf"){
-                $filename = time().'_'.$file->getClientOriginalName();
-                $file->move(public_path('storage/charters/'), $filename);
-                $tournament->charter = $filename;
-                $tournament->save();
+        if($tournament->name != $request->name){
+            foreach($tournaments as $tour){
+                if($tour->name == $request->name){
+                    $flag = false;
+                }
+            }
+        }
+        if($flag == true){
+            // Thông tin cơ bản
+            $tournament->name = $request->name;
+            $tournament->slug = Str::slug($tournament->name,'-');
+            $tournament->gender = $request->gender;
+            $tournament->stadium = $request->stadium;
+            $tournament->address = $request->address;
+            // Điểm
+            $tournament->score_win = $request->score_win;
+            $tournament->score_draw = $request->score_draw;
+            $tournament->score_lose = $request->score_lose;
+            // Số cầu thủ/ vòng
+            if(isset($request->number_player)) $tournament->number_player = $request->number_player;
+            if(isset($request->number_round)) $tournament->number_round = $request->number_round;
+            if(isset($request->logo)) $tournament->logo = $request->logo;
+            if(isset($request->introduce)) $tournament->introduce = $request->introduce;
+
+            $tournament->save();
+            // File điều lệ
+            if($request->file('charter') != null){
+                $file = $request->file('charter');
+                $type = $file->getClientMimeType();
+                
+                if($type == "application/pdf"){
+                    $filename = time().'_'.$file->getClientOriginalName();
+                    $file->move(public_path('storage/charters/'), $filename);
+                    $tournament->charter = $filename;
+                    $tournament->save();
+                    Session::flash('update_tournament', 'Cập nhật thành công!');
+                
+                }else if($type != "application/pdf"){
+                    Session::flash('error_type', 'Định dạng tệp không phải PDF!');
+                }
+            }else{
                 Session::flash('update_tournament', 'Cập nhật thành công!');
-            
-            }else if($type != "application/pdf"){
-                Session::flash('error_type', 'Định dạng tệp không phải PDF!');
             }
         }else{
-            Session::flash('update_tournament', 'Cập nhật thành công!');
+            Session::flash('name_false', 'Tên giải đã được sử dụng!');
         }
-
-        return redirect()->back();
+        
+        return redirect()->route('tournament.setting', $tournament->slug);
     }
 
     /* 2. View Trạng thái */ 

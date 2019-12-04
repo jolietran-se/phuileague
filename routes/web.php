@@ -79,14 +79,20 @@ Auth::routes();
         Route::group(['middleware' => ['auth']], function () {
             Route::post('/crop-logo', 'ClubController@logoCrop')->name('club.crop-logo');
             Route::post('/crop-uniform', 'ClubController@uniformCrop')->name('club.crop-uniform');
+            Route::post('/crop-avatar', 'ClubController@avatarCrop')->name('club.crop-avatar');
             // Tạo giải đấu
             Route::get('/create-club', 'ClubController@create')->name('club.create');
             Route::post('/create-club', 'ClubController@store')->name('club.store');
 
             Route::group(['prefix' => '{slug}'], function () {
                 Route::get('/profile', 'ClubController@profile')->name('club.profile');         // hồ sơ đội bóng
+                Route::get('/setting', 'ClubController@setting')->name('club.setting');         // cài đặt
                 Route::get('/member', 'ClubController@member')->name('club.member');            // thành viên
                 Route::get('/statistic', 'ClubController@statistic')->name('club.statistic');   // thống kê
+
+                Route::post('/setting', 'ClubController@update')->name('club.update');         // cài đặt
+                Route::post('/add-member', 'ClubController@addMember')->name('club.add-member');            // thành viên
+                Route::post('/edit-member', 'ClubController@editMember')->name('club.edit-member');            // thành viên
             });
             
         });
