@@ -93,6 +93,7 @@ Auth::routes();
                 Route::post('/setting', 'ClubController@update')->name('club.update');         // cài đặt
                 Route::post('/add-member', 'ClubController@addMember')->name('club.add-member');            // thành viên
                 Route::post('/edit-member', 'ClubController@editMember')->name('club.edit-member');            // thành viên
+                Route::post('/remove-member', 'ClubController@removeMember')->name('club.remove-member');            // thành viên
             });
             
         });

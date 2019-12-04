@@ -162,7 +162,18 @@ class ClubController extends Controller
         
         $player->save();
         
-        Log::info('avatar'.$request->avatar);
+        Session::flash('edit_player', "Đã cập nhật");
+
+        return redirect()->route('club.member', $request->slug);
+    }
+
+    public function removeMember(Request $request, $slug)
+    {
+        $player_id = $request->player_id;
+        
+        $player = Player::where('id', $player_id)->delete();
+        
+        Session::flash('remove_player', "Đã xóa");
 
         return redirect()->route('club.member', $request->slug);
     }

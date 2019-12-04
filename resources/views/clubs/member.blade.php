@@ -87,6 +87,9 @@
                                                 data-phone = "{{ $player->phone }}"
                                                 data-ismain = "{{ $player->ismain }}"
                                             ><small>Chi tiết</small></a>
+                                            <a href="#" class="btn btn-danger delete-player" role="button"
+                                                data-id="{{ $player->id }}"
+                                            ><small>Xóa</small></a>
                                         </small>
                                     </div>
                                 </div>
@@ -98,14 +101,13 @@
                         <div class="col-md-12"><span class="glyphicon glyphicon-plus"></span>Thêm thành viên</div>
                         <div class="col-md-12">
                             <!-- Avatar -->
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <div id="player-avatar">
-                                    <div id="preview-crop-avatar">
-                                        <img src="{{ asset('/storage/player-avatars/avatar_default.jpg') }}">
-                                    </div>
-                                    <button type="button" class="btn btn-submit set-avatar" data-toggle="modal" data-target="#avatarModal">
-                                        Thêm
-                                    </button>
+                                    <a href="#" class="btn btn-submit set-avatar" role="button" data-toggle="modal" data-target="#avatarModal">
+                                        <div id="preview-crop-avatar">
+                                            <img src="{{ asset('/storage/player-avatars/avatar_default.jpg') }}">
+                                        </div>
+                                    </a>
                                 </div>
                             </div>
                             <!-- Thêm thông tin -->
@@ -116,6 +118,9 @@
                                 <div class="col-md-4" id="player-info">
                                     <div class="form-group">
                                         <input type="number"class="form-control" name="uniform_number" id="uniform_number" placeholder="Số áo thi đấu">
+                                        @if ($errors->has('uniform_number'))
+                                            <p class="error-danger">{{ $errors->first('uniform_number') }}</p>
+                                        @endif
                                     </div>
                                     <div class="form-group">
                                         <input type="text"class="form-control" name="uniform_name" id="uniform_name" placeholder="Tên thi đấu">
@@ -145,6 +150,9 @@
                                 <div class="col-md-4" id="player-info">
                                     <div class="form-group">
                                         <input type="text"class="form-control" name="name" id="name" placeholder="Họ và tên đầy đủ">
+                                        @if ($errors->has('name'))
+                                            <p class="error-danger">{{ $errors->first('name') }}</p>
+                                        @endif
                                     </div>
                                     <div class="form-group">
                                         <input type="text"class="form-control" name="phone" id="phone" placeholder="Số điện thoại">
@@ -170,7 +178,7 @@
                                     <div class="modal-content update-banner">
                                         <div class="modal-header">
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                        <h6 class="modal-title" id="myModalLabel">Đặt lại Đồng phục</h6>
+                                        <h6 class="modal-title" id="myModalLabel">Ảnh đại diện</h6>
                                         </div>
                                         <div class="modal-body">
                                             <div class="row">
@@ -342,7 +350,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- Front Edit Modal -->
+                            <!-- BackSide Edit Modal -->
                             <div class="modal fade" id="editBacksideModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                                 <div class="modal-dialog" role="document">
                                     <div class="modal-content update-banner">
@@ -363,6 +371,24 @@
                                         </div>
                                         <div class="modal-footer">
                                             <button class="btn-primary btn-block upload-backside-edit">Cập nhật</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Player Delete Modal -->
+                            <div class="modal fade" id="deletePlayerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                <div class="modal-dialog modal-sm" role="document">
+                                    <div class="modal-content update-banner">
+                                        <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        <h5 class="modal-title" id="myModalLabel">Xóa thành viên</h5>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>Bạn chắc chắn muốn xóa thành viên này?</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button class="btn btn-danger remove-player">Có</button>
+                                            <button class="btn btn-default save-player">Hủy</button>
                                         </div>
                                     </div>
                                 </div>
@@ -685,6 +711,7 @@
                 });
             });
 
+            /* Cập nhật thông tin vào cơ sở dữ liệu*/ 
             $('.modal-footer').on('click', '.update-player', function(e) {
                 e.preventDefault();
                 var club_slug = $('#club-slug').val();
@@ -736,5 +763,47 @@
                 });
             });
        });
+    </script>
+
+    <!-- Delete Player -->
+    <script type="text/javascript">
+        $(document).on('click', '.delete-player', function(){
+            $('#deletePlayerModal').modal('show');
+            var player_id = $(this).data('id');
+            var club_slug = $('#club-slug').val();
+            var url = "{{ route('club.remove-member', ":slug") }}";
+            url = url.replace(':slug', club_slug);
+
+            $('.modal-footer').on('click', '.remove-player', function(e) {
+                $.ajax({
+                    dataType: 'json',
+                    type:'POST',
+                    url: url,
+                    data:{
+                        'player_id': player_id,
+                    },
+                    success:function(){
+                        $('#deletePlayerModal').modal('hide');
+                        location.reload();
+                    }, error: function(xhr, textStatus, thrownError) {
+                        location.reload();
+                    },
+                });
+            });
+            $('.modal-footer').on('click', '.remove-player', function(e) {
+                $('#deletePlayerModal').modal('hide');
+            });
+        });
+    </script>
+    
+    <!--  Notification with Toastr -->
+    <script>
+        toastr.options.positionClass = 'toast-top-right';
+        @if(Session::has('edit_player'))
+            toastr.success("{{ Session::get('edit_player') }}");
+        @endif
+        @if(Session::has('remove_player'))
+            toastr.info("{{ Session::get('remove_player') }}");
+        @endif
     </script>
 @endsection
