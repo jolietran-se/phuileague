@@ -15,17 +15,22 @@ class CreatePlayersTable extends Migration
     {
         Schema::create('players', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->timestamps();
             $table->string('name');
-            $table->string('avatar');
+            $table->string('avatar')->nullable();
             $table->integer('club_id')->usigned();
-            $table->string('indentification');
-            $table->string('phone');
-            $table->date('birthday')->nullable();
-            $table->string('country')->nullable();
+
             $table->integer('uniform_number');
-            $table->string('uniform_name');
-            $table->integer('position_id')->usigned();
+            $table->string('uniform_name')->nullable();
+            $table->integer('position')->usigned();
+            $table->integer('role')->usigned();
+
+            $table->string('front_idcard')->nullable();
+            $table->string('backside_idcard')->nullable();
+            $table->string('phone')->nullable();
+            $table->string('birthday')->nullable();
+            $table->integer('ismain')->nullable();
+
+            $table->timestamps();
         });
     }
 

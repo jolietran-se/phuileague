@@ -11,7 +11,7 @@
     <div class="col-md-8">
         <div class="header-detail">
             <!-- Tên giải đấu -->
-            <h5><strong>{{ $tournament->name }} </strong></h5>
+            <h5><strong>{{ $tournament->name }}</strong></h5>
             <!-- Thông tin tổng quát-->
             <span class="glyphicon glyphicon-menu-hamburger"></span> 
             <small class="header-text">

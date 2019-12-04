@@ -11,10 +11,15 @@
     <!-- Header TabList -->
     <div class="club-section club-main">
         <div class="container">
+            <div class="page-header text-center page-title">
+                <h5><strong>{{ $club->name }}</strong></h5>
+                <small>(Chỉnh sửa thông tin, thêm thành viên và thống kê thành tích)</small>
+            </div>
             <div class="col-md-3">
                 <div id="tablist-setting">
                     <ul class="nav nav-pills nav-stacked">
                         <li role="presentation"><a href="{{ route('club.profile', $club->slug)}}">Thông tin chung<span class="glyphicon glyphicon-chevron-right"></a></li>
+                        <li role="presentation"><a href="{{ route('club.setting', $club->slug)}}">Chỉnh sửa thông tin đội<span class="glyphicon glyphicon-chevron-right"></a></li>
                         <li role="presentation"><a href="{{ route('club.member', $club->slug)}}">Thành viên<span class="glyphicon glyphicon-chevron-right"></a></li>
                         <li role="presentation" class="active"><a href="{{ route('club.statistic', $club->slug)}}">Thống kê<span class="glyphicon glyphicon-chevron-right"></a></li>
                     </ul>
