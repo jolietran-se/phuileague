@@ -15,8 +15,11 @@ use Session;
 class TournamentController extends Controller
 {
     public function index()
-    {
-        return view('tournaments.list');
+    {   
+        $tournaments = Tournament::whereNotNull('slug')
+                                ->orderBy('created_at', 'DESC')
+                                ->get();
+        return view('tournaments.list', compact('tournaments'));
     }
     /* Cắt logo */ 
     public function imageCrop(Request $request)
@@ -40,7 +43,8 @@ class TournamentController extends Controller
     }
     /* Tạo mới giải đấu */
     public function store(TournamentRequest $request)
-    {
+    {   
+        // dd($request->all());
         // Lấy dữ liệu từ request
         $tournament = new Tournament();
         $tournament->owner_id = $request->owner_id;
@@ -142,5 +146,31 @@ class TournamentController extends Controller
         $tournament = Tournament::where('slug', $slug)->first();
 
         return view('tournaments.about', compact('tournament'));
+    }
+
+    public function search(Request $request)
+    {
+        $key = $request->search;
+        $tournaments = Tournament::whereNotNull('slug')
+                                ->orderBy('created_at', 'DESC')
+                                ->get();
+
+        if(isset($key)){
+            $tournaments = Tournament::where('name', 'LIKE', '%'.$key.'%')
+                                    ->orWhere('address', 'LIKE','%'.$key.'%')
+                                    ->orWhere('stadium', 'LIKE','%'.$key.'%')
+                                    ->orderBy('created_at', 'DESC')
+                                    ->get();
+            if(count($tournaments) > 0){
+                return view('tournaments.list', compact('tournaments'));
+            }else{
+                $tournaments = Tournament::whereNotNull('slug')
+                                ->orderBy('created_at', 'DESC')
+                                ->get();
+                Session::flash('search_false', "Không tìm thấy kết quả");
+            }
+        }
+
+        return view('tournaments.list', compact('tournaments'));
     }
 }

@@ -29,8 +29,8 @@
                 @endswitch
             </small>
             <small class="header-text">Bóng đá sân {{ $tournament->number_player }} | </small>
-            <small class="header-text">{{ $tournament->stadium }} |</small>
-            <small class="header-text">{{ $tournament->address }}</small>
+            <small class="header-text">{{ isset($tournament->stadium)?$tournament->stadium:"Chưa cập nhật" }} |</small>
+            <small class="header-text">{{ isset($tournament->address)?$tournament->address:"Chưa cập nhật" }}</small>
             <br>
             <small class="header-text"><span class="glyphicon glyphicon-ok-sign"></span> {{ $tournament->number_club }} đội bóng</small>
             <br>

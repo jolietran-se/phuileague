@@ -135,7 +135,6 @@
                                             <div id="01" class="subtab none">
                                                 <div class="form-group">
                                                     <label>Số đội tham gia</label><span class="required"> *</span>
-                                                    <small>(phù hợp từ 2-64 đội)</small>
                                                     <input class="form-control" type="number" name="number_club" placeholder="32">
                                                     @if ($errors->has('number_club'))
                                                         <p class="error-danger">{{ $errors->first('number_club') }}</p>
@@ -169,7 +168,6 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <label>Số lượt đá vòng tròn</label><span class="required"> *</span>
-                                                    <small>(lượt đi, lượt về)</small>
                                                     <div class="btn-group btn-group-justified btn-group-outline"  data-toggle="buttons">
                                                         <label class="btn tabOption active">
                                                             <input id="single" checked="checked" name="number_round" type="radio" value="1">1 lượt
@@ -199,7 +197,14 @@
                                                     <div class="col-xs-6">
                                                         <label>Số đội vào vòng knockout</label><span class="required"> *</span><br>
                                                         <small>(giai đoạn 2: loại trực tiếp)</small>
-                                                        <input class="form-control" type="number" name="number_knockout" placeholder="16">
+                                                        <select name="number_knockout" id="number_knockout" class="form-control">
+                                                            <option value="2">2</option>
+                                                            <option value="4">4</option>
+                                                            <option value="8">8</option>
+                                                            <option value="16">16</option>
+                                                            <option value="32">32</option>
+                                                            <option value="64">64</option>
+                                                        </select>
                                                         @if ($errors->has('number_knockout'))
                                                             <p class="error-danger">{{ $errors->first('number_knockout') }}</p>
                                                         @endif

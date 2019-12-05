@@ -17,11 +17,11 @@
                 <div id="tablist-setting">
                     <ul class="nav nav-pills nav-stacked">
                         <li class="active"><a href="{{ route('tournament.setting', $tournament->slug)}}">Thông tin chung <span class="glyphicon glyphicon-menu-right"></span></a></li>
-                        <li><a href="{{ route('setting.status', $tournament->slug)}}">Trạng thái <span class="glyphicon glyphicon-menu-right"></span></a></li>
-                        <li><a href="{{ route('setting.clubs', $tournament->slug)}}">Quản lý đội bóng <span class="glyphicon glyphicon-menu-right"></span></a></li>
                         <li><a href="{{ route('setting.groupstage', $tournament->slug)}}">Sắp xếp bảng đấu <span class="glyphicon glyphicon-menu-right"></span></a></li>
                         <li><a href="{{ route('setting.matchstage', $tournament->slug)}}">Sắp xếp cặp đấu <span class="glyphicon glyphicon-menu-right"></span></a></li>
                         <li><a href="{{ route('setting.schedule', $tournament->slug)}}">Quản lý lịch đấu <span class="glyphicon glyphicon-menu-right"></span></a></li>
+                        <li><a href="{{ route('setting.status', $tournament->slug)}}">Trạng thái <span class="glyphicon glyphicon-menu-right"></span></a></li>
+                        <li><a href="{{ route('setting.clubs', $tournament->slug)}}">Quản lý đội bóng <span class="glyphicon glyphicon-menu-right"></span></a></li>
                         <li><a href="{{ route('setting.rankingrule', $tournament->slug)}}">Quy tắc xếp hạng<span class="glyphicon glyphicon-menu-right"></span></a></li>
                         <li><a href="{{ route('setting.supporter', $tournament->slug)}}">Nhà tài trợ<span class="glyphicon glyphicon-menu-right"></span></a></li>
                     </ul>
@@ -47,8 +47,13 @@
                         @endswitch
                     </small>
                     <small class="header-text">Bóng đá sân {{ $tournament->number_player }} | </small>
-                    <small class="header-text">{{ $tournament->stadium }} |</small>
-                    <small class="header-text">{{ $tournament->address }}</small>
+                    <small class="header-text">{{ isset($tournament->stadium)?$tournament->stadium:"Chưa cập nhật" }} |</small>
+                    <small class="header-text">{{ isset($tournament->address)?$tournament->address:"Chưa cập nhật" }}</small><br>
+                    <small class="header-text">{{ $tournament->number_club }} đội bóng </small>
+                    @if ($tournament->tournament_type_id == 3)
+                        <small class="header-text">| {{ $tournament->number_group }} bảng đấu |</small>
+                        <small class="header-text">{{ $tournament->number_knockout }} đội vào vòng knockout</small>
+                    @endif
                 </div>
                 <!-- Form cập nhật thông tin -->
                 
