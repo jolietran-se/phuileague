@@ -8,8 +8,8 @@
 }
 .format-section,
 .format-main .container{
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 .format-main.format-section img{
     border-radius: 50%;

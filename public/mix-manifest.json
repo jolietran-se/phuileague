@@ -15,5 +15,7 @@
     "/css/style.css": "/css/style.css",
     "/css/time-circles.css": "/css/time-circles.css",
     "/css/home.css": "/css/home.css",
-    "/css/user.css": "/css/user.css"
+    "/css/user.css": "/css/user.css",
+    "/css/tournament.css": "/css/tournament.css",
+    "/css/club.css": "/css/club.css"
 }

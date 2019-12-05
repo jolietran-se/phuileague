@@ -1,0 +1,129 @@
+/* ----------------------
+|      CREATE CLUB      |
+-------------------------*/
+.club-section.club-main{
+    margin: 20px;
+}
+div#create-club{
+    margin-left: 170px;
+}
+label{
+    margin-bottom: 0px;
+}
+.logo-club img{
+    width: 100%;
+    height: 200px;
+    border-radius: 10px;
+    border: 1px solid #326295;
+    padding: 5px;
+}
+.set-logo{
+    margin-top: 5px;
+    width: 100%;
+}
+#club-uniform img{
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    border: 1px solid #326295;
+    padding: 5px;
+}
+#club-uniform .set-uniform{
+    margin-top: 5px;
+    width: 100%;
+}
+
+#update-unifom, #contact, #introduce{
+    margin-top: 20px;
+}
+button.submit-create{
+    width: 100%;
+}
+.required{
+    color: red;
+}
+
+/* LIST CLUB */
+.thumbnail #logo a>img{
+    width: 80%;
+}
+.list-section.list-main {
+    margin: 20px;
+}
+.media-heading h5{
+    color: #326295;
+}
+hr{
+    margin: 10px;
+}
+
+/* Tab List */
+.club-section.club-main #tablist-setting ul li{
+    border: 1px solid #326295;
+    border-radius: 5px;
+}
+
+ul li a span{
+    float: right;
+}
+.page-header{
+    margin: 10px 0 10px !important;
+}
+.page-title{
+    margin-top: 0px !important;
+}
+.panel-body{
+    padding: 5px !important;
+}
+.croppie-container {
+    height: auto !important;
+}
+#show-logo img{
+    border: 1px solid #326295;
+    border-radius: 50%;
+    padding: 5px;
+    /* margin-left: 30px; */
+}
+#show-uniform img{
+    border: 1px solid #326295;
+    border-radius: 5px;
+    padding: 5px;
+    margin-left: 10px;
+}
+hr{
+    margin: 5px !important;
+}
+#player-avatar img{
+    border: 1px solid #326295;
+    border-radius: 50%;
+    padding: 2px;
+    margin-top: 10%;
+}
+#player-avatar button{
+    margin: 5px 0 0 25%;
+}
+#player-info{
+    margin-top: 10px;
+}
+
+#demo-avatar .caption .btn.edit-player{
+    padding: 0px;
+    width: 50%;
+    float: left;
+}
+#demo-avatar .caption .btn.delete-player{
+    padding: 0px;
+    width: 50%;
+    float: left;
+}
+#demo-avatar .thumbnail>img{
+    width: 120px;
+    border-radius: 50%;
+    border: 1px solid #ddd;
+}
+#editPlayerModal table {
+    margin-top: 20px;
+}
+#editPlayerModal table tr td{
+    line-height: 45px;
+}
