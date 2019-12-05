@@ -32,6 +32,7 @@ Auth::routes();
     Route::group(['prefix' => 'league'], function () {
         // list tournament
         Route::get('/', 'TournamentController@index')->name('tournament.list');
+        Route::post('/search', 'TournamentController@search')->name('tournament.search');
 
         Route::group(['middleware' => 'auth'], function () {
             Route::post('/crop-logo', 'TournamentController@imageCrop')->name('tournament.crop-logo');

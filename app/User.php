@@ -54,7 +54,7 @@ class User extends Authenticatable
     // User 1-n Tournament
     public function tournaments()
     {
-        return $this->hasMany('App\Tournament');
+        return $this->hasMany('App\Tournament', 'owner_id');
     }
     // User n - n Role
     public function roles()
