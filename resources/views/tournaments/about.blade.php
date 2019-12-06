@@ -12,15 +12,26 @@
             <!-- Header TabList -->
             <div id="tablist-header" class="tablist">
                 <ul class="nav nav-tabs">
-                    <li role="presentation"><a href="{{ route('tournament.setting', $tournament->slug)}}">Tùy chỉnh</a></li>
-                    <li role="presentation"><a href="{{ route('tournament.dashboard', $tournament->slug)}}">Tin chung</a></li>
-                    <li role="presentation"><a href="{{ route('tournament.listregister', $tournament->slug)}}">Danh sách đăng ký</a></li>
-                    <li role="presentation"><a href="{{ route('tournament.stagegroup', $tournament->slug)}}">Vòng bảng</a></li>
-                    <li role="presentation"><a href="{{ route('tournament.knockout', $tournament->slug)}}">Vòng loại trực tiếp</a></li>
-                    <li role="presentation"><a href="{{ route('tournament.ranking', $tournament->slug)}}">Bảng xếp hạng</a></li>
-                    <li role="presentation"><a href="{{ route('tournament.listclub', $tournament->slug)}}">Đội bóng</a></li>
-                    <li role="presentation"><a href="{{ route('tournament.statistics', $tournament->slug)}}">Thống kê</a></li>
-                    <li role="presentation" class="active"><a href="{{ route('tournament.about', $tournament->slug)}}">Giới thiệu và điều lệ</a></li>
+                    @if ($userID == $tournament->owner_id)
+                        <li role="presentation"><a href="{{ route('tournament.setting', $tournament->slug)}}">Tùy chỉnh</a></li>
+                        <li role="presentation" ><a href="{{ route('tournament.dashboard', $tournament->slug)}}">Tin chung</a></li>
+                        <li role="presentation"><a href="{{ route('tournament.listregister', $tournament->slug)}}">Danh sách đăng ký</a></li>
+                        <li role="presentation"><a href="{{ route('tournament.stagegroup', $tournament->slug)}}">Vòng bảng</a></li>
+                        <li role="presentation"><a href="{{ route('tournament.knockout', $tournament->slug)}}">Vòng loại trực tiếp</a></li>
+                        <li role="presentation"><a href="{{ route('tournament.ranking', $tournament->slug)}}">Bảng xếp hạng</a></li>
+                        <li role="presentation"><a href="{{ route('tournament.listclub', $tournament->slug)}}">Đội bóng</a></li>
+                        <li role="presentation"><a href="{{ route('tournament.statistics', $tournament->slug)}}">Thống kê</a></li>
+                        <li role="presentation" class="active"><a href="{{ route('tournament.about', $tournament->slug)}}">Giới thiệu và điều lệ</a></li>
+                    @else 
+                        <li role="presentation"><a href="{{ route('tournament.dashboard', $tournament->slug)}}">Tin chung</a></li>
+                        <li role="presentation"><a href="{{ route('tournament.listregister', $tournament->slug)}}">Danh sách đăng ký</a></li>
+                        <li role="presentation"><a href="{{ route('tournament.stagegroup', $tournament->slug)}}">Vòng bảng</a></li>
+                        <li role="presentation"><a href="{{ route('tournament.knockout', $tournament->slug)}}">Vòng loại trực tiếp</a></li>
+                        <li role="presentation"><a href="{{ route('tournament.ranking', $tournament->slug)}}">Bảng xếp hạng</a></li>
+                        <li role="presentation"><a href="{{ route('tournament.listclub', $tournament->slug)}}">Đội bóng</a></li>
+                        <li role="presentation"><a href="{{ route('tournament.statistics', $tournament->slug)}}">Thống kê</a></li>
+                        <li role="presentation" class="active"><a href="{{ route('tournament.about', $tournament->slug)}}">Giới thiệu và điều lệ</a></li>
+                    @endif
                 </ul>
             </div>
             <!--================-->
@@ -34,7 +45,7 @@
                     @if(isset($tournament->introduce)) 
                         {{ strip_tags($tournament->introduce) }}
                     @else
-                        <p><small>Giải đấu hiện chưa có điều lệ</small></p>
+                        <p><small>Giải đấu hiện chưa được giới thiệu</small></p>
                     @endif
                 </div>
                 <div class="page-header">
@@ -42,6 +53,8 @@
                         <strong>Điều lệ giải: </strong>
                         @if (isset($tournament->charter))
                             <a href="{{ route('tournament.charter', [ $tournament->slug, $tournament->charter]) }}"  target="_blank"> Tải xuống </a>
+                        @else 
+                            <p><small>Giải đấu hiện chưa có điều lệ</small></p>
                         @endif
                     </h6>
                 </div>

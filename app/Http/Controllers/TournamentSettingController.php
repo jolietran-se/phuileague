@@ -20,8 +20,11 @@ class TournamentSettingController extends Controller
     public function setting($slug)
     {
         $tournament = Tournament::where('slug', $slug)->first();
-        return view('tournaments.setting', compact('tournament'));
+        $userID = isset(Auth::user()->id)?Auth::user()->id:0;
+
+        return view('tournaments.setting', compact('tournament', 'userID'));
     }
+
     public function exportChater($slug, $charter){
         // dd(1);
         $pathToFile = public_path('storage/charters/'.$charter);

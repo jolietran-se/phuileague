@@ -19,7 +19,9 @@ class TournamentController extends Controller
         $tournaments = Tournament::whereNotNull('slug')
                                 ->orderBy('created_at', 'DESC')
                                 ->get();
-        return view('tournaments.list', compact('tournaments'));
+        $userID = isset(Auth::user()->id)?Auth::user()->id:0;
+
+        return view('tournaments.list', compact('tournaments', 'userID'));
     }
     /* Cắt logo */ 
     public function imageCrop(Request $request)
@@ -95,57 +97,80 @@ class TournamentController extends Controller
     public function dashboard($slug)
     {
         $tournament = Tournament::where('slug', $slug)->first();
-        return view('tournaments.dashboard', compact('tournament'));
+
+        $userID = isset(Auth::user()->id)?Auth::user()->id:0;
+
+        return view('tournaments.dashboard', compact('tournament', 'userID'));
     }
 
     /* View danh sách đăng ký giải đấu */ 
     public function listRegister($slug)
     {
         $tournament = Tournament::where('slug', $slug)->first();
-        return view('tournaments.list_register', compact('tournament'));
+
+        $userID = isset(Auth::user()->id)?Auth::user()->id:0;
+
+        return view('tournaments.list_register', compact('tournament', 'userID'));
     }
 
     /* View Vòng bảng */ 
     public function stageGroup($slug)
     {
         $tournament = Tournament::where('slug', $slug)->first();
-        return view('tournaments.stage_group', compact('tournament'));
+        
+        $userID = isset(Auth::user()->id)?Auth::user()->id:0;
+        
+        return view('tournaments.stage_group', compact('tournament', 'userID'));
     }
 
     /* View Vòng loại trực tiếp*/ 
     public function knockout($slug)
     {
         $tournament = Tournament::where('slug', $slug)->first();
-        return view('tournaments.knockout', compact('tournament'));
+        
+        $userID = isset(Auth::user()->id)?Auth::user()->id:0;
+        
+        return view('tournaments.knockout', compact('tournament', 'userID'));
     }
 
     /* View Bảng xếp hạng */ 
     public function ranking($slug)
     {
         $tournament = Tournament::where('slug', $slug)->first();
-        return view('tournaments.ranking', compact('tournament'));
+        
+        $userID = isset(Auth::user()->id)?Auth::user()->id:0;
+        
+        return view('tournaments.ranking', compact('tournament', 'userID'));
     }
 
     /* View Đội bóng */ 
     public function listClubs($slug)
     {
         $tournament = Tournament::where('slug', $slug)->first();
-        return view('tournaments.list_club', compact('tournament'));
+        
+        $userID = isset(Auth::user()->id)?Auth::user()->id:0;
+        
+        return view('tournaments.list_club', compact('tournament', 'userID'));
     }
 
     /* View Thống kê */ 
     public function statistics($slug)
     {
         $tournament = Tournament::where('slug', $slug)->first();
-        return view('tournaments.statistics', compact('tournament'));
+        
+        $userID = isset(Auth::user()->id)?Auth::user()->id:0;
+        
+        return view('tournaments.statistics', compact('tournament', 'userID'));
     }
 
     /* View Giới thiệu */ 
     public function about($slug)
     {
         $tournament = Tournament::where('slug', $slug)->first();
+        
+        $userID = isset(Auth::user()->id)?Auth::user()->id:0;
 
-        return view('tournaments.about', compact('tournament'));
+        return view('tournaments.about', compact('tournament', 'userID'));
     }
 
     public function search(Request $request)

@@ -60,17 +60,34 @@
                         @foreach ($tournaments as $tour)
                             <div class="col-sm-3 col-md-3">
                                 <div class="thumbnail">
-                                    <a href="{{ route('tournament.setting', $tour->slug) }}">
-                                        @if(isset($tour->logo))
-                                            <img src="{{ asset('storage/logos/').'/'.$tour->logo }}" alt="...">
-                                        @else
-                                            <img src="{{ asset('/storage/logos/banner_default.png') }}">
-                                        @endif
-                                    </a>
-                                    <div class="caption">
+                                    @if ($userID == $tour->owner_id)
                                         <a href="{{ route('tournament.setting', $tour->slug) }}">
-                                            <h6 class="text-center" style="color:#326295">{{ $tour->name }}</h6>
+                                            @if(isset($tour->logo))
+                                                <img src="{{ asset('storage/logos/').'/'.$tour->logo }}" alt="...">
+                                            @else
+                                                <img src="{{ asset('/storage/logos/banner_default.png') }}">
+                                            @endif
                                         </a>
+                                    @else
+                                        <a href="{{ route('tournament.dashboard', $tour->slug) }}">
+                                            @if(isset($tour->logo))
+                                                <img src="{{ asset('storage/logos/').'/'.$tour->logo }}" alt="...">
+                                            @else
+                                                <img src="{{ asset('/storage/logos/banner_default.png') }}">
+                                            @endif
+                                        </a>
+                                    @endif
+                                    
+                                    <div class="caption">
+                                        @if ($userID == $tour->owner_id)
+                                            <a href="{{ route('tournament.setting', $tour->slug) }}">
+                                                <h6 class="text-center" style="color:#326295">{{ $tour->name }}</h6>
+                                            </a>
+                                        @else
+                                            <a href="{{ route('tournament.dashboard', $tour->slug) }}">
+                                                <h6 class="text-center" style="color:#326295">{{ $tour->name }}</h6>
+                                            </a>
+                                        @endif
                                         <p class="text-center author"><small class="header-text">BTC: {{ $tour->user->username }}</small></p>
                                         <p class="text-center"  >
                                             <small class="header-text">
