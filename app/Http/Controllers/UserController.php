@@ -78,7 +78,6 @@ class UserController extends Controller
         $clubs = Club::where('owner_id', $user->id)
                     ->orderBy('created_at', 'desc')
                     ->get();
-
         return view('users.clubs', compact('user', 'clubs'));
     }
 }

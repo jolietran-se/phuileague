@@ -104,13 +104,16 @@ class ClubController extends Controller
     {
         $club = Club::where('slug', $slug)->first();
 
-        $players = Player::where('club_id', $club->id)->get();
-        
-        $club->number_player = count($players);
-
+        $player1s = Player::where('club_id', $club->id)
+                        ->where('ismain', 1)
+                        ->get();
+        $player2s = Player::where('club_id', $club->id)
+                        ->where('ismain', 2)
+                        ->get();
+        $club->number_player = count($player1s)+ count($player2s);
         $club->save();
 
-        return view('clubs.member', compact('club', 'players'));
+        return view('clubs.member', compact('club', 'player1s', 'player2s'));
     }
     // Thêm thành viên
     public function addMember(PlayerRequest $request, $slug)

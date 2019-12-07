@@ -2,6 +2,7 @@
 @section('head')
     <link rel="stylesheet" href="{{ asset('css/user.css') }}">
     <link rel="stylesheet" href="{{ asset('css/tournament.css') }}">
+    <link rel="stylesheet" href="{{ asset('bower_components/toastr/toastr.min.css') }}">
 
 @endsection
 
@@ -41,5 +42,11 @@
 @endsection
 
 @section('foot')
+    <script src="{{ asset('bower_components/toastr/toastr.min.js') }}"></script>
+    <script>
+        @if(Session::has('check_owner'))
+            toastr.info("{{ Session::get('check_owner') }}");
+        @endif
+    </script>
 @endsection
 

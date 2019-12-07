@@ -43,7 +43,9 @@
                 </div>
                 <div id="introduce">
                     @if(isset($tournament->introduce)) 
-                        {{ strip_tags($tournament->introduce) }}
+                        @php
+                            echo $tournament->introduce;
+                        @endphp
                     @else
                         <p><small>Giải đấu hiện chưa được giới thiệu</small></p>
                     @endif

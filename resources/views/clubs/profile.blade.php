@@ -6,6 +6,9 @@
 @endsection
 
 @section('content')
+    @php
+        $userID = isset(Auth::user()->id)?Auth::user()->id:0;
+    @endphp
     <!-- Header TabList -->
     <div class="club-section club-main">
         <div class="container">
@@ -17,8 +20,10 @@
                 <div id="tablist-setting">
                     <ul class="nav nav-pills nav-stacked">
                         <li role="presentation" class="active"><a href="{{ route('club.profile', $club->slug)}}">Thông tin chung<span class="glyphicon glyphicon-chevron-right"></span></a></li>
-                        <li role="presentation"><a href="{{ route('club.setting', $club->slug)}}">Chỉnh sửa thông tin đội<span class="glyphicon glyphicon-chevron-right"></a></li>
-                            <li role="presentation"><a href="{{ route('club.member', $club->slug)}}">Thành viên<small>({{ isset($club->number_player)?$club->number_player:0 }})</small><span class="glyphicon glyphicon-chevron-right"></a></li>
+                        @if ($club->owner_id == $userID)
+                            <li role="presentation"><a href="{{ route('club.setting', $club->slug)}}">Chỉnh sửa thông tin đội<span class="glyphicon glyphicon-chevron-right"></a></li>
+                        @endif
+                        <li role="presentation"><a href="{{ route('club.member', $club->slug)}}">Thành viên<small>({{ isset($club->number_player)?$club->number_player:0 }})</small><span class="glyphicon glyphicon-chevron-right"></a></li>
                         <li role="presentation"><a href="{{ route('club.statistic', $club->slug)}}">Thống kê<span class="glyphicon glyphicon-chevron-right"></a></li>
                     </ul>
                 </div>

@@ -4,10 +4,10 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Auth;
-use App\Tournament;
+use App\Club;
 use Session;
 
-class CheckOwner
+class CheckOwnerCLub
 {
     /**
      * Handle an incoming request.
@@ -19,12 +19,14 @@ class CheckOwner
     public function handle($request, Closure $next)
     {   
         $userID = isset(Auth::user()->id)?Auth::user()->id:0;
-        $tournament = Tournament::where('slug', $request->slug)->first();
-        if($userID == $tournament->owner_id){
+        $club = Club::where('slug', $request->slug)->first();
+
+        if($userID == $club->owner_id){
             return $next($request);
         }else{
-            Session::flash('check_owner', 'Bạn không phải người tổ chức giải đấu này');
-            return redirect()->back();
+            Session::flash('check_owner', 'Bạn không phải người đại diện đội bóng này');
+
+            return redirect()->route('club.profile', $club->slug);
         }
     }
 }

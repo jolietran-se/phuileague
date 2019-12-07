@@ -4,9 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\TournamentRequest;
+use App\Http\Requests\RegisterRequest;
 use Illuminate\Support\Str;
 use App\Tournament;
 use App\User;
+use App\Club;
+use App\Player;
+use App\ClubTournament;
 use Image;
 use Log;
 use Auth;
@@ -107,12 +111,91 @@ class TournamentController extends Controller
     public function listRegister($slug)
     {
         $tournament = Tournament::where('slug', $slug)->first();
-
         $userID = isset(Auth::user()->id)?Auth::user()->id:0;
+        $clubs = Club::where('owner_id', $userID)->get();
 
-        return view('tournaments.list_register', compact('tournament', 'userID'));
+        date_default_timezone_set('Asia/Ho_Chi_Minh');  // Thiết lập về múi giờ Việt Nam
+        $date = date("d/m/Y");                          // Lấy ra ngày tháng hiện tại
+        // Kiểm tra xem đã hết hạn chưa
+        if($tournament->register_date < $date){
+            $tournament->register_permission = "off";
+            if($tournament->status == 3) $tournament->status = "2";
+            $tournament->save();
+        }else{
+            $tournament->register_permission = "on";
+            if($tournament->status == 2) $tournament->status = "3";
+            $tournament->save();
+        }
+        
+        return view('tournaments.list_register', compact('tournament', 'userID', 'clubs'));
     }
 
+    public function register(RegisterRequest $request, $slug)
+    {   
+        $tournament = Tournament::where('slug', $slug)->first();
+
+        $registed = ClubTournament::where('tournament_id', $tournament->id)->get();
+
+        $flag = true;
+        foreach ($registed as $club){
+            if($club->club_id == $request->club_id) $flag = false;
+        }
+        if($flag == true){
+            $club_tour = new ClubTournament();
+            $club_tour->tournament_id = $tournament->id;
+            $club_tour->club_id = $request->club_id;
+            $club_tour->status = 0; // trạng thái chờ phê duyệt
+            $club_tour->save();
+            Session::flash('register_success', "Đăng ký thành công");
+        }else{
+            Session::flash('register_fail', "Đội bóng đã nằm trong danh sách đăng ký");
+        }
+        
+        return redirect()->route('tournament.listregister', $tournament->slug);
+    }
+    // Cho phép tham gia
+    public function actionAllow(Request $request, $slug){
+
+        $clubID = $request->clubID;
+        $tournamentID = $request->tournamentID;
+
+        $club_tournament = ClubTournament::where('tournament_id', $tournamentID)
+                                            ->where('club_id', $clubID)
+                                            ->first();
+        $club_tournament->status = 1;
+        $club_tournament->save();
+
+        return response()->json(['status'=>true, 'clubId'=> $club_tournament->club_id]);
+    }
+    
+    // Từ chối tham gia
+    public function actionReject(Request $request, $slug){
+
+        $clubID = $request->clubID;
+        $tournamentID = $request->tournamentID;
+
+        $club_tournament = ClubTournament::where('tournament_id', $tournamentID)
+                                            ->where('club_id', $clubID)
+                                            ->first();
+        $club_tournament->status = 2;
+        $club_tournament->save();
+
+        return response()->json(['status'=>true, 'clubId'=> $club_tournament->club_id]);
+    }
+    // hủy đăng ký
+    public function cancelSignUp(Request $request, $slug){
+        Log::info('action-allow');
+        $clubID = $request->clubID;
+        $tournamentID = $request->tournamentID;
+
+        $club_tournament = ClubTournament::where('tournament_id', $tournamentID)
+                                            ->where('club_id', $clubID)
+                                            ->first();
+        $club_tournament->status = 2;
+        $club_tournament->save();
+
+        return response()->json(['status'=>true, 'clubId'=> $club_tournament->club_id]);
+    }
     /* View Vòng bảng */ 
     public function stageGroup($slug)
     {
@@ -198,4 +281,6 @@ class TournamentController extends Controller
 
         return view('tournaments.list', compact('tournaments'));
     }
+
+    
 }

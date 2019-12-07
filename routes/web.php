@@ -33,17 +33,21 @@ Auth::routes();
         // list tournament
         Route::get('/', 'TournamentController@index')->name('tournament.list');
         Route::post('/search', 'TournamentController@search')->name('tournament.search');
-
         Route::post('/crop-logo', 'TournamentController@imageCrop')->name('tournament.crop-logo');
+       
+        
         // Tạo giải đấu
-        Route::get('/create-tournament', 'TournamentController@create')->name('tournament.create');
-        Route::post('/create-tournament', 'TournamentController@store')->name('tournament.store');
+        Route::get('/create-tournament', 'TournamentController@create')->name('tournament.create')->middleware('auth');
+        Route::post('/create-tournament', 'TournamentController@store')->name('tournament.store')->middleware('auth');
         
         Route::group(['prefix' => '{slug}'], function () {
-            // Tùy chỉnh giải đấu
             Route::group(['middleware' => 'auth'], function () {
-                Route::group(['prefix' => 'setting'], function () {
-                    Route::group(['middleware' => ['owner']], function () {
+                // Đăng ký giải đấu
+                Route::post('/register-tournament', 'TournamentController@register')->name('tournament.register');
+                
+                Route::group(['middleware' => ['owner_tournament']], function () {
+                    // Tùy chỉnh giải đấu
+                    Route::group(['prefix' => 'setting'], function () {
                         Route::get('/', 'TournamentSettingController@setting')->name('tournament.setting');                  // thông tin chung
                         Route::post('/', 'TournamentSettingController@updateSetting')->name('tournament.update');            // cập nhật thông tin chung
                         
@@ -58,7 +62,13 @@ Auth::routes();
                         Route::get('/{charter}', 'TournamentSettingController@exportChater')->name('tournament.charter');    // cập nhật thông tin chung
                         Route::post('/status/{status}', 'TournamentSettingController@updateStatus')->name('tournament.update-status');    // cập nhật thông tin chung
                     });
+                    // Xem xét danh sách đăng ký
+                    Route::post('/allow', 'TournamentController@actionAllow')->name('tournament.action-allow');      // cho phép tham gia
+                    Route::post('/reject', 'TournamentController@actionReject')->name('tournament.action-reject');    // từ chối
                 });
+                // Hủy đăng ký tham gia giải đấu
+                Route::post('/cancel-sign-up', 'TournamentController@cancelSignUp')->name('club.cancel-signup')->middleware('owner_club');
+
             });
 
             // Other
@@ -79,28 +89,28 @@ Auth::routes();
         // list club
         Route::get('/', 'ClubController@index')->name('club.list');
 
-        Route::group(['middleware' => ['auth']], function () {
-            Route::post('/crop-logo', 'ClubController@logoCrop')->name('club.crop-logo');
-            Route::post('/crop-uniform', 'ClubController@uniformCrop')->name('club.crop-uniform');
-            Route::post('/crop-avatar', 'ClubController@avatarCrop')->name('club.crop-avatar');
-            // Tạo giải đấu
-            Route::get('/create-club', 'ClubController@create')->name('club.create');
-            Route::post('/create-club', 'ClubController@store')->name('club.store');
+        Route::post('/crop-logo', 'ClubController@logoCrop')->name('club.crop-logo');
+        Route::post('/crop-uniform', 'ClubController@uniformCrop')->name('club.crop-uniform');
+        Route::post('/crop-avatar', 'ClubController@avatarCrop')->name('club.crop-avatar');
+        // Tạo giải đấu
+        Route::get('/create-club', 'ClubController@create')->name('club.create')->middleware('auth');
+        Route::post('/create-club', 'ClubController@store')->name('club.store')->middleware('auth');
 
-            Route::group(['prefix' => '{slug}'], function () {
-                Route::get('/profile', 'ClubController@profile')->name('club.profile');         // hồ sơ đội bóng
-                Route::get('/setting', 'ClubController@setting')->name('club.setting');         // cài đặt
-                Route::get('/member', 'ClubController@member')->name('club.member');            // thành viên
-                Route::get('/statistic', 'ClubController@statistic')->name('club.statistic');   // thống kê
-
-                Route::post('/setting', 'ClubController@update')->name('club.update');         // cài đặt
-                Route::post('/add-member', 'ClubController@addMember')->name('club.add-member');            // thành viên
-                Route::post('/edit-member', 'ClubController@editMember')->name('club.edit-member');            // thành viên
-                Route::post('/remove-member', 'ClubController@removeMember')->name('club.remove-member');            // thành viên
-            });
+        Route::group(['prefix' => '{slug}'], function () {
+            Route::get('/profile', 'ClubController@profile')->name('club.profile');         // hồ sơ đội bóng
+            Route::get('/member', 'ClubController@member')->name('club.member');            // thành viên
+            Route::get('/statistic', 'ClubController@statistic')->name('club.statistic');   // thống kê
             
+            Route::group(['middleware' => ['owner_club']], function () {
+                Route::group(['middleware' => ['auth']], function () {
+                    Route::get('/setting', 'ClubController@setting')->name('club.setting');         // cài đặt
+                    Route::post('/setting', 'ClubController@update')->name('club.update');         // cài đặt
+                    Route::post('/add-member', 'ClubController@addMember')->name('club.add-member');            // thành viên
+                    Route::post('/edit-member', 'ClubController@editMember')->name('club.edit-member');            // thành viên
+                    Route::post('/remove-member', 'ClubController@removeMember')->name('club.remove-member');            // thành viên
+                });
+            });
         });
-        
     });
 
    
