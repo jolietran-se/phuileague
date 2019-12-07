@@ -61,7 +61,8 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'locale' => \App\Http\Middleware\Locale::class,
-        'owner' => \App\Http\Middleware\CheckOwner::class,
+        'owner_tournament' => \App\Http\Middleware\CheckOwnerTournament::class,
+        'owner_club' => \App\Http\Middleware\CheckOwnerClub::class,
     ];
 
     /**

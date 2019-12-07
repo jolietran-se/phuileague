@@ -33,4 +33,8 @@ class Club extends Model
         return $this->belongsTo('App\User', 'owner_id');
     }
 
+    // Club n - n Tournament
+    public function tournaments(){
+        return $this->belongsToMany('App\Tournament')->withPivot('status')->withTimestamps();
+    }
 }
