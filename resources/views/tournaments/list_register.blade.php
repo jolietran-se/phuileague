@@ -97,7 +97,7 @@
                             <td>Tên đội</td>
                             <td>Người đại diện</td>
                             <td>SĐT Liên hệ</td>
-                            <td>Email</td>
+                            <td style="width:10%; overflow:hidden;">Email</td>
                             <td>Thời gian đăng ký</td>
                             <td style="width:15%">Trạng thái</td>
                             @if ($userID!=0)
@@ -109,9 +109,9 @@
                             <tr>
                                 <td>{{ $count++ }}</td>
                                 <td><a href="{{ route('club.profile', $club->slug) }}">{{ $club->name }}</a></td>
-                                <td>{{ isset($club->user->username)?$club->user->username:"Chưa cập nhật" }}</td>
-                                <td>{{ isset($club->user->phone)?$club->user->phone:"Chưa cập nhật" }}</td>
-                                <td>{{ isset($club->user->email)?$club->user->email:"Chưa cập nhật" }}</td>
+                                <td><small>{{ isset($club->user->username)?$club->user->username:"Chưa cập nhật" }}</small></td>
+                                <td><small>{{ isset($club->user->phone)?$club->user->phone:"Chưa cập nhật" }}</small></td>
+                                <td><small>{{ isset($club->user->email)?$club->user->email:"Chưa cập nhật" }}</small></td>
                                 <td>{{ $club->pivot->created_at }}</td>
                                 <td id="club-{{$club->id}}-status">
                                     @switch($club->pivot->status)
@@ -165,7 +165,7 @@
                                         <td>
                                             <a href="#" class="btn btn-primary cancel-sign-up" role="button"
                                                 data-club-id = "{{ $club->id}}"
-                                                data-tournament-slug = "{{ $tournament->slug }}"
+                                                data-club-slug = "{{ $club->slug }}"
                                                 data-tournament-id = "{{ $tournament->id }}"
                                             >Hủy đăng ký</a>
                                         </td>
@@ -297,6 +297,7 @@
                         location.reload();
                     }, error: function(xhr, textStatus, thrownError) {
                         console.log('error');
+                        toastr.info("Đã xảy ra lỗi");
                     },
                 });
             });
@@ -332,6 +333,7 @@
                         location.reload();
                     }, error: function(xhr, textStatus, thrownError) {
                         console.log('error');
+                        toastr.info("Đã xảy ra lỗi");
                     },
                 });
             });
@@ -341,7 +343,27 @@
             $('#cancleModal').modal('show');
             var clubID = $(this).data('club-id');
             var tournamentID = $(this).data('tournament-id');
-            var tournamentSlug = $(this).data('tournament-slug');
+            var clubSlug = $(this).data('club-slug');
+            console.log(clubSlug);
+            $(document).on('click', '.cancel-sign-up', function(){
+                url = "{{ route('club.cancel-signup', ":slug") }}"
+                url = url.replace(':slug', clubSlug);
+                $.ajax({
+                    dataType: 'json',
+                    type:'POST',
+                    url: url,
+                    data:{
+                        'clubID': clubID,
+                        'tournamentID': tournamentID,
+                    },success:function(data){
+                        $('#cancleModal').modal('hide');
+                        location.reload();
+                    }, error: function(xhr, textStatus, thrownError) {
+                        console.log('error');
+                        toastr.info("Đã xảy ra lỗi");
+                    },
+                });
+            });
         });
     </script>
 @endsection

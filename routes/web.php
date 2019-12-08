@@ -66,8 +66,6 @@ Auth::routes();
                     Route::post('/allow', 'TournamentController@actionAllow')->name('tournament.action-allow');      // cho phép tham gia
                     Route::post('/reject', 'TournamentController@actionReject')->name('tournament.action-reject');    // từ chối
                 });
-                // Hủy đăng ký tham gia giải đấu
-                Route::post('/cancel-sign-up', 'TournamentController@cancelSignUp')->name('club.cancel-signup')->middleware('owner_club');
 
             });
 
@@ -109,6 +107,8 @@ Auth::routes();
                     Route::post('/edit-member', 'ClubController@editMember')->name('club.edit-member');            // thành viên
                     Route::post('/remove-member', 'ClubController@removeMember')->name('club.remove-member');            // thành viên
                 });
+                // Hủy đăng ký tham gia giải đấu
+                Route::post('/cancel-sign-up', 'TournamentController@cancelSignUp')->name('club.cancel-signup');
             });
         });
     });

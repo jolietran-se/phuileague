@@ -35,7 +35,9 @@
                     @endif
                 </ul>
             </div>
-            Đội bóng
+            <div id="content" class="col-md-8">
+                Danh sách CLB chính thức
+            </div>
         </div>
     </div>
 @endsection
