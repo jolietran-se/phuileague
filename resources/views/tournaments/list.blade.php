@@ -89,6 +89,23 @@
                                             </a>
                                         @endif
                                         <p class="text-center author"><small class="header-text">BTC: {{ $tour->user->username }}</small></p>
+                                        <p class="text-center">
+                                            @switch($tour->status)
+                                                @case(1)
+                                                    <span class="label label-danger">Đóng</span>
+                                                    @break
+                                                @case(2)
+                                                    <span class="label label-default">Chưa kích hoạt</span>
+                                                    @break
+                                                @case(3)
+                                                    <span class="label label-success">Đăng ký</span>
+                                                    @break
+                                                @case(4)
+                                                    <span class="label label-primary">Hoạt động</span>
+                                                    @break
+                                                @default
+                                            @endswitch
+                                        </p>
                                         <p class="text-center"  >
                                             <small class="header-text">
                                                 @switch($tour->tournament_type_id)

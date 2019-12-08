@@ -11,6 +11,7 @@ use App\User;
 use App\Club;
 use App\Player;
 use App\ClubTournament;
+use App\TournamentPlayer;
 use Image;
 use Log;
 use Auth;
@@ -25,7 +26,24 @@ class TournamentController extends Controller
                                 ->get();
         $userID = isset(Auth::user()->id)?Auth::user()->id:0;
 
+        foreach($tournaments as $tournament){
+            date_default_timezone_set('Asia/Ho_Chi_Minh');  // Thiết lập về múi giờ Việt Nam
+            $date = date("d/m/Y");                          // Lấy ra ngày tháng hiện tại
+            // Kiểm tra xem đã hết hạn chưa
+            if($tournament->register_date < $date){
+                $tournament->register_permission = "off";
+                if($tournament->status == 3) $tournament->status = "2";
+                $tournament->save();
+            }else{
+                $tournament->register_permission = "on";
+                if($tournament->status == 2) $tournament->status = "3";
+                $tournament->save();
+            }
+
+        }
+        
         return view('tournaments.list', compact('tournaments', 'userID'));
+
     }
     /* Cắt logo */ 
     public function imageCrop(Request $request)
@@ -154,22 +172,46 @@ class TournamentController extends Controller
         return redirect()->route('tournament.listregister', $tournament->slug);
     }
     // Cho phép tham gia
-    public function actionAllow(Request $request, $slug){
+    public function actionAllow(Request $request, $slug)
+    {
 
         $clubID = $request->clubID;
         $tournamentID = $request->tournamentID;
-
+        // Lưu đội bóng vào danh sách
         $club_tournament = ClubTournament::where('tournament_id', $tournamentID)
                                             ->where('club_id', $clubID)
                                             ->first();
         $club_tournament->status = 1;
         $club_tournament->save();
+        
+        // Lưu thông tin các cầu thủ trong đội hình chính
+        $players = Player::where('club_id', $clubID)
+                            ->where('ismain', 1)
+                            ->orderBy('uniform_number')
+                            ->get();
+        if(count($players) != 0){
+            foreach ($players as $player) {
+                $tournament_player = new TournamentPlayer();
+                $tournament_player->club_tournament_id = $club_tournament->id ;
+                $tournament_player->name = $player->name ;
+                $tournament_player->avatar = $player->avatar ;
+                $tournament_player->uniform_number = $player->uniform_number ;
+                $tournament_player->uniform_name = $player->uniform_name ;
+                $tournament_player->position = $player->position ;
+                $tournament_player->role = $player->role ;
+                $tournament_player->phone = $player->phone ;
+                $tournament_player->birthday = $player->birthday ;
+                $tournament_player->save();
+            }
+        }
+        
 
         return response()->json(['status'=>true, 'clubId'=> $club_tournament->club_id]);
     }
     
     // Từ chối tham gia
-    public function actionReject(Request $request, $slug){
+    public function actionReject(Request $request, $slug)
+    {
 
         $clubID = $request->clubID;
         $tournamentID = $request->tournamentID;
@@ -179,22 +221,27 @@ class TournamentController extends Controller
                                             ->first();
         $club_tournament->status = 2;
         $club_tournament->save();
-
+        
+        // Xóa thông tin các cầu thủ tham gia giải
+        $players = TournamentPlayer::where('club_tournament_id', $club_tournament->id)->get();
+        if(count($players)!=0){
+            foreach ($players as $player) {
+                $player->delete();
+            }
+        }
+        
         return response()->json(['status'=>true, 'clubId'=> $club_tournament->club_id]);
     }
     // hủy đăng ký
-    public function cancelSignUp(Request $request, $slug){
-        Log::info('action-allow');
+    public function cancelSignUp(Request $request, $slug)
+    {
         $clubID = $request->clubID;
         $tournamentID = $request->tournamentID;
 
         $club_tournament = ClubTournament::where('tournament_id', $tournamentID)
                                             ->where('club_id', $clubID)
-                                            ->first();
-        $club_tournament->status = 2;
-        $club_tournament->save();
-
-        return response()->json(['status'=>true, 'clubId'=> $club_tournament->club_id]);
+                                            ->delete();
+        return response()->json(['status'=>true]);
     }
     /* View Vòng bảng */ 
     public function stageGroup($slug)

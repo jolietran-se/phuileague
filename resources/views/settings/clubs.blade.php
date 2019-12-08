@@ -25,8 +25,11 @@
                     </ul>
                 </div>
             </div>
-            <div class="col-md-8">
-                Đội bóng
+            <div id="content" class="col-md-8">
+                <div class="page-header profile-text text-center">
+                    <h6><strong>Các CLB thi đấu chính thức</strong></h6>
+                   
+                </div>
             </div>
         </div>
     </div>
