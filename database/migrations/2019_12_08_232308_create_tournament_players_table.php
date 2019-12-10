@@ -16,12 +16,15 @@ class CreateTournamentPlayersTable extends Migration
         Schema::create('tournament_players', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('club_tournament_id');
+            $table->integer('player_id');
             $table->string('name');
             $table->string('avatar')->nullable();
             $table->integer('uniform_number');
             $table->string('uniform_name')->nullable();
             $table->integer('position')->usigned();
             $table->integer('role')->usigned();
+            $table->string('front_idcard')->nullable();
+            $table->string('backside_idcard')->nullable();
             $table->string('phone')->nullable();
             $table->string('birthday')->nullable();
             $table->timestamps();
@@ -35,6 +38,6 @@ class CreateTournamentPlayersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tournament_player');
+        Schema::dropIfExists('tournament_players');
     }
 }

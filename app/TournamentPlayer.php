@@ -10,14 +10,17 @@ class TournamentPlayer extends Model
 
     protected $fillable = [
         'club_tournament_id',
+        'player_id',
         'name',
         'avatar',
         'uniform_number',
         'uniform_name',
+        'birthday',
         'position',
         'role',
+        'front_idcard',
+        'backside_idcard',
         'phone',
-        'birthday',
     ];
 
     // Player n-1 Tournament-Club

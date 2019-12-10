@@ -25,8 +25,11 @@
                     </ul>
                 </div>
             </div>
-            <div class="col-md-8">
-                Sắp xếp bảng đấu
+            <div id="content" class="col-md-8">
+                <div class="page-header profile-text text-center">
+                    <h6><strong>Sắp xếp bảng đấu</strong></h6>
+                    <small>Số lượng: </small>
+                </div>
             </div>
         </div>
     </div>

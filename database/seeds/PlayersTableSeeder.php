@@ -9,15 +9,15 @@ class PlayersTableSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+public function run()
     {
         $faker = Faker\Factory::create();
 
-        for ($i = 1; $i < 20; $i++) {
+        for ($i = 1; $i < 300; $i++) {
             DB::table('players')->insert([
                 'name' => $faker->name,
                 'phone' => $faker->phoneNumber,
-                'club_id' => 6,
+                'club_id' => $faker->numberBetween($min = 21, $max = 35),
                 'uniform_number' => $faker->randomDigit,
                 'uniform_name' => $faker->name,
                 'position' => $faker->numberBetween($min = 1, $max = 5),

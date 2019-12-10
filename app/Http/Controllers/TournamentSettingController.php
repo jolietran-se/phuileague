@@ -6,13 +6,17 @@ use Illuminate\Http\Request;
 use App\Http\Requests\TournamentRequest;
 use Illuminate\Support\Str;
 use App\Tournament;
+use App\ClubTournament;
+use App\TournamentPlayer;
 use App\User;
+use App\Club;
 use Image;
 use Log;
 use Auth;
 use Session;
 use Response;
 use Validator;
+
 class TournamentSettingController extends Controller
 {
 
@@ -28,7 +32,7 @@ class TournamentSettingController extends Controller
     public function exportChater($slug, $charter){
         // dd(1);
         $pathToFile = public_path('storage/charters/'.$charter);
-        
+        // dd($charter);
         return Response::make(file_get_contents($pathToFile), 200, [
             'Content-Type'=> 'application/pdf',
             'Content-Disposition' => 'inline; filename="'.$charter.'"'
@@ -36,6 +40,7 @@ class TournamentSettingController extends Controller
     }
     public function updateSetting(Request $request, $slug)
     {   
+        // dd($request->all());
         $tournament = Tournament::where('slug', $slug)->first();
         $tournaments = Tournament::whereNotNull('slug')->get();
         
@@ -59,13 +64,15 @@ class TournamentSettingController extends Controller
             $tournament->score_win = $request->score_win;
             $tournament->score_draw = $request->score_draw;
             $tournament->score_lose = $request->score_lose;
-            // Số cầu thủ/ vòng
+            $tournament->max_player = $request->max_player;
+            $tournament->register_date = $request->register_date;
+            $this->checkDate($tournament);
+            // Số cầu thủ , số vòng
             if(isset($request->number_player)) $tournament->number_player = $request->number_player;
             if(isset($request->number_round)) $tournament->number_round = $request->number_round;
             if(isset($request->logo)) $tournament->logo = $request->logo;
             if(isset($request->introduce)) $tournament->introduce = $request->introduce;
-
-            $tournament->save();
+            $tournaments->save();
             // File điều lệ
             if($request->file('charter') != null){
                 $file = $request->file('charter');
@@ -112,7 +119,10 @@ class TournamentSettingController extends Controller
     public function clubs($slug)
     {
         $tournament = Tournament::where('slug', $slug)->first();
-        return view('settings.clubs', compact('tournament'));
+
+        $clubs = $tournament->clubs()->where('status', 1)->get();
+
+        return view('settings.clubs', compact('tournament', 'clubs'));
     }
     /* 4. View sắp xếp bảng đấu */ 
     public function groupstage($slug)
@@ -143,5 +153,23 @@ class TournamentSettingController extends Controller
     {
         $tournament = Tournament::where('slug', $slug)->first();
         return view('settings.supporter', compact('tournament'));
+    }
+
+    public function checkDate($tournament){
+        // Ngày hiện tại
+        date_default_timezone_set('Asia/Ho_Chi_Minh');
+        $today = date("d-m-Y");
+
+        if($tournament->status != 4){
+            // Kiểm tra xem đã hết hạn chưa
+            if(strtotime($tournament->register_date) < strtotime($today)){
+                $tournament->register_permission = "off";
+                if($tournament->status == 3) $tournament->status = "2";
+            }else{
+                $tournament->register_permission = "on";
+                if($tournament->status == 2) $tournament->status = "3";
+            }
+            $tournament->save();
+        }
     }
 }

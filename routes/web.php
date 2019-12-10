@@ -58,13 +58,14 @@ Auth::routes();
                         Route::get('/schedule', 'TournamentSettingController@schedule')->name('setting.schedule');           // quản lý lịch đấu
                         Route::get('/ranking-rule', 'TournamentSettingController@rankingrule')->name('setting.rankingrule'); // quy tắc xếp hạng
                         Route::get('/supporter', 'TournamentSettingController@supporter')->name('setting.supporter');        // nhà tài trợ
+                        Route::get('/{charter}', 'TournamentSettingController@exportChater')->name('tournament.charter');    // 
                         
-                        Route::get('/{charter}', 'TournamentSettingController@exportChater')->name('tournament.charter');    // cập nhật thông tin chung
-                        Route::post('/status/{status}', 'TournamentSettingController@updateStatus')->name('tournament.update-status');    // cập nhật thông tin chung
+                        Route::post('/status/{status}', 'TournamentSettingController@updateStatus')->name('tournament.update-status');    // cập nhật trạng thái
                     });
                     // Xem xét danh sách đăng ký
-                    Route::post('/allow', 'TournamentController@actionAllow')->name('tournament.action-allow');      // cho phép tham gia
-                    Route::post('/reject', 'TournamentController@actionReject')->name('tournament.action-reject');    // từ chối
+                    Route::post('/allow', 'TournamentController@actionAllow')->name('tournament.action-allow');      // Cho phép tham gia
+                    Route::post('/reject', 'TournamentController@actionReject')->name('tournament.action-reject');    // Từ chối
+                    Route::post('/end-sign-up', 'TournamentController@endSignUp')->name('tournament.end-sign-up');    // Kết thúc đăng ký
                 });
 
             });
@@ -78,6 +79,7 @@ Auth::routes();
             Route::get('/list-club', 'TournamentController@listClubs')->name('tournament.listclub');            // danh sách các đội tham gia
             Route::get('/statistics', 'TournamentController@statistics')->name('tournament.statistics');        // thống kê
             Route::get('/about', 'TournamentController@about')->name('tournament.about');                       // giới thiệu và điều lệ
+            Route::get('/{charter}', 'TournamentController@exportChater')->name('about.charter');               // Xem điều lệ
         });
 
     });
@@ -96,19 +98,19 @@ Auth::routes();
 
         Route::group(['prefix' => '{slug}'], function () {
             Route::get('/profile', 'ClubController@profile')->name('club.profile');         // hồ sơ đội bóng
-            Route::get('/member', 'ClubController@member')->name('club.member');            // thành viên
+            Route::get('/member', 'ClubController@member')->name('club.member');            // Danh sách thành viên
             Route::get('/statistic', 'ClubController@statistic')->name('club.statistic');   // thống kê
             
             Route::group(['middleware' => ['owner_club']], function () {
                 Route::group(['middleware' => ['auth']], function () {
-                    Route::get('/setting', 'ClubController@setting')->name('club.setting');         // cài đặt
-                    Route::post('/setting', 'ClubController@update')->name('club.update');         // cài đặt
-                    Route::post('/add-member', 'ClubController@addMember')->name('club.add-member');            // thành viên
-                    Route::post('/edit-member', 'ClubController@editMember')->name('club.edit-member');            // thành viên
-                    Route::post('/remove-member', 'ClubController@removeMember')->name('club.remove-member');            // thành viên
+                    Route::get('/setting', 'ClubController@setting')->name('club.setting');                     // Sửa đội bóng
+                    Route::post('/setting', 'ClubController@update')->name('club.update');                      // Sửa đội bóng
+                    Route::post('/add-member', 'ClubController@addMember')->name('club.add-member');            // Thêm thành viên
+                    Route::post('/edit-member', 'ClubController@editMember')->name('club.edit-member');         // Sửa thành viên
+                    Route::post('/remove-member', 'ClubController@removeMember')->name('club.remove-member');   // Xóa thành viên
                 });
                 // Hủy đăng ký tham gia giải đấu
-                Route::post('/cancel-sign-up', 'TournamentController@cancelSignUp')->name('club.cancel-signup');
+                Route::post('/cancel-sign-up', 'TournamentController@cancelSignUp')->name('club.cancel-signup');    // Hủy đăng ký
             });
         });
     });

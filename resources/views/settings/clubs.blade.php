@@ -27,8 +27,30 @@
             </div>
             <div id="content" class="col-md-8">
                 <div class="page-header profile-text text-center">
-                    <h6><strong>Các CLB thi đấu chính thức</strong></h6>
-                   
+                    <h6><strong>Danh sách chính thức</strong></h6>
+                    <small>Số lượng: {{ count($clubs) }}</small>
+                </div>
+                <!-- Danh sách đăng ký -->
+                <div id="list-register">
+                    <table class="table table-hover" id="table-status">
+                        <tr class="gradient">
+                            <td>STT</td>
+                            <td>Tên đội</td>
+                            <td>Người đại diện</td>
+                            <td>SĐT Liên hệ</td>
+                            <td style="width:10%; overflow:hidden;">Email</td>
+                        </tr>
+                        <?php $count = 1; ?>
+                        @foreach ($clubs as $club)
+                            <tr>
+                                <td>{{ $count++ }}</td>
+                                <td><a href="{{ route('club.profile', $club->slug) }}">{{ $club->name }}</a></td>
+                                <td><small>{{ isset($club->user->username)?$club->user->username:"Chưa cập nhật" }}</small></td>
+                                <td><small>{{ isset($club->user->phone)?$club->user->phone:"Chưa cập nhật" }}</small></td>
+                                <td><small>{{ isset($club->user->email)?$club->user->email:"Chưa cập nhật" }}</small></td>
+                            </tr>
+                        @endforeach
+                    </table>
                 </div>
             </div>
         </div>
