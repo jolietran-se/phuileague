@@ -54,7 +54,7 @@
                     <h6>
                         <strong>Điều lệ giải: </strong>
                         @if (isset($tournament->charter))
-                            <a href="{{ route('tournament.charter', [ $tournament->slug, $tournament->charter]) }}"  target="_blank"> Tải xuống </a>
+                            <a href="{{ route('about.charter', [ $tournament->slug, $tournament->charter]) }}"  target="_blank"> Tải xuống </a>
                         @else 
                             <p><small>Giải đấu hiện chưa có điều lệ</small></p>
                         @endif

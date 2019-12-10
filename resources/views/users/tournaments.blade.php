@@ -10,7 +10,7 @@
             @include('layouts.user')
             <div id="tablist">
                 <ul class="nav nav-tabs">
-                    <li role="presentation" class="active"><a href="{{ route('user.tournaments', $user->username) }}">Quản lý giải đấu</a></li>
+                    <li role="presentation" class="active"><a href="{{ route('user.tournaments', $user->username) }}">Quản lý giải đấu ({{ count($tournaments) }})</a></li>
                     <li role="presentation"><a href="{{ route('user.clubs', $user->username) }}">Quản lý đội bóng</a></li>
                 </ul>
             </div>

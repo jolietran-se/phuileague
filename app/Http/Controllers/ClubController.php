@@ -184,7 +184,7 @@ class ClubController extends Controller
     public function setting($slug)
     {
         $club = Club::where('slug', $slug)->first();
-
+       
         return view('clubs.setting', compact('club'));
     }
 

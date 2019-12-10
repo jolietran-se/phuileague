@@ -44,17 +44,21 @@
                 <div id="register">
                     <h6>Đăng ký thi đấu: ({{ $tournament->register_permission }})</h6>
                     <div class="gradient text-center register">
-                        @if($tournament->register_permission == "on")
+                        {{-- {{ $tournament->status}} --}}
+                        @if($tournament->register_permission == "on" && $tournament->status != 4)
                             <p>Giải đấu cho phép đăng ký đến hết ngày: {{ $tournament->register_date }}</p>
-                            <p>Giải đấu yêu cầu số lượng ít nhất là {{ $tournament->number_player }} cầu thủ mỗi đội</p>
+                            <p>Giải đấu yêu cầu số lượng từ {{ $tournament->number_player }} cầu thủ {{ isset($tournament->max_player)?", tối đa $tournament->max_player cầu thủ":"" }} mỗi đội</p>
                             <input type="submit" class="btn btn-primary" id="start-register" value="Bắt đầu đăng ký">
-                        @else 
+                        @elseif ($tournament->register_permission == "off" && $tournament->status != 4)
                             <p>Giải đấu đã hết hạn đăng ký hoặc không nhận đăng ký!</p>
                             <p>( Ban tổ chức sẽ đăng ký cho các đội bóng! )</p>
 
                             @if($tournament->owner_id == $userID)
                                 <input type="submit" class="btn btn-primary" id="start-register" value="Bắt đầu đăng ký">
                             @endif
+                        @else
+                            <p>Giải đấu đã kết thúc đăng ký!</p>
+                            <a href="{{ route('tournament.listclub', $tournament->slug) }}" class="btn btn-primary">Danh sách chính thức</a>
                         @endif
                     </div>
                     <!-- Form Đăng ký -->
@@ -69,8 +73,8 @@
                             @csrf
                             <select name="club_id" id="club_id" class="form-control">
                                 <option value="">-------------Lựa chọn----------</option>
-                                @if(count($clubs) != 0)
-                                    @foreach ($clubs as $club)
+                                @if(count($userClubs) != 0)
+                                    @foreach ($userClubs as $club)
                                         <option value="{{ $club->id }}">{{ $club->name }}</option>
                                     @endforeach
                                 @endif
@@ -84,13 +88,17 @@
                         </form>
 
                         <small>Lưu ý: Các cầu thủ trong <code>Đội hình thi đấu</code> sẽ có mặt trong danh sách đăng ký. 
-                                Bạn không thể thay đổi danh sách đăng ký khi đã <code>Đăng ký</code></small>
+                                Bạn không thể thay đổi danh sách đăng ký khi đã được <code>chấp nhận</code></small>
                     </div>
                 </div>
                 <hr>
                 <!-- Danh sách đăng ký -->
                 <div id="list-register">
-                    <h6>Danh sách đội tham gia</h6>
+                    <h6>Danh sách đăng ký tham gia: 
+                        <span class="label label-default" style="float:right; margin-right: 5px">Đã từ chối: {{ $number_reject }}</span>
+                        <span class="label label-success" style="float:right; margin-right: 5px">Đã chấp nhận: {{ $number_allow }}</span>
+                        <span class="label label-info" style="float:right; margin-right: 5px">Đang xét: {{ $number_consider}}</span>
+                    </h6>
                     <table class="table table-hover" id="table-status">
                         <tr class="gradient">
                             <td>STT</td>
@@ -100,8 +108,8 @@
                             <td style="width:10%; overflow:hidden;">Email</td>
                             <td>Thời gian đăng ký</td>
                             <td style="width:15%">Trạng thái</td>
-                            @if ($userID!=0)
-                                <td style="width:15%">Thao tác</td>
+                            @if ($userID != 0 && $tournament->status != "4")
+                                <td style="width:15%" id="action-column">Thao tác</td>
                             @endif
                         </tr>
                         <?php $count = 1; ?>
@@ -127,57 +135,70 @@
                                         @default
                                     @endswitch
                                 </td>
-                                @if($userID == $tournament->owner_id)
-                                    <td id="club-{{$club->id}}-action">
-                                        @switch($club->pivot->status)
-                                            @case(0)
-                                                <a href="#" class="btn btn-success action-allow" role="button"
-                                                    data-club-id = "{{ $club->id }}"
-                                                    data-tournament-id = "{{ $tournament->id }}"
-                                                    data-tournament-slug = "{{ $tournament->slug }}"
-                                                >Chấp nhận
-                                                </a>
-                                                <a href="#" class="btn btn-default action-reject" role="button"
-                                                    data-club-id = "{{ $club->id}}"
-                                                    data-tournament-id = "{{ $tournament->id }}"
-                                                    data-tournament-slug = "{{ $tournament->slug }}"
-                                                    >Từ chối </a>
-                                                @break
-                                            @case(1)
-                                                <a href="#" class="btn btn-default action-reject" role="button"
-                                                    id="{{ $club->id }}"
-                                                    data-club-id = "{{ $club->id }}"
-                                                    data-tournament-id = "{{ $tournament->id }}"
-                                                    data-tournament-slug = "{{ $tournament->slug }}"
-                                                    >Từ chối</a>
-                                                @break
-                                            @case(2)
-                                                <a href="#" class="btn btn-success action-allow" role="button"
-                                                    data-club-id = "{{ $club->id}}"
-                                                    data-tournament-id = "{{ $tournament->id }}"
-                                                    data-tournament-slug = "{{ $tournament->slug }}"
-                                                    >Chấp nhận</a>
-                                            @default
-                                        @endswitch
-                                    </td>
-                                @elseif($userID == $club->owner_id)
-                                    @if ($tournament->register_permission == "on")
-                                        <td>
-                                            <a href="#" class="btn btn-primary cancel-sign-up" role="button"
-                                                data-club-id = "{{ $club->id}}"
-                                                data-club-slug = "{{ $club->slug }}"
-                                                data-tournament-id = "{{ $tournament->id }}"
-                                            >Hủy đăng ký</a>
+                                @if ($tournament->status != "4")
+                                    @if($userID == $tournament->owner_id)
+                                        <td id="club-{{$club->id}}-action">
+                                            @switch($club->pivot->status)
+                                                @case(0)
+                                                    <a href="#" class="btn btn-success action-allow" role="button"
+                                                        data-club-id = "{{ $club->id }}"
+                                                        data-tournament-id = "{{ $tournament->id }}"
+                                                        data-tournament-slug = "{{ $tournament->slug }}"
+                                                    >Chấp nhận
+                                                    </a>
+                                                    <a href="#" class="btn btn-default action-reject" role="button"
+                                                        data-club-id = "{{ $club->id}}"
+                                                        data-tournament-id = "{{ $tournament->id }}"
+                                                        data-tournament-slug = "{{ $tournament->slug }}"
+                                                        >Từ chối </a>
+                                                    @break
+                                                @case(1)
+                                                    <a href="#" class="btn btn-default action-reject" role="button"
+                                                        id="{{ $club->id }}"
+                                                        data-club-id = "{{ $club->id }}"
+                                                        data-tournament-id = "{{ $tournament->id }}"
+                                                        data-tournament-slug = "{{ $tournament->slug }}"
+                                                        >Từ chối</a>
+                                                    @break
+                                                @case(2)
+                                                    <!-- Đã từ chối thì không thể thao tác thêm -->
+                                                    <a href="#" class="btn btn-success action-allow" role="button"
+                                                        data-club-id = "{{ $club->id }}"
+                                                        data-tournament-id = "{{ $tournament->id }}"
+                                                        data-tournament-slug = "{{ $tournament->slug }}"
+                                                    >Chấp nhận
+                                                    </a>
+                                                @default
+                                            @endswitch
                                         </td>
+                                    @elseif($userID == $club->owner_id)
+                                        @if ($tournament->register_permission == "on")
+                                            <td id="cancle-column">
+                                                <a href="#" class="btn btn-primary cancel-sign-up" role="button"
+                                                    data-club-id = "{{ $club->id}}"
+                                                    data-club-slug = "{{ $club->slug }}"
+                                                    data-tournament-id = "{{ $tournament->id }}"
+                                                >Hủy đăng ký</a>
+                                            </td>
+                                        @endif
+                                    @else
+                                        <td></td>
                                     @endif
-                                @else
-                                    <td></td>
                                 @endif
+                                
                             </tr>
                         @endforeach
                     </table>
                 </div>
-                
+                <!-- Kết thúc đăng ký -->
+                @if($userID == $tournament->owner_id && $tournament->status != 4)
+                    <form action="{{ route('tournament.end-sign-up', $tournament->slug) }}" method="post">
+                        @csrf
+                        <input type="hidden" name="slug" value="{{ $tournament->slug }}">
+                        <input type="submit" value="Kết thúc đăng ký" class="btn btn-primary" style="margin-left: 42%">
+                    </form>
+                    {{-- <input type="submit" value="Kết thúc đăng ký" class="btn btn-primary sign-up-modal" style="margin-left: 42%"> --}}
+                @endif
                 <!-- Modal thay đổi trạng thái -->
                 <div id="modals">
                     <!-- Allow Modal -->
@@ -232,7 +253,26 @@
                         </div>
                     </div>
                 </div>
-                   
+                <!-- Modal kết thúc đăng ký-->
+                <div class="modal fade" id="endModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal-dialog " role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h5 class="modal-title" id="myModalLabel">Kết thúc đăng ký</h5>
+                            </div>
+                            <div class="modal-body">
+                                <input type="hidden" id="tournament-slug" value="{{ $tournament->slug }}">
+                                <p><span class="glyphicon glyphicon-share-alt"></span> Khi bạn kết thúc đăng ký, giải đấu sẽ chuyển sang trạng thái <span class="label label-primary">Hoạt động</span></p>
+                                <p><span class="glyphicon glyphicon-share-alt"></span> Bạn không thể chỉnh sửa danh sách đăng ký, các đội bóng đã được chấp nhận sẽ nằm trong danh sách chính thức của giải đấu.</p>
+                                <p><span class="glyphicon glyphicon-share-alt"></span> Chọn <code>Tùy chỉnh</code> > <code>Sắp xếp bảng đấu </code>để tiếp tục quản lý giải đấu</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-danger end-sign-up">Đồng ý</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -282,18 +322,15 @@
                         'clubID': clubID,
                         'tournamentID': tournamentID,
                     }, success:function(data1){
-                        console.log(data1)
                         $('#allowModal').modal('hide');
-                        var status1 = 'Đã chấp nhận';
-                        var action1 = "<a href='#' class='btn btn-default action-reject' role='button'"+
-                                            "data-club-id = '{{ $club->id }}'"+
-                                            "data-tournament-id = '{{ $tournament->id }}'"+
-                                            "data-tournament-slug = '{{ $tournament->slug }}'"+
-                                            ">Từ chối</a>";
-                        console.log(data1.clubId);
-                        console.log('allow:'+action1);
-                        $('#club-'+data1.clubId+'-status').html(status1);
-                        $('#club-'+data1.clubId+'-action').html(action1);
+                        // var status1 = 'Đã chấp nhận';
+                        // var action1 = "<a href='#' class='btn btn-default action-reject' role='button'"+
+                        //                     "data-club-id = '{{ $club->id }}'"+
+                        //                     "data-tournament-id = '{{ $tournament->id }}'"+
+                        //                     "data-tournament-slug = '{{ $tournament->slug }}'"+
+                        //                     ">Từ chối</a>";
+                        // $('#club-'+data1.clubId+'-status').html(status1);
+                        // $('#club-'+data1.clubId+'-action').html(action1);
                         location.reload();
                     }, error: function(xhr, textStatus, thrownError) {
                         console.log('error');
@@ -321,15 +358,14 @@
                         'tournamentID': tournamentID,
                     }, success:function(data){
                         $('#rejectModal').modal('hide');
-                        var status = 'Đã từ chối';
-                        var action = "<a href='#' class='btn btn-success action-allow' role='button'"+
-                                            "data-club-id = '{{ $club->id }}'"+
-                                            "data-tournament-id = '{{ $tournament->id }}'"+
-                                            "data-tournament-slug = '{{ $tournament->slug }}'"+
-                                            ">Chấp nhận</a>";
-                        console.log('reject:'+action);
-                        $('#club-'+data.clubId+'-status').html(status);
-                        $('#club-'+data.clubId+'-action').html(action);
+                        // var status = 'Đã từ chối';
+                        // var action = "<a href='#' class='btn btn-success action-allow' role='button'"+
+                        //                     "data-club-id = '{{ $club->id }}'"+
+                        //                     "data-tournament-id = '{{ $tournament->id }}'"+
+                        //                     "data-tournament-slug = '{{ $tournament->slug }}'"+
+                        //                     ">Chấp nhận</a>";
+                        // $('#club-'+data.clubId+'-status').html(status);
+                        // $('#club-'+data.clubId+'-action').html(action);
                         location.reload();
                     }, error: function(xhr, textStatus, thrownError) {
                         console.log('error');
@@ -357,6 +393,34 @@
                         'tournamentID': tournamentID,
                     },success:function(data){
                         $('#cancleModal').modal('hide');
+                        location.reload();
+                    }, error: function(xhr, textStatus, thrownError) {
+                        console.log('error');
+                        toastr.info("Đã xảy ra lỗi");
+                    },
+                });
+            });
+        });
+    </script>
+    <!-- Kết thúc đăng ký -->
+    <script type="text/javascript">
+        $(document).on('click', '.sign-up-modal', function(e){
+            e.preventDefault();
+            $('#endModal').modal('show');
+            $(document).on('click', '.end-sign-up', function(e){
+                e.preventDefault;
+                var slug = $('#tournament-slug').val();
+                url = "{{ route('tournament.end-sign-up', ":slug") }}";
+                url = url.replace(':slug', slug);
+                console.log(url);
+                $.ajax({
+                    dataType: 'json',
+                    type:'POST',
+                    url: url,
+                    data:{
+                        'slug': slug,
+                    },success:function(data){
+                        $('#endModal').modal('hide');
                         location.reload();
                     }, error: function(xhr, textStatus, thrownError) {
                         console.log('error');

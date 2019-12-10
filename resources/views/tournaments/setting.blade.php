@@ -4,6 +4,7 @@
     <link rel="stylesheet" href="{{ asset('css/tournament.css') }}">
     <link rel="stylesheet" href="{{ asset('bower_components/Croppie/croppie.css') }}">
     <link rel="stylesheet" href="{{ asset('bower_components/toastr/toastr.min.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
 
 @endsection
 
@@ -187,6 +188,19 @@
                                 @endif
                             </div>
                         </div>
+                        <!-- Số lượng tối đa và hạn chót đăng ký-->
+                        <div class="form-group row">
+                            <div class="col-xs-6">
+                                <label>Số lượng cầu thủ tối đa mỗi đội:</label>
+                                <input type="number" class="form-control" name="max_player" value="{{ $tournament->max_player }}">
+                            </div>
+                            @if (isset($tournament->register_date))
+                                <div class="col-xs-6">
+                                    <label>Hạn chót đăng ký:</label>
+                                    <input type="text" class="form-control" name="register_date" value="{{ $tournament->register_date }}">
+                                </div>
+                            @endif
+                        </div>
                         <!-- Thông tin và điều lệ giải -->
                         <div class="form-group" id="charter" >
                             <label for="charter">Điều lệ giải:</label>
@@ -240,6 +254,7 @@
     <script src="{{ asset('bower_components/Croppie/croppie.js') }}"></script>
     <script src="{{ asset('bower_components/toastr/toastr.min.js') }}"></script>
     <script src={{ url('bower_components/ckeditor/ckeditor.js') }}></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
     <!-- Selected Option và Input Radio checked -->
     <script type="text/javascript">
         var gender = $('#input-gender').val();
@@ -339,6 +354,19 @@
                 });
             });
         /*End Upload logo*/
+
+        /* Register Date Format */
+        $(document).ready(function(){
+            var date_input=$('input[name="register_date"]'); //our date input has the name "date"
+            var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+            var options={
+                format: 'dd-mm-yyyy',
+                container: container,
+                todayHighlight: true,
+                autoclose: true,
+            };
+            date_input.datepicker(options);
+        })
     </script>
 
     <!-- CKFinder và CKEditor -->

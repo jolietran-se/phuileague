@@ -7,6 +7,8 @@ use App\Http\Requests\ProfileRequest;
 use App\User;
 use App\Tournament;
 use App\Club;
+use App\Player;
+use App\Option;
 use Image;
 use Log;
 use Session;
@@ -78,6 +80,12 @@ class UserController extends Controller
         $clubs = Club::where('owner_id', $user->id)
                     ->orderBy('created_at', 'desc')
                     ->get();
+        foreach ($clubs as $club) {
+            $players = Player::where('club_id', $club->id)->get();
+            $club->number_player = count($players);
+            $club->save();
+        }
+
         return view('users.clubs', compact('user', 'clubs'));
     }
 }
