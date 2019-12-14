@@ -192,12 +192,7 @@
                 </div>
                 <!-- Kết thúc đăng ký -->
                 @if($userID == $tournament->owner_id && $tournament->status != 4)
-                    <form action="{{ route('tournament.end-sign-up', $tournament->slug) }}" method="post">
-                        @csrf
-                        <input type="hidden" name="slug" value="{{ $tournament->slug }}">
-                        <input type="submit" value="Kết thúc đăng ký" class="btn btn-primary" style="margin-left: 42%">
-                    </form>
-                    {{-- <input type="submit" value="Kết thúc đăng ký" class="btn btn-primary sign-up-modal" style="margin-left: 42%"> --}}
+                    <input type="submit" value="Kết thúc đăng ký" class="btn btn-primary sign-up-modal" style="margin-left: 42%">
                 @endif
                 <!-- Modal thay đổi trạng thái -->
                 <div id="modals">
@@ -265,7 +260,7 @@
                                 <input type="hidden" id="tournament-slug" value="{{ $tournament->slug }}">
                                 <p><span class="glyphicon glyphicon-share-alt"></span> Khi bạn kết thúc đăng ký, giải đấu sẽ chuyển sang trạng thái <span class="label label-primary">Hoạt động</span></p>
                                 <p><span class="glyphicon glyphicon-share-alt"></span> Bạn không thể chỉnh sửa danh sách đăng ký, các đội bóng đã được chấp nhận sẽ nằm trong danh sách chính thức của giải đấu.</p>
-                                <p><span class="glyphicon glyphicon-share-alt"></span> Chọn <code>Tùy chỉnh</code> > <code>Sắp xếp bảng đấu </code>để tiếp tục quản lý giải đấu</p>
+                                <p><span class="glyphicon glyphicon-share-alt"></span> Chọn <code>Tùy chỉnh</code> để tiếp tục quản lý giải đấu</p>
                             </div>
                             <div class="modal-footer">
                                 <button class="btn btn-danger end-sign-up">Đồng ý</button>
@@ -301,6 +296,9 @@
         @endif
         @if(Session::has('register_fail'))
             toastr.warning("{{ Session::get('register_fail') }}");
+        @endif
+        @if(Session::has('end-sign-up'))
+            toastr.info("{{ Session::get('end-sign-up') }}");
         @endif
     </script>
     <!-- Thay đổi trạng thái-->

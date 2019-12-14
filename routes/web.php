@@ -60,6 +60,8 @@ Auth::routes();
                         Route::get('/supporter', 'TournamentSettingController@supporter')->name('setting.supporter');        // nhà tài trợ
                         Route::get('/{charter}', 'TournamentSettingController@exportChater')->name('tournament.charter');    // 
                         
+                        Route::post('/group-stage/sort', 'TournamentSettingController@sortGroup')->name('setting.sort-group');                      // sắp xếp theo thứ tự
+                        Route::post('/group-stage/sort-random', 'TournamentSettingController@sortGroupRandom')->name('setting.sort-group-random');  //sắp xếp ngẫu nhiên
                         Route::post('/status/{status}', 'TournamentSettingController@updateStatus')->name('tournament.update-status');    // cập nhật trạng thái
                     });
                     // Xem xét danh sách đăng ký

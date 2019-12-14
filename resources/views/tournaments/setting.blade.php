@@ -28,7 +28,6 @@
                     </ul>
                 </div>
             </div>
-            
             <!-- Content: thông tin chung -->
             <div id="content" class="col-md-8">
                 <div class="page-header profile-text text-center">
@@ -66,6 +65,7 @@
                     <input id="input-player" value="{{ $tournament->number_player }}" hidden>
                     <input id="input-round" value="{{ $tournament->number_round }}" hidden>
                     <input id="input-introduce" value="{{ $tournament->introduce }}" hidden>
+                    <input id="input-knockout" value="{{ $tournament->number_knockout }}" hidden>
                     <div class="col-md-6">
                         <!-- Thông tin cơ bản -->
                         <div class="form-group">
@@ -146,24 +146,26 @@
                             </div>
                         </div>
                         <!-- Số lượt đá vòng tròn -->
-                        <div class="form-group">
-                            <label>Số lượt đá vòng tròn</label>
-                            <small>(lượt đi, lượt về)</small>:
-                            <div class="btn-group btn-group-justified btn-group-outline"  data-toggle="buttons">
-                                <label class="btn tabOption" id="1round">
-                                    <input name="number_round" type="radio" value="1">1 lượt
-                                </label>
-                                <label class="btn tabOption" id="2rounds">
-                                    <input name="number_round" type="radio" value="2"><small>2 lượt</small>
-                                </label>
-                                <label class="btn tabOption" id="3rounds">
-                                    <input name="number_round" type="radio" value="3"><small>3 lượt</small>
-                                </label>
-                                <label class="btn tabOption" id="4rounds">
-                                    <input name="number_round" type="radio" value="4"><small>4 lượt</small>
-                                </label>
+                        @if ($tournament->tournament_type_id == 2)
+                            <div class="form-group">
+                                <label>Số lượt đá vòng tròn</label>
+                                <small>(lượt đi, lượt về)</small>:
+                                <div class="btn-group btn-group-justified btn-group-outline"  data-toggle="buttons">
+                                    <label class="btn tabOption" id="1round">
+                                        <input name="number_round" type="radio" value="1">1 lượt
+                                    </label>
+                                    <label class="btn tabOption" id="2rounds">
+                                        <input name="number_round" type="radio" value="2"><small>2 lượt</small>
+                                    </label>
+                                    <label class="btn tabOption" id="3rounds">
+                                        <input name="number_round" type="radio" value="3"><small>3 lượt</small>
+                                    </label>
+                                    <label class="btn tabOption" id="4rounds">
+                                        <input name="number_round" type="radio" value="4"><small>4 lượt</small>
+                                    </label>
+                                </div>
                             </div>
-                        </div>
+                        @endif
                         <!-- Điểm thắng, điểm hòa, điểm thua -->
                         <div class="form-group row">
                             <div class="col-xs-4">
@@ -188,6 +190,32 @@
                                 @endif
                             </div>
                         </div>
+                        <!-- Số lượng bảng đấu, số lượng đội vào vòng knockout -->
+                        @if ($tournament->tournament_type_id == 3)
+                            <div class="form-group row">
+                                <div class="col-xs-6">
+                                    <label>Số bảng đấu</label><span class="required"> *</span><br>
+                                    <input class="form-control" type="number" name="number_group" value="{{ $tournament->number_group }}">
+                                    @if ($errors->has('number_group'))
+                                        <p class="error-danger">{{ $errors->first('number_group') }}</p>
+                                    @endif
+                                </div>
+                                <div class="col-xs-6">
+                                    <label>Số đội vào vòng knockout</label><span class="required"> *</span><br>
+                                    <select name="number_knockout" id="number_knockout" class="form-control">
+                                        <option value="2">2</option>
+                                        <option value="4">4</option>
+                                        <option value="8">8</option>
+                                        <option value="16">16</option>
+                                        <option value="32">32</option>
+                                        <option value="64">64</option>
+                                    </select>
+                                    @if ($errors->has('number_knockout'))
+                                        <p class="error-danger">{{ $errors->first('number_knockout') }}</p>
+                                    @endif
+                                </div>
+                            </div>
+                        @endif
                         <!-- Số lượng tối đa và hạn chót đăng ký-->
                         <div class="form-group row">
                             <div class="col-xs-6">
@@ -261,7 +289,9 @@
         var number_player = $('#input-player').val();
         var numer_round = $('#input-round').val();
 		var introduce = $('#input-introduce').val();
+		var knockout = $('#input-knockout').val();
         $("select#gender").val(gender);
+        $("select#number_knockout").val(knockout);
 
         console.log(number_player);
         // Hiển thị number_player
