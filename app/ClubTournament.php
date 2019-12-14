@@ -12,5 +12,6 @@ class ClubTournament extends Model
         'club_id',
         'tournament_id',
         'status',
+        'group_id',
     ];
 }

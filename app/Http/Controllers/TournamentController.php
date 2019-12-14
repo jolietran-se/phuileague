@@ -263,42 +263,23 @@ class TournamentController extends Controller
         return response()->json(['status'=>true]);
     }
     // Kết thúc đăng ký
-    // public function endSignUp(Request $request, $slug)
-    // {
-    //     $tournament = Tournament::where('slug', $slug)->first();
-    //     $tournament->status = 4;
-    //     $tournament->register_permission = "off";
-    //     $tournament->save();
-
-    //     $n = $tournament->number_player;
-        
-    //     // return response()->json(['status'=>true]);
-    // }
     public function endSignUp(Request $request, $slug)
     {
         $tournament = Tournament::where('slug', $slug)->first();
         $tournament->status = 4;
         $tournament->register_permission = "off";
+        
+        $clubs = ClubTournament::where('tournament_id', $tournament->id)->get();
+        foreach($clubs as $club){
+            if($club->status != 1) $club->delete();
+        }
         $tournament->save();
 
-        $n = $tournament->number_club;
-        dd($n);
-        
-        if($tournament->tournament_type_id == 1)
-        {
-            // Hình thức đấu loại trực tiếp
+        Session::flash('end-sign-up', 'Giải đấu đã chuyển sang trạng thái hoạt động!');
 
-        }else if($tournament->tournament_type_id == 2)
-        {
-            // Hình thức đấu vòng tròn
-
-        }else if($tournament->tournament_type_id == 3)
-        {
-            // Hình thức đấu hai giai đoạn
-        }
-
-        return view('tournaments.list_club', compact('tournament'));
+        return response()->json(['status'=>true]);
     }
+    
     /* View Vòng bảng */ 
     public function stageGroup($slug)
     {
@@ -333,10 +314,10 @@ class TournamentController extends Controller
     public function listClubs($slug)
     {
         $tournament = Tournament::where('slug', $slug)->first();
-        
         $userID = isset(Auth::user()->id)?Auth::user()->id:0;
+        $clubs = $tournament->clubs()->where('status', 1)->get();
         
-        return view('tournaments.list_club', compact('tournament', 'userID'));
+        return view('tournaments.list_club', compact('tournament', 'userID', 'clubs'));
     }
 
     /* View Thống kê */ 
