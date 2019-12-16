@@ -41,4 +41,14 @@ class Tournament extends Model
     public function clubs(){
         return $this->belongsToMany('App\Club')->withPivot('status', 'group_id')->withTimestamps();
     }
+
+    // Tournament 1-n Match
+    public function matchs(){
+        return $this->hasMany('App\Match', 'tournament_id');
+    }
+
+    // Tournament 1-n group
+    public function groups(){
+        return $this->hasMany('App\Group', 'tournament_id');
+    }
 }

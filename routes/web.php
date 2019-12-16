@@ -62,7 +62,10 @@ Auth::routes();
                         
                         Route::post('/group-stage/sort', 'TournamentSettingController@sortGroup')->name('setting.sort-group');                      // sắp xếp theo thứ tự
                         Route::post('/group-stage/sort-random', 'TournamentSettingController@sortGroupRandom')->name('setting.sort-group-random');  //sắp xếp ngẫu nhiên
-                        Route::post('/status/{status}', 'TournamentSettingController@updateStatus')->name('tournament.update-status');    // cập nhật trạng thái
+                        Route::post('/status/{status}', 'TournamentSettingController@updateStatus')->name('tournament.update-status');              // cập nhật trạng thái
+
+                        Route::post('/save-stage', 'TournamentSettingController@saveStageRound')->name('setting.save-stage');    // Lưu thay đổi cặp đấu
+
                     });
                     // Xem xét danh sách đăng ký
                     Route::post('/allow', 'TournamentController@actionAllow')->name('tournament.action-allow');      // Cho phép tham gia

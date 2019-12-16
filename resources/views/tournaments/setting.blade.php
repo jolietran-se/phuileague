@@ -21,10 +21,10 @@
                         <li><a href="{{ route('setting.groupstage', $tournament->slug)}}">Sắp xếp bảng đấu <span class="glyphicon glyphicon-menu-right"></span></a></li>
                         <li><a href="{{ route('setting.matchstage', $tournament->slug)}}">Sắp xếp cặp đấu <span class="glyphicon glyphicon-menu-right"></span></a></li>
                         <li><a href="{{ route('setting.schedule', $tournament->slug)}}">Quản lý lịch đấu <span class="glyphicon glyphicon-menu-right"></span></a></li>
-                        <li><a href="{{ route('setting.status', $tournament->slug)}}">Trạng thái <span class="glyphicon glyphicon-menu-right"></span></a></li>
-                        <li><a href="{{ route('setting.clubs', $tournament->slug)}}">Quản lý đội bóng <span class="glyphicon glyphicon-menu-right"></span></a></li>
+                        {{-- <li><a href="{{ route('setting.status', $tournament->slug)}}">Trạng thái <span class="glyphicon glyphicon-menu-right"></span></a></li> --}}
+                        {{-- <li><a href="{{ route('setting.clubs', $tournament->slug)}}">Quản lý đội bóng <span class="glyphicon glyphicon-menu-right"></span></a></li> --}}
                         <li><a href="{{ route('setting.rankingrule', $tournament->slug)}}">Quy tắc xếp hạng<span class="glyphicon glyphicon-menu-right"></span></a></li>
-                        <li><a href="{{ route('setting.supporter', $tournament->slug)}}">Nhà tài trợ<span class="glyphicon glyphicon-menu-right"></span></a></li>
+                        {{-- <li><a href="{{ route('setting.supporter', $tournament->slug)}}">Nhà tài trợ<span class="glyphicon glyphicon-menu-right"></span></a></li> --}}
                     </ul>
                 </div>
             </div>
@@ -56,11 +56,8 @@
                     @endif
                 </div>
                 <!-- Form cập nhật thông tin -->
-                
-                
                 <form action="{{ route('tournament.update', $tournament->slug) }}" method="post" enctype="multipart/form-data">
                     {{ csrf_field() }}
-
                     <input id="input-gender" value="{{ $tournament->gender}}" hidden>
                     <input id="input-player" value="{{ $tournament->number_player }}" hidden>
                     <input id="input-round" value="{{ $tournament->number_round }}" hidden>
@@ -195,7 +192,11 @@
                             <div class="form-group row">
                                 <div class="col-xs-6">
                                     <label>Số bảng đấu</label><span class="required"> *</span><br>
-                                    <input class="form-control" type="number" name="number_group" value="{{ $tournament->number_group }}">
+                                    @if ($tournament->status == 4)
+                                        <input class="form-control" type="number" name="number_group" value="{{ $tournament->number_group }}" readonly>
+                                    @else 
+                                        <input class="form-control" type="number" name="number_group" value="{{ $tournament->number_group }}">
+                                    @endif
                                     @if ($errors->has('number_group'))
                                         <p class="error-danger">{{ $errors->first('number_group') }}</p>
                                     @endif
