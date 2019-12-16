@@ -241,6 +241,9 @@ small.header-text{
 }
 
 /* Tablist Stting Style*/
+div#tablist-setting{
+    background-color: blueviolet;
+}
 #tablist-setting ul {
     list-style-type: none;
     margin: -15px;
@@ -252,6 +255,7 @@ small.header-text{
     border-bottom: 1px solid #555;
 }
 #tablist-setting ul li:last-child{
+    padding-bottom: 100%;
     border-bottom: none;
 }
 #tablist-setting ul li a {

@@ -2,7 +2,7 @@
 @section('head')
     <link rel="stylesheet" href="{{ asset('css/user.css') }}">
     <link rel="stylesheet" href="{{ asset('css/tournament.css') }}">
-
+    <link rel="stylesheet" href="{{ asset('bower_components/toastr/toastr.min.css') }}">
 @endsection
 
 @section('content')
@@ -18,10 +18,10 @@
                         <li class="active"><a href="{{ route('setting.groupstage', $tournament->slug)}}">Sắp xếp bảng đấu<span class="glyphicon glyphicon-menu-right"></span></a></li>
                         <li><a href="{{ route('setting.matchstage', $tournament->slug)}}">Sắp xếp cặp đấu<span class="glyphicon glyphicon-menu-right"></span></a></li>
                         <li><a href="{{ route('setting.schedule', $tournament->slug)}}">Quản lý lịch đấu<span class="glyphicon glyphicon-menu-right"></span></a></li>
-                        <li><a href="{{ route('setting.status', $tournament->slug)}}">Trạng thái<span class="glyphicon glyphicon-menu-right"></span></a></li>
-                        <li><a href="{{ route('setting.clubs', $tournament->slug)}}">Quản lý đội bóng<span class="glyphicon glyphicon-menu-right"></span></a></li>
+                        {{-- <li><a href="{{ route('setting.status', $tournament->slug)}}">Trạng thái<span class="glyphicon glyphicon-menu-right"></span></a></li> --}}
+                        {{-- <li><a href="{{ route('setting.clubs', $tournament->slug)}}">Quản lý đội bóng<span class="glyphicon glyphicon-menu-right"></span></a></li> --}}
                         <li><a href="{{ route('setting.rankingrule', $tournament->slug)}}">Quy tắc xếp hạng<span class="glyphicon glyphicon-menu-right"></span></a></li>
-                        <li><a href="{{ route('setting.supporter', $tournament->slug)}}">Nhà tài trợ<span class="glyphicon glyphicon-menu-right"></span></a></li>
+                        {{-- <li><a href="{{ route('setting.supporter', $tournament->slug)}}">Nhà tài trợ<span class="glyphicon glyphicon-menu-right"></span></a></li> --}}
                     </ul>
                 </div>
             </div>
@@ -82,6 +82,29 @@
                             <input type="submit" value="Lưu" class="btn btn-success submit-group">
                         </div>
                     </div>
+
+                    <!-- Player Delete Modal -->
+                    <div class="modal fade" id="updateGroup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h5 class="modal-title text-center" id="myModalLabel">
+                                    <strong>Cảnh báo</strong>
+                                    <span class="glyphicon glyphicon-exclamation-sign"></span>
+                                </h5>
+                                </div>
+                                <div class="modal-body">
+                                    <p class="text-center">Các thông tin, kết quả của trận đấu, thông tin của bảng đấu sẽ bị thay đổi
+                                    và không hoàn lại được.</p>
+                                    <h6  class="text-center">Bạn có chắc chắn muốn thực hiện thay đổi?</h6>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-danger update-group" style="margin-right:45%">Đồng ý</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -89,6 +112,7 @@
 @endsection
 
 @section('foot')
+    <script src="{{ asset('bower_components/toastr/toastr.min.js') }}"></script>
     <script type="text/javascript">
         $("#list-group" ).sortable({
             items: "li",
@@ -96,7 +120,10 @@
             opacity: 0.6,
         });
         $(document).on('click', '.submit-group', function(e){
-            sendOrderToServer();
+            $('#updateGroup').modal('show');
+            $(document).on('click', '.update-group', function(e){
+                sendOrderToServer();
+            });
         });
         // Lưu bảng
         function sendOrderToServer() {
@@ -129,15 +156,12 @@
             groups.forEach(function(item, index, array){
                 var count = 0;
                 $('#'+item['groupID']+' li.club1').each(function(index,element) {
-                    // clubs.push({
-                    //     groupID:$(this).attr('id'),
-                    // });
                     count +=1;
                 });
-                if(count< 3) flag = false;
+                if(count<2) flag = false;
             });
 
-            // Nếu thỏa mãn về số đội thì 
+            // Nếu thỏa mãn về số đội thì lưu lại
             if(flag == true){
                  // Tống số đội vào vòng knockout
                 var sum = 0;
@@ -167,15 +191,18 @@
                             } else {
                                 console.log(response);
                             }
+                            $('#updateGroup').modal('hide');
                             location.reload();
                         }
                     });
                 }else{
+                    $('#updateGroup').modal('hide');
                     html = "<div class='alert alert-danger'> <span>Tổng số đội đi tiếp của các bảng phải bằng "+number_knockout+"</span> <br></div>"
                     $('#notification').html(html);
                 }
             }else{
-                html = "<div class='alert alert-danger'> <span> Mỗi bảng phải có ít nhất 3 đội</span> <br></div>"
+                $('#updateGroup').modal('hide');
+                html = "<div class='alert alert-danger'> <span> Mỗi bảng phải có ít nhất 2 đội</span> <br></div>"
                 $('#notification').html(html);
             }
         }

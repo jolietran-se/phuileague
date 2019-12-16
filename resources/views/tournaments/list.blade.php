@@ -69,7 +69,7 @@
                                             @endif
                                         </a>
                                     @else
-                                        <a href="{{ route('tournament.dashboard', $tour->slug) }}">
+                                        <a href="{{ route('tournament.listregister', $tour->slug) }}">
                                             @if(isset($tour->logo))
                                                 <img src="{{ asset('storage/logos/').'/'.$tour->logo }}" alt="...">
                                             @else
@@ -84,7 +84,7 @@
                                                 <h6 class="text-center" style="color:#326295">{{ $tour->name }}</h6>
                                             </a>
                                         @else
-                                            <a href="{{ route('tournament.dashboard', $tour->slug) }}">
+                                            <a href="{{ route('tournament.listregister', $tour->slug) }}">
                                                 <h6 class="text-center" style="color:#326295">{{ $tour->name }}</h6>
                                             </a>
                                         @endif
