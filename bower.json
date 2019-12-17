@@ -26,6 +26,8 @@
     "slick": "*",
     "masonry-layout": "masonry#4.2.1",
     "magnific-popup": "Magnific-Popup#1.1.0",
-    "Croppie": "croppie#^2.6.4"
+    "Croppie": "croppie#^2.6.4",
+    "datetimepicker": "2.5.0",
+    "bootstrap-timepicker": "^0.5.2"
   }
 }

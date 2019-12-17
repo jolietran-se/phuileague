@@ -127,3 +127,12 @@ hr{
 #editPlayerModal table tr td{
     line-height: 45px;
 }
+#list-member div.player-name{
+    height: 20px;
+    overflow: hidden;
+}
+h6.text-center.club-name{
+    height: 35px;
+    overflow: hidden;
+    color: #326295;
+}
