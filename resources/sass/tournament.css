@@ -203,7 +203,6 @@ Setting Tournament Area Start Here
     padding: 10px 0px 0px 0px;
     background-color: #ece1df47;
 }
-
 small.header-text{
     font-size: 13px;
 }
@@ -241,9 +240,6 @@ small.header-text{
 }
 
 /* Tablist Stting Style*/
-div#tablist-setting{
-    background-color: blueviolet;
-}
 #tablist-setting ul {
     list-style-type: none;
     margin: -15px;
@@ -255,7 +251,6 @@ div#tablist-setting{
     border-bottom: 1px solid #555;
 }
 #tablist-setting ul li:last-child{
-    padding-bottom: 100%;
     border-bottom: none;
 }
 #tablist-setting ul li a {
@@ -326,4 +321,154 @@ Setting > trạng thái
 ---------------------------------------*/
 ul li a span{
     float: right;
+}
+
+/* ------------------------------------
+Search
+--------------------------------------- */
+#list-tournament .thumbnail{
+    height: 307px;
+    overflow: hidden;
+}
+
+#list-tournament p.author{
+    margin-bottom: 5px !important;
+}
+
+div.search-tournament {
+    padding-bottom: 10px;
+}
+
+/* Danh sách đăng ký */
+.gradient{
+    background:linear-gradient(135deg,#3bbf1a,#3916b7);
+    color: #fff;
+}
+#register .register{
+    margin: 5px 20% 0 20%;
+    padding: 20px;
+}
+#register-form{
+    border-radius: 5px;
+    border: 1px solid #326295;
+}
+#table-status .btn{
+    padding: 2px 2px;
+}
+
+#list-club .caption h6.text-center.club-name{
+    height: 20px;
+    overflow: hidden;
+    color: #326295;
+}
+#list-club .caption hr{
+    margin-top: 5px !important;
+    margin-bottom: 5px !important;
+}
+#list-club div.thumbnail{
+    height: 280px;
+}
+
+/* ------------------------------------
+    SETTING > SẮP XẾP BẢNG ĐẤU
+--------------------------------------- */
+#group-stage #list-group .page-header{
+    padding: 8px 0 0 5px;
+    margin-bottom: 0px;
+}
+#group-stage #list-group .page-header input{
+    margin-left: 10px;
+    width: 55px;
+    text-align:center;
+    border-radius: 5px;
+    border: 1px solid;
+}
+
+#group-stage #list-group .group-container{
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin: 15px 0;
+}
+#group-stage #list-group ul li{
+    border: 1px dashed  #ddd;
+    padding: 3px;
+    margin-bottom: 3px;
+}
+
+#match-stage #group-match .page-header{
+    padding: 8px 0 0 5px;
+    margin-bottom: 0px;
+}
+#match-stage #group-match .page-header input{
+    margin-left: 10px;
+    width: 55px;
+    text-align:center;
+    border-radius: 5px;
+    border: 1px solid;
+}
+
+#match-stage #group-match .group-container{
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    padding: 5px;
+    margin: 5px 0;
+}
+#match-stage #group-match .round-area ul li{
+    border: 1px dashed  #ddd;
+    padding: 3px;
+    margin-bottom: 3px;
+}
+
+#group-match .panel-body div.col{
+    padding: 2px;
+}
+#group-match .panel-body{
+    padding:5px;
+}
+.round-label{
+    margin-top: 20px;
+    padding: 2px; 
+    background: #326295;
+}
+.round-label p{
+    color: #fff;
+}
+#tab{
+    margin-left: 43%;
+}
+#tab ul li{
+    width: 35px;
+    height: 35px;
+    float: left;
+    border: 1px solid #326295;
+    border-radius: 50%;
+    padding: 5px;
+    text-align: center;
+    margin-right: 3px;
+}
+
+#tab ul li.active{
+    background: #326295;
+}
+#tab ul li.active a{
+    color: #fff;
+}
+#tab1{
+    margin-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+}
+#tab1 ul{
+    margin-left: 28%;
+}
+#tab1 ul li{
+    float: left;
+    margin-right: 30px;
+}
+#tab1 ul li.active{
+    border-bottom: 2px solid #326295;
+}
+#tab1 ul li.active a h6{
+    color: #326295;
+    text-decoration: #326295;
 }

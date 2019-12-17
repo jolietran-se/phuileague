@@ -399,7 +399,29 @@ class TournamentSettingController extends Controller
     public function schedule($slug)
     {
         $tournament = Tournament::where('slug', $slug)->first();
-        return view('settings.schedule', compact('tournament'));
+        $groups = $tournament->groups()->get();
+        $clubs = $tournament->clubs()->get();
+        // dd($clubs);
+        $matchs = $tournament->matchs()->get();
+        $number_round = $tournament->groups()->max('number_round');
+
+        return view('settings.schedule', compact('tournament', 'groups', 'clubs', 'matchs', 'number_round'));
+    }
+    public function saveSchedule(Request $request, $slug)
+    {
+        $tournament = Tournament::where('slug', $slug)->first();
+
+        foreach($request->schedules as $schedule){
+            $obj = $tournament->matchs()->where('id', $schedule['matchId'])->first();
+            $obj->address = $schedule['address'];
+            $obj->date = $schedule['date'];
+            $obj->time = $schedule['time'];
+            $obj->save();
+        }
+
+        Session::flash('save_schedule', 'Cập nhật thành công');
+
+        return response()->json(['status'=>true]);
     }
     /*7.  View Quy tắc xếp hạng */ 
     public function rankingrule($slug)
