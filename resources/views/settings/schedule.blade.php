@@ -55,14 +55,14 @@
                                 <div class="tab-content">
                                     @for($i=1; $i<=$number_round; $i++)
                                         <div id="round{{$i}}" class="round-area col-md-12 tab-item">
-                                            <div class="col-md-12 round-label"><p class="text-center">Lượt thi đấu thứ {{ $i }}</p></div>
+                                            <div class="col-md-12 round-label"><p class="text-center">VÒNG {{ $i }}</p></div>
                                             @php $index = 1; @endphp
                                             @foreach ($groups as $group)
                                                 @if ($group->number_round >= $i)
                                                     <div id="group-{{ $group->name }}" data-id="{{ $group->id }}" class="col-md-12 group groupRound{{$i}}">
                                                         <div class="group-container">
                                                             <div class="panel-body">
-                                                                @foreach ($matchs as $match)
+                                                                @foreach ($matchsG as $match)
                                                                     @if ($match->round == $i && $match->group_id == $group->id && $match->stage=="G")
                                                                         <div class="col col-md-12 match-detail round{{$i}}" data-status="{{ $match->status }}" data-id="{{ $match->id }}">
                                                                             <div class="col-md-1 stt">
@@ -211,7 +211,6 @@
                     var address = $('input#address-'+matchId).val();
                     var date = $('input#date-'+matchId).val();
                     var time = $('input#time-'+matchId).val();
-                    console.log(matchId+address+date+time);
                     schedules.push({
                         matchId: matchId,
                         address: address,

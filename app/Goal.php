@@ -15,8 +15,9 @@ class Goal extends Model
         'isowngoal',
     ];
 
-    // Goal 1-1 Player
+    // Goal n-1 Player
     public function player(){
-        return $this->hasOne('App\Goal', 'player_id');
+        return $this->belongsTo('App\Player', 'player_id');
     }
+
 }

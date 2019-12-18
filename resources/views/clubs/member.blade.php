@@ -874,7 +874,7 @@
     <script type="text/javascript">
         var userID = $('#userID').val();
         var ownerID = $('#ownerID').val();
-        console.log(ownerID);
+        // console.log(ownerID);
         if(userID != ownerID){
             $('#add-member').hide();
             $('#modals').hide();

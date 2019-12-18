@@ -10,6 +10,9 @@ use App\Tournament;
 use App\User;
 use App\Club;
 use App\Player;
+use App\Goal;
+use App\Match;
+use App\Card;
 use App\ClubTournament;
 use App\TournamentPlayer;
 use Image;
@@ -284,20 +287,70 @@ class TournamentController extends Controller
     public function stageGroup($slug)
     {
         $tournament = Tournament::where('slug', $slug)->first();
-        
         $userID = isset(Auth::user()->id)?Auth::user()->id:0;
+        $groups = $tournament->groups()->get();
+        $matchs = $tournament->matchs()->where('stage','G')->get();
+        $clubs = $tournament->clubs()->get();
         
-        return view('tournaments.stage_group', compact('tournament', 'userID'));
+        $club = $clubs->where('id', 2)->first()->players()->get();
+        // foreach($matchs as $match){
+        //     dd($match->goals()->where('club_id', 2)->get());
+        // }
+
+        return view('tournaments.stage_group', compact('tournament', 'userID', 'groups', 'matchs', 'clubs'));
+    }
+    public function saveMatchResult(Request $request, $slug)
+    {
+        $tournament = Tournament::where('slug', $slug)->first();
+        $match = $tournament->matchs()->where('id', $request->matchId)->first();
+        $goalsOfMatch = $request->goalsOfMatch;
+        // Log::info($goalsOfMatch);
+        $match->goalA = $goalsOfMatch[0]['goalA'];
+        $match->goalB = $goalsOfMatch[0]['goalB'];
+        $match->save();
+        // Xóa những bàn thắng cũ
+        $match->goals()->delete();
+        // Tạo mới các bàn thắng
+        Log::info(($request->goalsOfA));
+        foreach($request->goalsOfA as $goalA){
+            $goal = new Goal();
+            $goal->match_id = $goalA['matchId'];
+            $goal->club_id = $goalA['clubId'];
+            $goal->player_id = $goalA['playerId'];
+            $goal->goal_time = $goalA['goalTime'];
+            $goal->isowngoal = $goalA['isOwnGoal'];
+            $goal->created_at = null;
+            $goal->updated_at = null;
+            $goal->save();
+        }
+        foreach($request->goalsOfB as $goalB){
+            $goal = new Goal();
+            $goal->match_id = $goalB['matchId'];
+            $goal->club_id = $goalB['clubId'];
+            $goal->player_id = $goalB['playerId'];
+            $goal->goal_time = $goalB['goalTime'];
+            $goal->isowngoal = $goalB['isOwnGoal'];
+            $goal->created_at = null;
+            $goal->updated_at = null;
+            $goal->save();
+        }
+        // Log::info($match->goals()->get());
+        
+        return response()->json(['status'=>true]);
     }
 
     /* View Vòng loại trực tiếp*/ 
     public function knockout($slug)
     {
         $tournament = Tournament::where('slug', $slug)->first();
-        
         $userID = isset(Auth::user()->id)?Auth::user()->id:0;
         
-        return view('tournaments.knockout', compact('tournament', 'userID'));
+        $tournament = Tournament::where('slug', $slug)->first();
+        $userID = isset(Auth::user()->id)?Auth::user()->id:0;
+        $groups = $tournament->groups()->get();
+        $matchs = $tournament->matchs()->get();
+        $clubs = $tournament->clubs()->get();
+        return view('tournaments.knockout', compact('tournament', 'userID', 'groups', 'matchs', 'clubs'));
     }
 
     /* View Bảng xếp hạng */ 

@@ -373,17 +373,17 @@ class TournamentSettingController extends Controller
         $tournament = Tournament::where('slug', $slug)->first();
         $groups = $tournament->groups()->get();
         $clubs = $tournament->clubs()->get();
-        $matchs = $tournament->matchs()->get();
+        $matchsG = $tournament->matchs()->where('stage', 'G')->get();
         $number_round = $tournament->groups()->max('number_round');
 
-        return view('settings.match_stage', compact('tournament', 'groups', 'clubs', 'matchs', 'number_round'));
+        return view('settings.match_stage', compact('tournament', 'groups', 'clubs', 'matchsG', 'number_round'));
     }
     // Sắp xếp lại cặp đấu
     public function saveStageRound(Request $request, $slug)
     {
         $tournament = Tournament::where('slug', $slug)->first();
 
-        foreach($request->matchs as $match){
+        foreach($request->matchsG as $match){
             $obj = $tournament->matchs()->where('id', $match['matchId'])->first();
             $obj->clubA_id = $match['clubA_id'];
             $obj->clubB_id = $match['clubB_id'];
@@ -402,10 +402,11 @@ class TournamentSettingController extends Controller
         $groups = $tournament->groups()->get();
         $clubs = $tournament->clubs()->get();
         // dd($clubs);
-        $matchs = $tournament->matchs()->get();
+        $matchsG = $tournament->matchs()->where('stage', 'G')->get();
+        // $matchsK = $tournament->matchs()->get();
         $number_round = $tournament->groups()->max('number_round');
 
-        return view('settings.schedule', compact('tournament', 'groups', 'clubs', 'matchs', 'number_round'));
+        return view('settings.schedule', compact('tournament', 'groups', 'clubs', 'matchsG', 'number_round'));
     }
     public function saveSchedule(Request $request, $slug)
     {

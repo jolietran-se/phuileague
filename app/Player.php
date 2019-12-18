@@ -26,5 +26,8 @@ class Player extends Model
     public function club(){
         return $this->belongsTo('App\User', 'owner_id');
     }
+    public function goals(){
+        return $this->hasMany('App\Goal', 'player_id');
+    }
     
 }

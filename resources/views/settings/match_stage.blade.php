@@ -58,7 +58,7 @@
                                 <div class="tab-content">
                                     @for($i=1; $i<=$number_round; $i++)
                                         <div id="round{{$i}}" class="round-area col-md-12 tab-item">
-                                            <div class="col-md-12 round-label"><p class="text-center">Lượt thi đấu thứ {{ $i }}</p></div>
+                                            <div class="col-md-12 round-label"><p class="text-center">VÒNG {{ $i }}</p></div>
                                             @php $index = 1; @endphp
                                             @foreach ($groups as $group)
                                                 @if ($group->number_round >= $i)
@@ -66,7 +66,7 @@
                                                         <div class="group-container">
                                                             <div class="page-header"><h6>BẢNG {{ $group->name }}</h6> </div>
                                                             <div class="panel-body">
-                                                                @foreach ($matchs as $match)
+                                                                @foreach ($matchsG as $match)
                                                                     @if ($match->round == $i && $match->group_id == $group->id && $match->stage=="G")
                                                                         <div class="col col-md-12 match-detail round{{$i}}" data-status="{{ $match->status }}" data-id="{{ $match->id }}">
                                                                             <div class="col col-md-2">
@@ -179,13 +179,13 @@
             var round = $(this).attr('data-round');
             $(document).on('click', '.saveRound'+round, function(e){
                 // Lấy dữ liệu từng lượt
-                var matchs = [];
+                var matchsG = [];
                 $('div.match-detail.round'+round).each(function(){
                     var matchId = $(this).attr('data-id');
                     var clubA_id = $('select#'+matchId+'clubAId').val();
                     var clubB_id = $('select#'+matchId+'clubBId').val();
                     // console.log(matchId+clubA_id+clubB_id);
-                    matchs.push({
+                    matchsG.push({
                         matchId: matchId,
                         clubA_id: clubA_id,
                         clubB_id: clubB_id,
@@ -195,7 +195,7 @@
                 // Kiểm tra xem có đội trùng nhau không
                 var flag = true;
                 var arrId = [];
-                matchs.forEach(function(item){
+                matchsG.forEach(function(item){
                     arrId.push(item['clubA_id']);
                     arrId.push(item['clubB_id']);
                     var count1 = arrId.filter(i => i == item['clubA_id']).length;
@@ -208,13 +208,13 @@
                     var slug = $('#tournament-slug').val();
                     url = " {{ route('setting.save-stage', ":slug") }}";
                     url = url.replace(':slug', slug);
-                    console.log(matchs);
+                    console.log(matchsG);
                     $.ajax({
                         type: "POST", 
                         dataType: "json", 
                         url: url,
                         data: {
-                            matchs:matchs,
+                            matchsG:matchsG,
                             _token: '{{csrf_token()}}'
                         },
                         success: function(response) {
@@ -231,7 +231,6 @@
                     html = "<div class='alert alert-danger'> <span>Trong một lượt thi đấu, một đội không thể tham gia hai trận đấu</span> <br></div>"
                     $('#notification').html(html);
                 }
-                
             });
         });
     </script>
