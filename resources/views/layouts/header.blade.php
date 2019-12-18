@@ -54,12 +54,12 @@
                                 <!-- Tạo giải đấu -->
                                 <li><a href="{{ route('tournament.create') }}">{{ trans('header.tournament_create') }}</a></li>
                                 <!-- Tìm đội bóng -->
-                                <li><a href="{{ route('club.list') }}">{{ trans('header.club_search') }}</a></li>
+                                {{-- <li><a href="{{ route('club.list') }}">{{ trans('header.club_search') }}</a></li> --}}
                                 <!-- Tạo đội bóng -->
                                 <li><a href="{{ route('club.create') }}">{{ trans('header.club_create') }}</a></li>
 
                                 <!-- Drop Down - Hướng dẫn-->
-                                <li class="menu-item-has-children">
+                                {{-- <li class="menu-item-has-children">
                                     <a href="#">{{ trans('header.guide') }}</a>
                                     <ul class="sub-menu">
                                        <li><a href="#">{{ trans('header.guide_create_tour') }}</a></li> 
@@ -67,7 +67,7 @@
                                        <li><a href="#">{{ trans('header.guide_apply_to_tour') }}</a></li> 
                                        <li><a href="#">{{ trans('header.guide_export_card') }}</a></li> 
                                     </ul>
-                                </li>
+                                </li> --}}
                                 <!-- Authentication Links -->
                                 @guest
                                     <li><a href="{{ route('login') }}">{{ trans('header.login') }}</a></li>

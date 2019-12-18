@@ -288,14 +288,10 @@ class TournamentController extends Controller
     {
         $tournament = Tournament::where('slug', $slug)->first();
         $userID = isset(Auth::user()->id)?Auth::user()->id:0;
+        
         $groups = $tournament->groups()->get();
         $matchs = $tournament->matchs()->where('stage','G')->get();
         $clubs = $tournament->clubs()->get();
-        
-        $club = $clubs->where('id', 2)->first()->players()->get();
-        // foreach($matchs as $match){
-        //     dd($match->goals()->where('club_id', 2)->get());
-        // }
 
         return view('tournaments.stage_group', compact('tournament', 'userID', 'groups', 'matchs', 'clubs'));
     }
@@ -304,37 +300,104 @@ class TournamentController extends Controller
         $tournament = Tournament::where('slug', $slug)->first();
         $match = $tournament->matchs()->where('id', $request->matchId)->first();
         $goalsOfMatch = $request->goalsOfMatch;
-        // Log::info($goalsOfMatch);
+        // Thay đổi trạng thái trận đấu:
+        $match->status = "close";
         $match->goalA = $goalsOfMatch[0]['goalA'];
         $match->goalB = $goalsOfMatch[0]['goalB'];
+        $match->yellow_card_A = $goalsOfMatch[0]['yellow_card_A'];
+        $match->yellow_card_B = $goalsOfMatch[0]['yellow_card_B'];
+        $match->red_card_A = $goalsOfMatch[0]['red_card_A'];
+        $match->red_card_B = $goalsOfMatch[0]['red_card_B'];
         $match->save();
         // Xóa những bàn thắng cũ
         $match->goals()->delete();
-        // Tạo mới các bàn thắng
-        Log::info(($request->goalsOfA));
-        foreach($request->goalsOfA as $goalA){
-            $goal = new Goal();
-            $goal->match_id = $goalA['matchId'];
-            $goal->club_id = $goalA['clubId'];
-            $goal->player_id = $goalA['playerId'];
-            $goal->goal_time = $goalA['goalTime'];
-            $goal->isowngoal = $goalA['isOwnGoal'];
-            $goal->created_at = null;
-            $goal->updated_at = null;
-            $goal->save();
+        $match->cards()->delete();
+        // Lưu các bàn thắng
+        if(is_array($request->goalsOfA) || is_object($request->goalsOfA)){
+            foreach($request->goalsOfA as $goalA){
+                $goal = new Goal();
+                $goal->match_id = $goalA['matchId'];
+                $goal->club_id = $goalA['clubId'];
+                $goal->player_id = $goalA['playerId'];
+                $goal->goal_time = $goalA['goalTime'];
+                $goal->isowngoal = $goalA['isOwnGoal'];
+                $goal->created_at = null;
+                $goal->updated_at = null;
+                $goal->save();
+            }
         }
-        foreach($request->goalsOfB as $goalB){
-            $goal = new Goal();
-            $goal->match_id = $goalB['matchId'];
-            $goal->club_id = $goalB['clubId'];
-            $goal->player_id = $goalB['playerId'];
-            $goal->goal_time = $goalB['goalTime'];
-            $goal->isowngoal = $goalB['isOwnGoal'];
-            $goal->created_at = null;
-            $goal->updated_at = null;
-            $goal->save();
+        
+        if(is_array($request->goalsOfB) || is_object($request->goalsOfB)){
+            foreach($request->goalsOfB as $goalB){
+                $goal = new Goal();
+                $goal->match_id = $goalB['matchId'];
+                $goal->club_id = $goalB['clubId'];
+                $goal->player_id = $goalB['playerId'];
+                $goal->goal_time = $goalB['goalTime'];
+                $goal->isowngoal = $goalB['isOwnGoal'];
+                $goal->created_at = null;
+                $goal->updated_at = null;
+                $goal->save();
+            }
         }
-        // Log::info($match->goals()->get());
+        
+        // Lưu thẻ vàng 
+        if(is_array($request->yellowsOfA) || is_object($request->yellowsOfA)){
+            foreach($request->yellowsOfA as $yellowA){
+                $yellow = new Card();
+                $yellow->match_id = $yellowA['matchId'];
+                $yellow->club_id = $yellowA['clubId'];
+                $yellow->player_id = $yellowA['playerId'];
+                $yellow->card_time = $yellowA['cardTime'];
+                $yellow->isredcard = $yellowA['isRedCard'];
+                $yellow->created_at = null;
+                $yellow->updated_at = null;
+                $yellow->save();
+            }
+        }
+        
+        if(is_array($request->yellowsOfB) || is_object($request->yellowsOfB)){
+            foreach($request->yellowsOfB as $yellowB){
+                $yellow = new Card();
+                $yellow->match_id = $yellowB['matchId'];
+                $yellow->club_id = $yellowB['clubId'];
+                $yellow->player_id = $yellowB['playerId'];
+                $yellow->card_time = $yellowB['cardTime'];
+                $yellow->isredcard = $yellowB['isRedCard'];
+                $yellow->created_at = null;
+                $yellow->updated_at = null;
+                $yellow->save();
+            }
+        }
+        
+        if(is_array($request->redsOfA) || is_object($request->redsOfA)){
+            foreach($request->redsOfA as $redA){
+                $red = new Card();
+                $red->match_id = $redA['matchId'];
+                $red->club_id = $redA['clubId'];
+                $red->player_id = $redA['playerId'];
+                $red->card_time = $redA['cardTime'];
+                $red->isredcard = $redA['isRedCard'];
+                $red->created_at = null;
+                $red->updated_at = null;
+                $red->save();
+            }
+        }
+        
+        if(is_array($request->redsOfB) || is_object($request->redsOfB)){
+            foreach($request->redsOfB as $redB){
+                $red = new Card();
+                $red->match_id = $redB['matchId'];
+                $red->club_id = $redB['clubId'];
+                $red->player_id = $redB['playerId'];
+                $red->card_time = $redB['cardTime'];
+                $red->isredcard = $redB['isRedCard'];
+                $red->created_at = null;
+                $red->updated_at = null;
+                $red->save();
+            }
+        }
+        
         
         return response()->json(['status'=>true]);
     }
