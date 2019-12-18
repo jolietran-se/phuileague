@@ -10,6 +10,7 @@ class Goal extends Model
 
     protected $fillable = [
         'match_id',
+        'club_id',
         'player_id',
         'goal_time',
         'isowngoal',

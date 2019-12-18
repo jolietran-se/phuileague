@@ -39,6 +39,7 @@
         </div>
     </div>
     <div class="setting-section setting-main">
+        @if ($tournament->tournament_type_id == 3)
         <div class="container" id="content">
             <div class="col-md-12">
                 <small><b>Giai đoạn đấu vòng tròn có:</b> {{ count($groups) }} bảng đấu và {{ $groups->sum('number_match') }} trận đấu.</small><br>
@@ -56,12 +57,12 @@
                                     @foreach ($matchs as $match)
                                         @if ($match->round == $i && $match->group_id == $group->id && $match->stage=="G")
                                             <datalist id="players-a-{{$match->id}}">
-                                                @foreach ($clubs->where('id',$match->clubA_id)->first()->players()->get() as $player)
+                                                @foreach ($clubs->where('id',$match->clubA_id)->first()->players()->where('ismain',1)->get() as $player)
                                                     <option data-id="{{$player->id}}" value="{{ $player->name }}"></option>
                                                 @endforeach
                                             </datalist>
                                             <datalist id="players-b-{{$match->id}}">
-                                                @foreach ($clubs->where('id',$match->clubB_id)->first()->players()->get() as $player)
+                                                @foreach ($clubs->where('id',$match->clubB_id)->first()->players()->where('ismain',1)->get() as $player)
                                                     <option data-id="{{ $player->id }}" value="{{ $player->name }}"></option> 
                                                 @endforeach
                                             </datalist>
@@ -75,6 +76,10 @@
                                                 data-b-logo="{{ $clubs->where('id', $match->clubB_id)->first()->logo }}"
                                                 data-a-goal="{{ $match->goalA }}"
                                                 data-b-goal="{{ $match->goalB }}"
+                                                data-a-yellow="{{ $match->yellow_card_A }}"
+                                                data-b-yellow="{{ $match->yellow_card_B }}"
+                                                data-a-red="{{ $match->red_card_A }}"
+                                                data-b-red="{{ $match->red_card_B }}"
                                                 data-address="{{ $match->address }}"
                                                 data-date="{{ $match->date }}"
                                                 data-time="{{ $match->time }}"
@@ -82,6 +87,10 @@
                                                 data-round="{{ $match->round }}"
                                                 data-list-goal-a = {{ $match->goals()->where('club_id', $match->clubA_id)->get() }}
                                                 data-list-goal-b = {{ $match->goals()->where('club_id', $match->clubB_id)->get() }}
+                                                data-list-yellow-a = {{ $match->cards()->where('club_id', $match->clubA_id)->where('isredcard', 0)->get() }}
+                                                data-list-yellow-b = {{ $match->cards()->where('club_id', $match->clubB_id)->where('isredcard', 0)->get() }}
+                                                data-list-red-a = {{ $match->cards()->where('club_id', $match->clubA_id)->where('isredcard', 1)->get() }}
+                                                data-list-red-b = {{ $match->cards()->where('club_id', $match->clubB_id)->where('isredcard', 1)->get() }}
                                             >
                                                 <td style="width:20%"><small>#{{$index}}  Bảng {{$group->name}}</small></td>
                                                 <td style="width:25%" class="text-right">
@@ -109,7 +118,6 @@
                     </div>
                 @endfor
             </div>
-
             <div class="modals">
                 <!-- Player Edit Modal -->
                 <div class="modal fade" id="showMacthDetail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -171,22 +179,26 @@
                                             <div class="text-center col-md-12">
                                                 <p>Thẻ vàng</p>
                                                 <div class="col-md-6">
-                                                    <input type="number" id="input-yellowA" class="pull-right form-control" style="width:30%!important">
+                                                    <input type="number" id="input-yellowA" min="0" class="pull-right form-control" style="width:30%!important">
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <input type="number" id="input-yellowB" class="pull-left  form-control" style="width:30%!important">
+                                                    <input type="number" id="input-yellowB" min="0" class="pull-left  form-control" style="width:30%!important">
                                                 </div>
+                                                <div class="col-md-6" id="add-yellow-a"></div>
+                                                <div class="col-md-6" id="add-yellow-b"></div>
                                             </div>
                                         </div>
                                         <div id="red-list" class="tab1-item">
                                             <div class="text-center col-md-12">
                                                 <p>Thẻ đỏ</p>
                                                 <div class="col-md-6">
-                                                    <input type="number" id="input-rebA" class="pull-right form-control" style="width:30%!important">
+                                                    <input type="number" id="input-redA" min="0" class="pull-right form-control" style="width:30%!important">
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <input type="number" id="input-rebB" class="pull-left  form-control" style="width:30%!important">
+                                                    <input type="number" id="input-redB" min="0" class="pull-left  form-control" style="width:30%!important">
                                                 </div>
+                                                <div class="col-md-6" id="add-red-a"></div>
+                                                <div class="col-md-6" id="add-red-b"></div>
                                             </div>
                                         </div>
                                     </div>
@@ -199,7 +211,10 @@
                 </div>
             </div>
             <input type="hidden" id="tournament-slug" value="{{ $tournament->slug }}">
+            <input type="hidden" id="tournament-owner" value="{{ $tournament->owner_id }}">
+            <input type="hidden" id="user-id" value="{{ isset(Auth::user()->id)?Auth::user()->id:0 }}">
         </div>
+        @endif
     </div>
 @endsection
 
@@ -219,8 +234,6 @@
                 $('#clubB-name').html($(this).data('b-name')?$(this).data('b-name'):"Đội B");
                 $('#goalA').html($(this).data('a-goal')!=""?$(this).data('a-goal'):"...");
                 $('#goalB').html($(this).data('b-goal')!=""?$(this).data('b-goal'):"...");
-                $('#input-goalA').val($(this).data('a-goal'));
-                $('#input-goalB').val($(this).data('b-goal'));
                 $('#match-id').val();
                 // lấy logo 
                 var logoA_name= $(this).data('a-logo');
@@ -248,7 +261,11 @@
                 /*--------------------------------------*/ 
                 /* Thêm bàn thắng và cập nhật bàn thắng */ 
                 /*--------------------------------------*/ 
-                    // Thêm và xóa input
+                    // Hiển thị tỷ số:
+                    $('#input-goalA').val($(this).data('a-goal'));
+                    $('#input-goalB').val($(this).data('b-goal'));
+                    
+                    // Thêm và xóa bàn thắng
                     var add_item_a = '<a class="dynamic item-add-goal-a-'+matchID+' pull-right"><span class="fa fa-plus-circle"></span></a>';
                     var add_item_b = '<a class="dynamic item-add-goal-b-'+matchID+' pull-left"><span class="fa fa-plus-circle"></span></a>';
                     $('div#add-goal-a').html(add_item_a);
@@ -286,11 +303,10 @@
                     $(document).on('click', '.item-remove-goal-b-'+matchID, function(e){
                         $(this).parents('.more-goal-b-'+matchID).remove();
                     });
-
                     // Hiển thị danh sách cầu thủ đã ghi bàn
                     var list_goal_a = $(this).data('list-goal-a');
                     var list_goal_b = $(this).data('list-goal-b');
-                    console.log(list_goal_a);
+                    // console.log(list_goal_a);
                     list_goal_a.forEach(function(item){
                         goalId = item['id'];
                         goalMatchId = item['match_id'];
@@ -344,26 +360,204 @@
                         // tên cầu thủ
                         $('#goal-b-player-id.goal-'+goalId).val($('#players-b-'+matchID+' option[data-id="'+ goalPlayerId+'"]').val());
                     });
+                /*--------------------------------------*/ 
+                /* Thêm và cập nhật thẻ vàng */ 
+                /*--------------------------------------*/ 
+                    // Hiển thị số lượng thẻ
+                    $('#input-yellowA').val($(this).data('a-yellow'));
+                    $('#input-yellowB').val($(this).data('b-yellow'));
+                    // Thêm và xóa thẻ
+                    var item_add_yellow_a = '<a class="dynamic item-add-yellow-a-'+matchID+' pull-right"><span class="fa fa-plus-circle"></span></a>';
+                    var item_add_yellow_b = '<a class="dynamic item-add-yellow-b-'+matchID+' pull-left"><span class="fa fa-plus-circle"></span></a>';
+                    $('#add-yellow-a').html(item_add_yellow_a);
+                    $('#add-yellow-b').html(item_add_yellow_b);
 
-                    // Lưu kết quả trận đấu
+                    var add_yellow_a = '<div class="more-yellow more-yellow-a-'+matchID+'">'+
+                                            '<table cellspacing="0" cellpadding="0" id="more-yellow">'+
+                                                '<tr>'+
+                                                    '<td><input type="text" id="yellow-a-player-id" class="form-control" list="players-a-'+matchID+'" placeholder="Tên cầu thủ"></td>'+
+                                                    '<td style="width:30%"><input type="number" id="yellow-a-time" min="1" class="form-control" placeholder="phút thứ..."></td>'+
+                                                    '<td><a class="dynamic item-remove-yellow-a-'+matchID+' pull-right"><span class="glyphicon glyphicon-minus"></span></a></td>'+
+                                                '</tr>'+
+                                            '</table>'+
+                                        '</div>';
+                    var add_yellow_b = '<div class="more-yellow more-yellow-b-'+matchID+'">'+
+                                            '<table cellspacing="0" cellpadding="0" id="more-yellow">'+
+                                                '<tr>'+
+                                                    '<td><a class="dynamic item-remove-yellow-b-'+matchID+' pull-right"><span class="glyphicon glyphicon-minus"></span></a></td>'+
+                                                    '<td style="width:30%"><input type="number" id="yellow-b-time" min="1" class="form-control" placeholder="phút thứ..."></td>'+
+                                                    '<td><input type="text" id="yellow-b-player-id" class="form-control" list="players-b-'+matchID+'" placeholder="Tên cầu thủ"></td>'+
+                                                '</tr>'+
+                                            '</table>'+
+                                        '</div>';
+                    $('.item-add-yellow-a-'+matchID).on('click', function(){
+                        $(this).before(add_yellow_a);
+                    });
+                    $('.item-add-yellow-b-'+matchID).on('click', function(e){
+                        e.preventDefault();
+                        $(this).before(add_yellow_b);
+                    });
+                    $(document).on('click', '.item-remove-yellow-a-'+matchID, function(){
+                        $(this).parents('.more-yellow-a-'+matchID).remove();
+                    });
+                    $(document).on('click', '.item-remove-yellow-b-'+matchID, function(e){
+                        $(this).parents('.more-yellow-b-'+matchID).remove();
+                    });
+
+                    // Hiển thị cầu thủ đã nhận thẻ vàng trước đó
+                    var list_yellow_a = $(this).data('list-yellow-a');
+                    var list_yellow_b = $(this).data('list-yellow-b');
+                    // console.log(list_yellow_a);
+                    list_yellow_a.forEach(function(item){
+                        yellowId = item['id'];
+                        yellowPlayerId = item['player_id'];
+                        yellowTime = item['card_time'];
+                        var yellow_a = '<div class="more-yellow more-yellow-a-'+matchID+'">'+
+                                        '<table cellspacing="0" cellpadding="0" id="more-yellow">'+
+                                            '<tr>'+
+                                                '<td><input type="text" id="yellow-a-player-id" class="form-control yellow-'+yellowId+'" list="players-a-'+matchID+'" placeholder="Tên cầu thủ" ></td>'+
+                                                '<td style="width:30%"><input type="number" id="yellow-a-time" min="1" max="90" class="form-control" value="'+yellowTime+'" placeholder="phút thứ..."></td>'+
+                                                '<td><a class="dynamic item-remove-yellow-a-'+matchID+' pull-right"><span class="glyphicon glyphicon-minus"></span></a></td>'+
+                                            '</tr>'+
+                                        '</table>'+
+                                    '</div>';
+                        $('.item-add-yellow-a-'+matchID).before(yellow_a);
+                        
+                        // tên cầu thủ
+                        $('#yellow-a-player-id.yellow-'+yellowId).val($('#players-a-'+matchID+' option[data-id="'+ yellowPlayerId+'"]').val());
+                    });
+                    list_yellow_b.forEach(function(item){
+                        yellowId = item['id'];
+                        yellowPlayerId = item['player_id'];
+                        yellowTime = item['card_time'];
+                        
+                        var yellow_b = '<div class="more-yellow more-yellow-b-'+matchID+'">'+
+                                        '<table cellspacing="0" cellpadding="0" id="more-yellow">'+
+                                            '<tr>'+
+                                                '<td><a class="dynamic item-remove-yellow-b-'+matchID+' pull-right"><span class="glyphicon glyphicon-minus"></span></a></td>'+
+                                                '<td style="width:30%"><input type="number" id="yellow-b-time" min="1" max="90" class="form-control yellow-'+yellowId+'" value="'+yellowTime+'" placeholder="phút thứ..." ></td>'+
+                                                '<td><input type="text" id="yellow-b-player-id" class="form-control yellow-'+yellowId+'" list="players-b-'+matchID+'" placeholder="Tên cầu thủ" ></td>'+
+                                            '</tr>'+
+                                        '</table>'+
+                                    '</div>';
+                        $('.item-add-yellow-b-'+matchID).before(yellow_b);
+                        // tên cầu thủ
+                        $('#yellow-b-player-id.yellow-'+yellowId).val($('#players-b-'+matchID+' option[data-id="'+ yellowPlayerId+'"]').val());
+                    });
+                /*--------------------------------------*/ 
+                /* Thêm và cập nhật thẻ đỏ */ 
+                /*--------------------------------------*/ 
+                    // Hiển thị số lượng thẻ
+                    $('#input-redA').val($(this).data('a-red'));
+                    $('#input-redB').val($(this).data('b-red'));
+                    // Thêm và xóa thẻ
+                    var item_add_red_a = '<a class="dynamic item-add-red-a-'+matchID+' pull-right"><span class="fa fa-plus-circle"></span></a>';
+                    var item_add_red_b = '<a class="dynamic item-add-red-b-'+matchID+' pull-left"><span class="fa fa-plus-circle"></span></a>';
+                    $('#add-red-a').html(item_add_red_a);
+                    $('#add-red-b').html(item_add_red_b);
+
+                    var add_red_a = '<div class="more-red more-red-a-'+matchID+'">'+
+                                            '<table cellspacing="0" cellpadding="0" id="more-red">'+
+                                                '<tr>'+
+                                                    '<td><input type="text" id="red-a-player-id" class="form-control" list="players-a-'+matchID+'" placeholder="Tên cầu thủ"></td>'+
+                                                    '<td style="width:30%"><input type="number" id="red-a-time" min="1" class="form-control" placeholder="phút thứ..."></td>'+
+                                                    '<td><a class="dynamic item-remove-red-a-'+matchID+' pull-right"><span class="glyphicon glyphicon-minus"></span></a></td>'+
+                                                '</tr>'+
+                                            '</table>'+
+                                        '</div>';
+                    var add_red_b = '<div class="more-red more-red-b-'+matchID+'">'+
+                                            '<table cellspacing="0" cellpadding="0" id="more-red">'+
+                                                '<tr>'+
+                                                    '<td><a class="dynamic item-remove-red-b-'+matchID+' pull-right"><span class="glyphicon glyphicon-minus"></span></a></td>'+
+                                                    '<td style="width:30%"><input type="number" id="red-b-time" min="1" class="form-control" placeholder="phút thứ..."></td>'+
+                                                    '<td><input type="text" id="red-b-player-id" class="form-control" list="players-b-'+matchID+'" placeholder="Tên cầu thủ"></td>'+
+                                                '</tr>'+
+                                            '</table>'+
+                                        '</div>';
+                    $('.item-add-red-a-'+matchID).on('click', function(){
+                        $(this).before(add_red_a);
+                    });
+                    $('.item-add-red-b-'+matchID).on('click', function(e){
+                        e.preventDefault();
+                        $(this).before(add_red_b);
+                    });
+                    $(document).on('click', '.item-remove-red-a-'+matchID, function(){
+                        $(this).parents('.more-red-a-'+matchID).remove();
+                    });
+                    $(document).on('click', '.item-remove-red-b-'+matchID, function(e){
+                        $(this).parents('.more-red-b-'+matchID).remove();
+                    });
+
+                    // Hiển thị cầu thủ đã nhận thẻ đỏ trước đó
+                    var list_red_a = $(this).data('list-red-a');
+                    var list_red_b = $(this).data('list-red-b');
+                    // console.log(list_red_a);
+                    list_red_a.forEach(function(item){
+                        redId = item['id'];
+                        redPlayerId = item['player_id'];
+                        redTime = item['card_time'];
+                        var red_a = '<div class="more-red more-red-a-'+matchID+'">'+
+                                        '<table cellspacing="0" cellpadding="0" id="more-red">'+
+                                            '<tr>'+
+                                                '<td><input type="text" id="red-a-player-id" class="form-control red-'+redId+'" list="players-a-'+matchID+'" placeholder="Tên cầu thủ" ></td>'+
+                                                '<td style="width:30%"><input type="number" id="red-a-time" min="1" max="90" class="form-control" value="'+redTime+'" placeholder="phút thứ..."></td>'+
+                                                '<td><a class="dynamic item-remove-red-a-'+matchID+' pull-right"><span class="glyphicon glyphicon-minus"></span></a></td>'+
+                                            '</tr>'+
+                                        '</table>'+
+                                    '</div>';
+                        $('.item-add-red-a-'+matchID).before(red_a);
+                        
+                        // tên cầu thủ
+                        $('#red-a-player-id.red-'+redId).val($('#players-a-'+matchID+' option[data-id="'+ redPlayerId+'"]').val());
+                    });
+                    list_red_b.forEach(function(item){
+                        redId = item['id'];
+                        redPlayerId = item['player_id'];
+                        redTime = item['card_time'];
+                        
+                        var red_b = '<div class="more-red more-red-b-'+matchID+'">'+
+                                        '<table cellspacing="0" cellpadding="0" id="more-red">'+
+                                            '<tr>'+
+                                                '<td><a class="dynamic item-remove-red-b-'+matchID+' pull-right"><span class="glyphicon glyphicon-minus"></span></a></td>'+
+                                                '<td style="width:30%"><input type="number" id="red-b-time" min="1" max="90" class="form-control red-'+redId+'" value="'+redTime+'" placeholder="phút thứ..." ></td>'+
+                                                '<td><input type="text" id="red-b-player-id" class="form-control red-'+redId+'" list="players-b-'+matchID+'" placeholder="Tên cầu thủ" ></td>'+
+                                            '</tr>'+
+                                        '</table>'+
+                                    '</div>';
+                        $('.item-add-red-b-'+matchID).before(red_b);
+                        // tên cầu thủ
+                        $('#red-b-player-id.red-'+redId).val($('#players-b-'+matchID+' option[data-id="'+ redPlayerId+'"]').val());
+                    });
+
+                /*--------------------------------------*/ 
+                /* Lưu kết quả trận đấu */ 
+                /*--------------------------------------*/
                     submit = '<button class="btn btn-success save-match-result-'+ matchID +'" data-dismiss="modal">Lưu</button>'
                     $('#footer-submit').html(submit);
                     var clubA_id = $(this).data('a-id');
                     var clubB_id = $(this).data('b-id');
                     var matchId = matchID;
                     $(document).on('click', '.save-match-result-'+matchID, function(){
+                        // Lấy dữ liệu
                         var slug = $('#tournament-slug').val();
                         url = " {{ route('setting.save-match-result', ":slug") }}";
                         url = url.replace(':slug', slug);
+                        var goalsOfMatch = [];
                         var goalsOfA = [];
                         var goalsOfB = [];
-                        var goalsOfMatch = [];
+                        var yellowsOfA =[];
+                        var yellowsOfB = [];
+                        var redsOfA = [];
+                        var redsOfB = [];
                         goalsOfMatch.push({
                             goalA: $('#input-goalA').val(),
                             goalB: $('#input-goalB').val(),
+                            yellow_card_A: $('#input-yellowA').val(),
+                            yellow_card_B: $('#input-yellowB').val(),
+                            red_card_A: $('#input-redA').val(),
+                            red_card_B: $('#input-redB').val(),
                         });
                         $('div.more-goal-a-'+matchID).each(function(index, element){
-                            // console.log($(this).find('input#goal-a-isog').is(':checked')?1:0);
                             goalsOfA.push({
                                 matchId:matchId,
                                 clubId:clubA_id,
@@ -373,7 +567,6 @@
                             });
                         });
                         $('div.more-goal-b-'+matchID).each(function(index, element){
-                            // console.log($(this).find('input#goal-b-isog').is(':checked')?1:0);
                             goalsOfB.push({
                                 matchId:matchId,
                                 clubId:clubB_id,
@@ -382,7 +575,43 @@
                                 isOwnGoal: $(this).find('input#goal-b-isog').is(':checked')?1:0,
                             });
                         });
-                        console.log(goalsOfA);
+                        $('div.more-yellow-a-'+matchID).each(function(index, element){
+                            yellowsOfA.push({
+                                matchId:matchId,
+                                clubId:clubA_id,
+                                playerId: $("#players-a-"+matchID+" option[value='" + $(this).find('input#yellow-a-player-id').val() + "']").attr('data-id'),
+                                cardTime: $(this).find('input#yellow-a-time').val(),
+                                isRedCard: 0,
+                            });
+                        });
+                        $('div.more-yellow-b-'+matchID).each(function(index, element){
+                            yellowsOfB.push({
+                                matchId:matchId,
+                                clubId:clubB_id,
+                                playerId: $("#players-b-"+matchID+" option[value='" + $(this).find('input#yellow-b-player-id').val() + "']").attr('data-id'),
+                                cardTime: $(this).find('input#yellow-b-time').val(),
+                                isRedCard: 0,
+                            });
+                        });
+                        $('div.more-red-a-'+matchID).each(function(index, element){
+                            redsOfA.push({
+                                matchId:matchId,
+                                clubId:clubA_id,
+                                playerId: $("#players-a-"+matchID+" option[value='" + $(this).find('input#red-a-player-id').val() + "']").attr('data-id'),
+                                cardTime: $(this).find('input#red-a-time').val(),
+                                isRedCard: 1,
+                            });
+                        });
+                        $('div.more-red-b-'+matchID).each(function(index, element){
+                            redsOfB.push({
+                                matchId:matchId,
+                                clubId:clubB_id,
+                                playerId: $("#players-b-"+matchID+" option[value='" + $(this).find('input#red-b-player-id').val() + "']").attr('data-id'),
+                                cardTime: $(this).find('input#red-b-time').val(),
+                                isRedCard: 1,
+                            });
+                        });
+                        console.log(redsOfB);
 
                         // Lưu dữ liệu
                         $.ajax({
@@ -394,6 +623,10 @@
                                 goalsOfMatch: goalsOfMatch,
                                 goalsOfA: goalsOfA,
                                 goalsOfB: goalsOfB,
+                                yellowsOfA:yellowsOfA,
+                                yellowsOfB:yellowsOfB,
+                                redsOfA: redsOfA,
+                                redsOfB: redsOfB,
                                 _token: '{{csrf_token()}}'
                             },
                             success: function(response) {
@@ -405,13 +638,21 @@
                                 location.reload();
                             }
                         });
-                    })
+                    });
+                /*--------------------------------------*/ 
+                /* Kiểm tra owner */ 
+                /*--------------------------------------*/
+                    var userId = $('#user-id').val();
+                    var owner = $('#tournament-owner').val();
+                    if(userId != owner){
+                        $('input').attr('readonly', 'readonly');
+                        $("input:checkbox").click(function() { return false; });
+                        $('span.fa.fa-plus-circle').hide();
+                        $('span.glyphicon.glyphicon-minus').hide();
+                        $('#footer-submit').hide();
+                    }
             });
         });
-
-       
-        
-
     </script>
 @endsection
 

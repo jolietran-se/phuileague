@@ -21,7 +21,7 @@
                         <li role="presentation"><a href="{{ route('club.profile', $club->slug)}}">Thông tin chung<span class="glyphicon glyphicon-chevron-right"></span></a></li>
                         <li role="presentation" class="active"><a href="{{ route('club.setting', $club->slug)}}">Chỉnh sửa thông tin đội<span class="glyphicon glyphicon-chevron-right"></a></li>
                             <li role="presentation"><a href="{{ route('club.member', $club->slug)}}">Thành viên<small>({{ isset($club->number_player)?$club->number_player:0 }})</small><span class="glyphicon glyphicon-chevron-right"></a></li>
-                        <li role="presentation"><a href="{{ route('club.statistic', $club->slug)}}">Thống kê<span class="glyphicon glyphicon-chevron-right"></a></li>
+                        {{-- <li role="presentation"><a href="{{ route('club.statistic', $club->slug)}}">Thống kê<span class="glyphicon glyphicon-chevron-right"></a></li> --}}
                     </ul>
                 </div>
             </div>
