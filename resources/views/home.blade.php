@@ -119,9 +119,9 @@
                                 <ul>
                                     <li><i class="fa fa-angle-right"></i>Nhập điều lệ, hình và đia điểm</li>
                                     <li><i class="fa fa-angle-right"></i>Nhập thông tin của đội/cầu thủ</li>
-                                    <li><i class="fa fa-angle-right"></i>Mời người tham gia</li>
+                                    <li><i class="fa fa-angle-right"></i>Sắp xếp bảng đấu</li>
+                                    <li><i class="fa fa-angle-right"></i>Sắp xếp cặp đấu</li>
                                     <li><i class="fa fa-angle-right"></i>Lập lịch đấu</li>
-                                    <li><i class="fa fa-angle-right"></i>Tùy chỉnh giai đoạn</li>
                                 </ul>
                             </div>
                         </div>
@@ -132,9 +132,8 @@
                             <h6 class="management-title">Giai đoạn 3: Điều hành</h6>
                             <div class="about-widget">
                                 <ul>
-                                    <li><i class="fa fa-angle-right"></i>Kích hoạt</li>
                                     <li><i class="fa fa-angle-right"></i>Nhập tỷ số</li>
-                                    <li><i class="fa fa-angle-right"></i>Xem thống kê</li>
+                                    <li><i class="fa fa-angle-right"></i>Theo dõi bảng xếp hạng</li>
                                 </ul>   
                             </div>
                         </div>

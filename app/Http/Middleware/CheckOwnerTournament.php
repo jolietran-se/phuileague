@@ -26,7 +26,7 @@ class CheckOwnerTournament
         }else{
             Session::flash('check_owner', 'Bạn không phải người tổ chức giải đấu này');
             
-            return redirect()->route('tournament.dashboard', $tournament->slug);
+            return redirect()->route('tournament.listregister', $tournament->slug);
         }
     }
 }

@@ -232,7 +232,8 @@
                             <div class="col-md-12">
                             <label for=""><span class="glyphicon glyphicon-list"></span> Đội hình thi đấu ({{ count($player1s) }})</label>
                             </div>
-                            @foreach ($player1s as $player)
+                            <div class="col-md-12">
+                                @foreach ($player1s as $player)
                                 <div class="col-md-3" id="demo-avatar">
                                     <div class="thumbnail">
                                         @if (isset($player->avatar))
@@ -288,6 +289,8 @@
                                     </div>
                                 </div>
                             @endforeach
+                            </div>
+                            
                             <hr>
                             <div class="col-md-12">
                                 <label for=""><span class="glyphicon glyphicon-list"></span> Đội hình dự bị ({{ count($player2s) }})</label>

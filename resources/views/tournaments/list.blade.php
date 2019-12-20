@@ -6,6 +6,7 @@
 @endsection
 
 @section('content')
+
     <div class="header-tournament search-tournament">
         <div class="container">
             <div id="header-information" class="row">
@@ -60,7 +61,7 @@
                         @foreach ($tournaments as $tour)
                             <div class="col-sm-3 col-md-3">
                                 <div class="thumbnail">
-                                    @if ($userID == $tour->owner_id)
+                                    @if (isset(Auth::user()->id)?Auth::user()->id:0 === $tour->owner_id)
                                         <a href="{{ route('tournament.setting', $tour->slug) }}">
                                             @if(isset($tour->logo))
                                                 <img src="{{ asset('storage/logos/').'/'.$tour->logo }}" alt="...">
@@ -79,7 +80,7 @@
                                     @endif
                                     
                                     <div class="caption">
-                                        @if ($userID == $tour->owner_id)
+                                        @if (isset(Auth::user()->id)?Auth::user()->id:0 === $tour->owner_id)
                                             <a href="{{ route('tournament.setting', $tour->slug) }}">
                                                 <h6 class="text-center" style="color:#326295">{{ $tour->name }}</h6>
                                             </a>
@@ -140,18 +141,11 @@
 
 @section('foot')
     <script src="{{ asset('bower_components/toastr/toastr.min.js') }}"></script>
-    <script type="text/javascript">
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-    </script>
     <!--  Notification with Toastr -->
     <script>
         toastr.options.positionClass = 'toast-top-bottom';
         @if(Session::has('search_false'))
-            toastr.info("{{ Session::get('search_false') }}");
+            toastr.warning("{{ Session::get('search_false') }}");
         @endif
     </script>
 @endsection
