@@ -271,6 +271,8 @@
             </div>
         </div>
     </div>
+
+    <input type="hidden" id="count-clubs" value="{{ count($tournament->clubs()->get()) }}">
 @endsection
 
 @section('foot')
@@ -321,14 +323,6 @@
                         'tournamentID': tournamentID,
                     }, success:function(data1){
                         $('#allowModal').modal('hide');
-                        // var status1 = 'Đã chấp nhận';
-                        // var action1 = "<a href='#' class='btn btn-default action-reject' role='button'"+
-                        //                     "data-club-id = '{{ $club->id }}'"+
-                        //                     "data-tournament-id = '{{ $tournament->id }}'"+
-                        //                     "data-tournament-slug = '{{ $tournament->slug }}'"+
-                        //                     ">Từ chối</a>";
-                        // $('#club-'+data1.clubId+'-status').html(status1);
-                        // $('#club-'+data1.clubId+'-action').html(action1);
                         location.reload();
                     }, error: function(xhr, textStatus, thrownError) {
                         console.log('error');
@@ -356,14 +350,6 @@
                         'tournamentID': tournamentID,
                     }, success:function(data){
                         $('#rejectModal').modal('hide');
-                        // var status = 'Đã từ chối';
-                        // var action = "<a href='#' class='btn btn-success action-allow' role='button'"+
-                        //                     "data-club-id = '{{ $club->id }}'"+
-                        //                     "data-tournament-id = '{{ $tournament->id }}'"+
-                        //                     "data-tournament-slug = '{{ $tournament->slug }}'"+
-                        //                     ">Chấp nhận</a>";
-                        // $('#club-'+data.clubId+'-status').html(status);
-                        // $('#club-'+data.clubId+'-action').html(action);
                         location.reload();
                     }, error: function(xhr, textStatus, thrownError) {
                         console.log('error');
