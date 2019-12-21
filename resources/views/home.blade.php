@@ -52,9 +52,8 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class = "format-text text-center">
-                        <h3>Hỗ trợ nhiều thể thức đấu loại cho giải đấu</h3>
+                        <h3>Hỗ trợ thể thức đấu loại hai giai đoạn cho giải đấu</h3>
                         <p>Các hình thức thi đấu phổ biến trong các giải bóng đá từ nghiệp dư đến chuyên nghiệp.</p>
-                        <p>Tuân theo luật thi đấu hiện hành.</p>
                     </div>
                 </div>
                 <div class="col-md-4">

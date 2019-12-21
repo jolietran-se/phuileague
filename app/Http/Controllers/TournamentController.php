@@ -429,7 +429,7 @@ class TournamentController extends Controller
         foreach($clubs as $club){
             // $clubRaking = array();
             $number_match = 0;
-            $number_win = $number_draw = $number_lose = 0;
+            $number_win = $number_draw = $number_lost = 0;
             $goal_for = $goal_against = 0;
             $number_yellow = $number_red = 0;
             foreach($matchs as $match){
@@ -438,7 +438,7 @@ class TournamentController extends Controller
                         $number_match+=1;
                         if ($match->goalA > $match->goalB) $number_win++;
                         elseif($match->goalA == $match->goalB) $number_draw++;
-                        elseif($match->goalA < $match->goalB) $number_lose++;
+                        elseif($match->goalA < $match->goalB) $number_lost++;
                     }  
                     
                     $goal_for +=  $match->goalA;
@@ -452,7 +452,7 @@ class TournamentController extends Controller
                         $number_match+=1;
                         if($match->goalB > $match->goalA) $number_win++;
                         elseif($match->goalB == $match->goalA) $number_draw++;
-                        elseif($match->goalb < $match->goalA) $number_lose++;
+                        elseif($match->goalb < $match->goalA) $number_lost++;
                     }
                     
                     $goal_for +=  $match->goalB;
@@ -462,7 +462,7 @@ class TournamentController extends Controller
                     $number_red += $match->red_card_B;
                 }
             }
-            $point = $number_win*$tournament->score_win + $number_draw*$tournament->score_draw + $number_lose*$tournament->score_lose;
+            $point = $number_win*$tournament->score_win + $number_draw*$tournament->score_draw + $number_lost*$tournament->score_lose;
             $groupClubsRanking[]= array(
                 'club_id' => $club->id,
                 'name' => $club->name,
@@ -470,7 +470,7 @@ class TournamentController extends Controller
                 'number_match' => $number_match,
                 'number_win' => $number_win,
                 'number_draw' => $number_draw,
-                'number_lose' => $number_lose,
+                'number_lost' => $number_lost,
                 'goal_for' => $goal_for,
                 'goal_against' => $goal_against,
                 'number_yellow' => $number_yellow,

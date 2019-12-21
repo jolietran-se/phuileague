@@ -70,7 +70,7 @@
                                         <td>{{ $index }} @php $index++; @endphp</td>
                                         <td class="text-left">{{ $club['name'] }}</td>
                                         <td>{{ $club['number_match'] }}</td>
-                                        <td>{{ $club['number_win'] }}-{{ $club['number_draw'] }}-{{ $club['number_lose'] }}</td>
+                                        <td>{{ $club['number_win'] }}-{{ $club['number_draw'] }}-{{ $club['number_lost'] }}</td>
                                         <td>{{ $club['goal_for'] }}/{{ $club['goal_against'] }} ({{ $club['goal_for']-$club['goal_against'] }})</td>
                                         <td>{{ $club['number_yellow'] }}/{{ $club['number_red'] }}</td>
                                         <td>{{ $club['point'] }}</td>
