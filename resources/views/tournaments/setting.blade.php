@@ -19,6 +19,7 @@
                     <ul class="nav nav-pills nav-stacked">
                         <li class="active"><a href="{{ route('tournament.setting', $tournament->slug)}}">Thông tin chung <span class="glyphicon glyphicon-menu-right"></span></a></li>
                         <li><a href="{{ route('setting.groupstage', $tournament->slug)}}">Sắp xếp bảng đấu <span class="glyphicon glyphicon-menu-right"></span></a></li>
+                        {{-- <li><a href="{{ route('setting.knockoutstage', $tournament->slug)}}">Sắp xếp loại trực tiếp<span class="glyphicon glyphicon-menu-right"></span></a></li> --}}
                         <li><a href="{{ route('setting.matchstage', $tournament->slug)}}">Sắp xếp cặp đấu <span class="glyphicon glyphicon-menu-right"></span></a></li>
                         <li><a href="{{ route('setting.schedule', $tournament->slug)}}">Quản lý lịch đấu <span class="glyphicon glyphicon-menu-right"></span></a></li>
                         {{-- <li><a href="{{ route('setting.status', $tournament->slug)}}">Trạng thái <span class="glyphicon glyphicon-menu-right"></span></a></li> --}}

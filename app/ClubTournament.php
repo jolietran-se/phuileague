@@ -14,4 +14,9 @@ class ClubTournament extends Model
         'status',
         'group_id',
     ];
+
+    // Club 1-n Player
+    public function club(){
+        return $this->belongsTo('App\Club', 'club_id');
+    }
 }

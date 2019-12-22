@@ -95,6 +95,11 @@
                                                 <td style="width:20%"><small>#{{$index}}  Bảng {{$group->name}}</small></td>
                                                 <td style="width:25%" class="text-right">
                                                     <small>{{ $clubs->where('id', $match->clubA_id)->first()->name }}</small>
+                                                    @if (isset($clubs->where('id', $match->clubA_id)->first()->logo))
+                                                        <img src="{{ asset('storage/club-logos/').'/'.$clubs->where('id', $match->clubA_id)->first()->logo }}" alt="" class="img-circle" style="width:30px">
+                                                    @else 
+                                                        <img src="{{ asset('storage/club-logos/logo_default.jpg') }}" alt="" class="img-circle" style="width:30px">
+                                                    @endif
                                                 </td >
                                                 <td style="width:10%" class="text-center">
                                                     <small>{{ isset($match->goalA)?$match->goalA:"..." }}</small>
@@ -102,6 +107,11 @@
                                                     <small>{{ isset($match->goalB)?$match->goalB:"..." }}</small>
                                                 </td>
                                                 <td style="width:25%">
+                                                    @if (isset($clubs->where('id', $match->clubB_id)->first()->logo))
+                                                        <img src="{{ asset('storage/club-logos/').'/'.$clubs->where('id', $match->clubB_id)->first()->logo }}" alt="" class="img-circle" style="width:30px">
+                                                    @else 
+                                                        <img src="{{ asset('storage/club-logos/logo_default.jpg') }}" alt="" class="img-circle" style="width:30px">
+                                                    @endif
                                                     <small>{{ $clubs->where('id', $match->clubB_id)->first()->name }}</small>
                                                 </td>
                                                 <td style="width:20%" class="text-right">

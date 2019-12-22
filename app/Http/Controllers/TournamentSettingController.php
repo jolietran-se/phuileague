@@ -367,6 +367,7 @@ class TournamentSettingController extends Controller
 
         return response()->json(['status'=>true]);
     }
+
     /* 5. View sắp xếp cặp đấu */ 
     public function matchstage($slug)
     {
