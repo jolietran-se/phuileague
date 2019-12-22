@@ -49,36 +49,65 @@
                 </div>
                 <div id="tab-content" class="col-md-12">
                     <div id="stage-group" class="tab-item col-md-10">
+                        <input type="hidden" id="list-group" value="{{ $groups }}">
+                        <div class="text-center">
+                            @if (isset(Auth::user()->id)?Auth::user()->id:0 === $tournament->owner_id)
+                                <p>Hãy chọn ra các đội xuất sắc nhất theo bảng xếp hạng hoặc tiêu chí riêng của bạn để bước vào vòng loại trực tiếp.</p>
+                                <p><b>Chú ý:</b> chỉ thay đổi lựa chọn khi vòng loại chưa diễn ra. Nếu tiếp thục thay đổi, tất cả các kết quả của vòng knockout sẽ bị xóa vĩnh viễn. </p>
+                            @endif
+                        </div>
                         @foreach ($groups as $group)
-                            <table class="table table-striped" style="border: 1px solid #326295;">
-                                <tr>
-                                    <td style="background: #326295; color:#fff" colspan="7">Bảng {{$group->name}}</td>
-                                </tr>
-                                <tr style="background: #ece1df47;" class="text-center">
-                                    <td>STT</td>
-                                    <td style="width:30%">Đội bóng</td>
-                                    <td>Số trận</td>
-                                    <td>T-H-B</td>
-                                    <td>Hiệu số</td>
-                                    <td>Thẻ vàng/Thẻ đỏ</td>
-                                    <td>Điểm</td>
-                                </tr>
-                                @php $index=1; @endphp
-                                @foreach ($groupClubsRanking as $club)
-                                    @if ($club['group_id'] == $group->id)
-                                    <tr class="text-center">
-                                        <td>{{ $index }} @php $index++; @endphp</td>
-                                        <td class="text-left">{{ $club['name'] }}</td>
-                                        <td>{{ $club['number_match'] }}</td>
-                                        <td>{{ $club['number_win'] }}-{{ $club['number_draw'] }}-{{ $club['number_lost'] }}</td>
-                                        <td>{{ $club['goal_for'] }}/{{ $club['goal_against'] }} ({{ $club['goal_for']-$club['goal_against'] }})</td>
-                                        <td>{{ $club['number_yellow'] }}/{{ $club['number_red'] }}</td>
-                                        <td>{{ $club['point'] }}</td>
+                            <div id="group" data-id="{{ $group->id }}">
+                                <table class="table table-striped" style="border: 1px solid #326295;" id="group-{{ $group->id }}">
+                                    <tr>
+                                        <td style="background: #326295; color:#fff" colspan="8">Bảng {{$group->name}}</td>
                                     </tr>
-                                    @endif
-                                @endforeach
-                            </table>
+                                    <tr style="background: #ece1df47;" class="text-center">
+                                        <td>STT</td>
+                                        <td style="width:30%">Đội bóng</td>
+                                        <td>Số trận</td>
+                                        <td>T-H-B</td>
+                                        <td>Hiệu số</td>
+                                        <td>Thẻ vàng/Thẻ đỏ</td>
+                                        <td>Điểm</td>
+                                        @if (isset(Auth::user()->id)?Auth::user()->id:0 === $tournament->owner_id)
+                                            <td>Vào vòng loại?</td>
+                                        @endif
+                                    </tr>
+                                    @php $index=1; @endphp
+                                    @foreach ($groupClubsRanking as $club)
+                                        @if ($club->group_id == $group->id)
+                                        <tr data-id="{{ $club->id }}" class="text-center {{ $group->id }}-club">
+                                            <td>{{ $index }} @php $index++; @endphp</td>
+                                            <td class="text-left">
+                                                @if (isset(($club->club()->get())[0]->logo))
+                                                    <img src="{{ asset('storage/club-logos/').'/'.($club->club()->get())[0]->logo }}" alt="" class="img-circle" style="width:30px">
+                                                @else 
+                                                    <img src="{{ asset('storage/club-logos/logo_default.jpg') }}" alt="" class="img-circle" style="width:30px">
+                                                @endif
+                                                {{ ($club->club()->get())[0]->name }}
+                                            </td>
+                                            <td>{{ $club->g_number_match }}</td>
+                                            <td>{{ $club->g_number_win }}-{{ $club->g_number_draw }}-{{ $club->g_number_lost }}</td>
+                                            <td>{{ $club->g_goal_for }}/{{ $club->g_goal_against }} ({{ $club->g_goal_for - $club->g_goal_against }})</td>
+                                            <td>{{ $club->g_number_yellow }}/{{ $club->g_number_red }}</td>
+                                            <td>{{ $club->g_point }}</td>
+                                            @if (isset(Auth::user()->id)?Auth::user()->id:0 === $tournament->owner_id)
+                                                <input type="hidden" id="isnext-{{$club->id}}" value="{{$club->isnext}}">
+                                                <td><input type="checkbox" id="checked-{{$club->id}}" class="rank-{{ $index }}"></td>
+                                            @endif
+                                        </tr>
+                                        @endif
+                                    @endforeach
+                                </table>
+                            </div>
+                            
                         @endforeach
+                        @if (isset(Auth::user()->id)?Auth::user()->id:0 === $tournament->owner_id)
+                            <div>
+                                <input type="submit" value="Lưu" class="btn btn-success submit-pass pull-right">
+                            </div>
+                        @endif
                     </div>
                     <div id="stage-knockout" class="tab-item col-md-12">
                         Vòng loại trực tiếp
@@ -87,6 +116,7 @@
             </div>
         </div>
     </div>
+    <input type="hidden" id="tournament-slug" value="{{ $tournament->slug }}">
 
 @endsection
 
@@ -107,6 +137,57 @@
             return false;
         });
         activeTab($('.tab li:first-child'));
+
+        //Hiển thị checked từ CSDL
+        $('div#group').each(function(index, element){
+            var groupId = $(this).attr('data-id');
+            $('tr.'+groupId+'-club').each(function(index1, element1){
+                var clubId = $(this).attr('data-id');
+                var isnext = $(this).find('#isnext-'+clubId).val();
+                if(isnext == 1){
+                    $('#checked-'+clubId).prop( "checked", true );
+                }else{
+                    $('#checked-'+clubId).prop( "checked", false );
+                }
+            });
+        });
+
+        // Thay đổi các đội vào vòng knockout
+        $(document).on('click', '.submit-pass', function(){
+            var passClubs = [];
+            $('div#group').each(function(index, element){
+                var groupId = $(this).attr('data-id');
+                $('tr.'+groupId+'-club').each(function(index1, element1){
+                    var clubId = $(this).attr('data-id');
+                    // Lưu thay đổi:
+                    passClubs.push({
+                        clubId: clubId,
+                        isNext: $(this).find('#checked-'+clubId).is(':checked')?1:0,
+                    })
+                });
+            });
+            var slug = $('#tournament-slug').val();
+            url = " {{ route('setting.save-pass-group', ":slug") }}";
+            url = url.replace(':slug', slug);
+            $.ajax({
+                type: "POST", 
+                dataType: "json", 
+                url: url,
+                data: {
+                    passClubs: passClubs,
+                    _token: '{{csrf_token()}}'
+                },
+                success: function(response) {
+                    if (response.status == "success"){
+                        console.log(response);
+                    } else {
+                        console.log(response);
+                    }
+                    location.reload();
+                }
+            });
+        });
+
     </script>
 @endsection
 

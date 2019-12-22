@@ -15,4 +15,9 @@ class Group extends Model
         'number_club',
         'number_to_knockout',
     ];
+    
+    public function clubs()
+    {
+        return $this->hasMany('App\ClubTournament', 'group_id');
+    }
 }

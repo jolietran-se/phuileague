@@ -326,7 +326,6 @@ class TournamentController extends Controller
                 $goal->save();
             }
         }
-        
         if(is_array($request->goalsOfB) || is_object($request->goalsOfB)){
             foreach($request->goalsOfB as $goalB){
                 $goal = new Goal();
@@ -340,7 +339,6 @@ class TournamentController extends Controller
                 $goal->save();
             }
         }
-        
         // Lưu thẻ vàng 
         if(is_array($request->yellowsOfA) || is_object($request->yellowsOfA)){
             foreach($request->yellowsOfA as $yellowA){
@@ -355,7 +353,6 @@ class TournamentController extends Controller
                 $yellow->save();
             }
         }
-        
         if(is_array($request->yellowsOfB) || is_object($request->yellowsOfB)){
             foreach($request->yellowsOfB as $yellowB){
                 $yellow = new Card();
@@ -369,7 +366,7 @@ class TournamentController extends Controller
                 $yellow->save();
             }
         }
-        
+        // Lưu thẻ đỏ
         if(is_array($request->redsOfA) || is_object($request->redsOfA)){
             foreach($request->redsOfA as $redA){
                 $red = new Card();
@@ -383,7 +380,6 @@ class TournamentController extends Controller
                 $red->save();
             }
         }
-        
         if(is_array($request->redsOfB) || is_object($request->redsOfB)){
             foreach($request->redsOfB as $redB){
                 $red = new Card();
@@ -397,7 +393,6 @@ class TournamentController extends Controller
                 $red->save();
             }
         }
-        
         
         return response()->json(['status'=>true]);
     }
@@ -420,20 +415,18 @@ class TournamentController extends Controller
     {
         $tournament = Tournament::where('slug', $slug)->first();
         $userID = isset(Auth::user()->id)?Auth::user()->id:0;
-        $groups = $tournament->groups()->get();
-        $clubs = $tournament->clubs()->get();
 
         // Vòng bảng:
-        $matchs = $tournament->matchs()->where('stage', 'G')->get();
-        $groupClubsRanking = array();
-        foreach($clubs as $club){
-            // $clubRaking = array();
+        $groups = $tournament->groups()->get();
+        $matchsG = $tournament->matchs()->where('stage', 'G')->get();
+        $tour_clubs = ClubTournament::where('tournament_id', $tournament->id)->get();
+        foreach($tour_clubs as $club){
             $number_match = 0;
             $number_win = $number_draw = $number_lost = 0;
             $goal_for = $goal_against = 0;
             $number_yellow = $number_red = 0;
-            foreach($matchs as $match){
-                if($match->clubA_id == $club->id){
+            foreach($matchsG as $match){
+                if($match->clubA_id == $club->club_id){
                     if($match->goalA!==null && $match->goalB!==null){
                         $number_match+=1;
                         if ($match->goalA > $match->goalB) $number_win++;
@@ -447,7 +440,7 @@ class TournamentController extends Controller
                     $number_yellow += $match->yellow_card_A;
                     $number_red += $match->red_card_A;
                 }
-                if($match->clubB_id == $club->id){
+                if($match->clubB_id == $club->club_id){
                     if($match->goalA!==null && $match->goalB!==null){
                         $number_match+=1;
                         if($match->goalB > $match->goalA) $number_win++;
@@ -463,39 +456,48 @@ class TournamentController extends Controller
                 }
             }
             $point = $number_win*$tournament->score_win + $number_draw*$tournament->score_draw + $number_lost*$tournament->score_lose;
-            $groupClubsRanking[]= array(
-                'club_id' => $club->id,
-                'name' => $club->name,
-                'group_id'=> $club->pivot->group_id,
-                'number_match' => $number_match,
-                'number_win' => $number_win,
-                'number_draw' => $number_draw,
-                'number_lost' => $number_lost,
-                'goal_for' => $goal_for,
-                'goal_against' => $goal_against,
-                'number_yellow' => $number_yellow,
-                'number_red' => $number_red,
-                'point' => $point,
-            );
+            $club->g_number_match = $number_match;
+            $club->g_number_win = $number_win;
+            $club->g_number_draw = $number_draw;
+            $club->g_number_lost = $number_lost;
+            $club->g_point = $point;
+            $club->g_number_yellow = $number_yellow;
+            $club->g_number_red = $number_red;
+            $club->g_goal_for =  $goal_for;
+            $club->g_goal_against = $goal_against;
+            $club->g_goal_diff = $goal_for - $goal_against;
+            $club->save();
         }
-        // Sắp xếp giảm dần theo số điểm
-        usort($groupClubsRanking, function($a, $b){
-            $sort =  $b['point'] <=> $a['point'];
-            // nếu điểm bằng nhau thì tính đến hiệu số
-            if($sort == 0){
-                $sort = ($b['goal_for']-$b['goal_against']) <=> ($a['goal_for']-$a['goal_against']);
-                // nếu hiệu số bằng nhau thì tính đến thẻ vàng
-                if($sort == 0){
-                    $sort = $b['number_yellow'] <=> $a['number_yellow'];
-                }
-            }
-            return $sort;
-        });
-        // dd($groupClubsRanking);
+        $groupClubsRanking = ClubTournament::where('tournament_id', $tournament->id)
+                                            ->orderBy('g_point', 'desc')
+                                            ->orderBy('g_goal_diff', 'desc')
+                                            ->orderBy('g_number_yellow', 'asc')
+                                            ->get();
 
-        return view('tournaments.ranking', compact('tournament', 'userID', 'groups', 'clubs', 'groupClubsRanking'));
+        return view('tournaments.ranking', compact('tournament', 'userID', 'groups', 'groupClubsRanking'));
     }
 
+    public function savePassGroup(Request $request, $slug)
+    {   
+        Log::info($request->all());
+        $tournament = Tournament::where('slug', $slug)->first();
+        if(is_array($request->passClubs) || is_object($request->passClubs)){
+            foreach($request->passClubs as $club){
+                $clubTournament = ClubTournament::where('id', $club['clubId'])->first();
+                $clubTournament->isnext = $club['isNext'];
+                $clubTournament->save();
+            }
+        }
+        // Xóa các kết quả hiện có của vòng loại trực tiếp
+        $matchsK = $tournament->matchs()->where('stage', 'K')->get();
+        foreach($matchsK as $match){
+            $match->delete();
+            $match->goals()->delete();
+            $match->cards()->delete();
+        }
+        
+        return response()->json(['status'=>true]);
+    }
     /* View Đội bóng */ 
     public function listClubs($slug)
     {

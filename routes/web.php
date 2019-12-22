@@ -73,6 +73,7 @@ Auth::routes();
                     Route::post('/reject', 'TournamentController@actionReject')->name('tournament.action-reject');    // Từ chối
                     Route::post('/end-sign-up', 'TournamentController@endSignUp')->name('tournament.end-sign-up');    // Kết thúc đăng ký
                     Route::post('/save-result', 'TournamentController@saveMatchResult')->name('setting.save-match-result');   // Lưu thông tin lịch đấu
+                    Route::post('/save-pass-group', 'TournamentController@savePassGroup')->name('setting.save-pass-group');   // Chọn các đội vào vòng knockout
                 });
 
             });
