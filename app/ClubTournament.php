@@ -19,4 +19,7 @@ class ClubTournament extends Model
     public function club(){
         return $this->belongsTo('App\Club', 'club_id');
     }
+    public function group(){
+        return $this->belongsTo('App\Group', 'group_id');
+    }
 }
