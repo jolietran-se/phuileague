@@ -377,18 +377,77 @@ class TournamentSettingController extends Controller
         $matchsG = $tournament->matchs()->where('stage', 'G')->get();
         $number_round = $tournament->groups()->max('number_round');
 
-        return view('settings.match_stage', compact('tournament', 'groups', 'clubs', 'matchsG', 'number_round'));
+        // các đội vào vòng knockout
+        $clubsToKnockout = $tournament->clubs()->wherePivot('isnext', 1)
+                                                ->orderBy('group_id')
+                                                ->orderBy('g_point', 'desc')
+                                                ->get();
+        $knockoutClubsRanking = $tournament->clubs()->wherePivot('isnext', 1)
+                                                ->orderBy('k_point', 'desc')
+                                                ->get();
+        // số lượt thi đấu:
+        $number_knockout = $tournament->number_knockout; 
+        $k_rounds = (int) (log10($number_knockout)/log10(2));
+        for ($i=$k_rounds; $i >=1; $i--){
+            // số dội tại lượt i:
+            $t = 0;
+            $n_club = pow(2, $i);
+            $n_match = $n_club/2;
+            $matchsKn = $tournament->matchs()->where('stage', 'K')->where('round', $n_club)->get();
+            if (count($matchsKn) === 0) {
+                if ($i==$k_rounds) {
+                    // Sắp xếp cặp đấu
+                    $clubsKn = $clubsToKnockout->take($n_club);
+                    $existClub = array();
+                    foreach($clubsKn as $key => $club){
+                        if (!in_array($key, $existClub)) {
+                            $existClub[] = $key;
+                            $existClub[] = $n_club-$key-1;
+                            $match = new Match();
+                            $match->tournament_id = $tournament->id;
+                            $match->stage = "K";
+                            $match->round = $n_club;
+                            $match->clubA_id = $clubsKn[$key]->id;
+                            $match->clubB_id = $clubsKn[$n_club-$key-1]->id;
+                            $match->save();
+                        }
+                    }
+                }else{
+                    for ($i=1; $i <=$n_match ; $i++){ 
+                        $match = new Match();
+                        $match->tournament_id = $tournament->id;
+                        $match->stage = "K";
+                        $match->round = $n_club;
+                        $match->clubA_id = 0;
+                        $match->clubB_id = 0;
+                        $match->save();
+                    }
+                }
+            }
+        }
+        $matchsK = $tournament->matchs()->where('stage', 'K')->get();
+
+        return view('settings.match_stage', compact('tournament', 'groups',  'clubs', 'matchsG', 'matchsK', 'number_round', 'k_rounds', 'clubsToKnockout', 'knockoutClubsRanking'));
     }
     // Sắp xếp lại cặp đấu
     public function saveStageRound(Request $request, $slug)
     {
         $tournament = Tournament::where('slug', $slug)->first();
-
-        foreach($request->matchsG as $match){
-            $obj = $tournament->matchs()->where('id', $match['matchId'])->first();
-            $obj->clubA_id = $match['clubA_id'];
-            $obj->clubB_id = $match['clubB_id'];
-            $obj->save();
+        if(isset($request->matchsG)){
+            foreach($request->matchsG as $match){
+                $obj = $tournament->matchs()->where('id', $match['matchId'])->first();
+                $obj->clubA_id = $match['clubA_id'];
+                $obj->clubB_id = $match['clubB_id'];
+                $obj->save();
+            }
+        }
+        if (isset($request->matchsK)){
+            foreach($request->matchsK as $match){
+                $obj = $tournament->matchs()->where('id', $match['matchId'])->first();
+                $obj->clubA_id = $match['clubA_id'];
+                $obj->clubB_id = $match['clubB_id'];
+                $obj->save();
+            }
         }
 
         Session::flash('match_stage', 'Cập nhật thành công');

@@ -242,8 +242,8 @@
                 $('#address').html($(this).data('address')?$(this).data('address'):"Chưa cập nhật");
                 $('#clubA-name').html($(this).data('a-name')?$(this).data('a-name'):"Đội A");
                 $('#clubB-name').html($(this).data('b-name')?$(this).data('b-name'):"Đội B");
-                $('#goalA').html($(this).data('a-goal')!=""?$(this).data('a-goal'):"...");
-                $('#goalB').html($(this).data('b-goal')!=""?$(this).data('b-goal'):"...");
+                $('#goalA').html($(this).data('a-goal')!==""?$(this).data('a-goal'):"...");
+                $('#goalB').html($(this).data('b-goal')!==""?$(this).data('b-goal'):"...");
                 $('#match-id').val();
                 // lấy logo 
                 var logoA_name= $(this).data('a-logo');
@@ -313,6 +313,7 @@
                     $(document).on('click', '.item-remove-goal-b-'+matchID, function(e){
                         $(this).parents('.more-goal-b-'+matchID).remove();
                     });
+                    
                     // Hiển thị danh sách cầu thủ đã ghi bàn
                     var list_goal_a = $(this).data('list-goal-a');
                     var list_goal_b = $(this).data('list-goal-b');

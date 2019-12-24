@@ -65,6 +65,7 @@ Auth::routes();
                         Route::post('/status/{status}', 'TournamentSettingController@updateStatus')->name('tournament.update-status');              // cập nhật trạng thái
 
                         Route::post('/save-stage', 'TournamentSettingController@saveStageRound')->name('setting.save-stage');       // Lưu thay đổi cặp đấu
+                        Route::post('/save-stage-k', 'TournamentSettingController@saveStageRoundK')->name('setting.save-stage-k');       // Lưu thay đổi cặp đấu
                         Route::post('/save-schedule', 'TournamentSettingController@saveSchedule')->name('setting.save-schedule');   // Lưu thông tin lịch đấu
 
                     });
@@ -82,7 +83,7 @@ Auth::routes();
             Route::get('/dashboard', 'TournamentController@dashboard')->name('tournament.dashboard');           // tin chung or đăng ký thi đấu
             Route::get('/list-register', 'TournamentController@listRegister')->name('tournament.listregister'); // danh sách đăng ký
             Route::get('/stage-group', 'TournamentController@stageGroup')->name('tournament.stagegroup');       // vòng bảng
-            Route::get('/knockout', 'TournamentController@knockout')->name('tournament.knockout');              // vòng loại trực tiếp
+            Route::get('/knockout', 'TournamentController@stageKnockout')->name('tournament.knockout');              // vòng loại trực tiếp
             Route::get('/ranking', 'TournamentController@ranking')->name('tournament.ranking');                 // bảng xếp hạng
             Route::get('/list-club', 'TournamentController@listClubs')->name('tournament.listclub');            // danh sách các đội tham gia
             Route::get('/statistics', 'TournamentController@statistics')->name('tournament.statistics');        // thống kê
