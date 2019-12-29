@@ -135,7 +135,7 @@
                                             <div id="01" class="subtab none">
                                                 <div class="form-group">
                                                     <label>Số đội tham gia</label><span class="required"> *</span>
-                                                    <input class="form-control" type="number" name="number_club" placeholder="32">
+                                                    <input class="form-control" type="number" min="6" name="number_club" placeholder="32">
                                                     @if ($errors->has('number_club'))
                                                         <p class="error-danger">{{ $errors->first('number_club') }}</p>
                                                     @endif
@@ -146,7 +146,7 @@
                                                 <div class="form-group row">
                                                     <div class="col-xs-4">
                                                         <label>Điểm thắng:</label><span class="required"> *</span>
-                                                        <input class="form-control" type="number" name="score_win" placeholder="3">
+                                                        <input class="form-control" type="number" min="0" name="score_win" placeholder="3">
                                                         @if ($errors->has('score_win'))
                                                             <p class="error-danger">{{ $errors->first('score_win') }}</p>
                                                         @endif
@@ -189,7 +189,7 @@
                                                     <div class="col-xs-6">
                                                         <label>Số bảng đấu</label><span class="required"> *</span><br>
                                                         <small>(giai đoạn 1: chia bảng đấu vòng tròn)</small>
-                                                        <input class="form-control" type="number" name="number_group" placeholder="8">
+                                                        <input class="form-control" type="number" min="2" name="number_group" placeholder="8">
                                                         @if ($errors->has('number_group'))
                                                             <p class="error-danger">{{ $errors->first('number_group') }}</p>
                                                         @endif
