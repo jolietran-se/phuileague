@@ -304,6 +304,8 @@ class TournamentController extends Controller
         $match->status = "close";
         $match->goalA = $goalsOfMatch[0]['goalA'];
         $match->goalB = $goalsOfMatch[0]['goalB'];
+        $match->sub_goal_A = $goalsOfMatch[0]['subGoalA'];
+        $match->sub_goal_B = $goalsOfMatch[0]['subGoalB'];
         $match->yellow_card_A = $goalsOfMatch[0]['yellow_card_A'];
         $match->yellow_card_B = $goalsOfMatch[0]['yellow_card_B'];
         $match->red_card_A = $goalsOfMatch[0]['red_card_A'];
@@ -455,7 +457,8 @@ class TournamentController extends Controller
                     if($match->goalA!==null && $match->goalB!==null){
                         $number_match+=1;
                         if ($match->goalA > $match->goalB) $number_win++;
-                        elseif($match->goalA == $match->goalB) $number_draw++;
+                        elseif($match->goalA == $match->goalB && $match->sub_goal_A > $match->sub_goal_B) $number_win++;
+                        elseif($match->goalA == $match->goalB && $match->sub_goal_A < $match->sub_goal_B) $number_lost++;
                         elseif($match->goalA < $match->goalB) $number_lost++;
                     }  
                     $goal_for +=  $match->goalA;
@@ -467,7 +470,8 @@ class TournamentController extends Controller
                     if($match->goalA!==null && $match->goalB!==null){
                         $number_match+=1;
                         if($match->goalB > $match->goalA) $number_win++;
-                        elseif($match->goalB == $match->goalA) $number_draw++;
+                        elseif($match->goalB == $match->goalA && $match->sub_goal_B > $match->sub_goal_A) $number_win++;
+                        elseif($match->goalB == $match->goalA && $match->sub_goal_B < $match->sub_goal_A) $number_lost++;
                         elseif($match->goalb < $match->goalA) $number_lost++;
                     }
                     $goal_for +=  $match->goalB;
@@ -488,6 +492,8 @@ class TournamentController extends Controller
             $club->k_goal_against = $goal_against;
             $club->save();
         }
+
+        Session::flash('save_result', 'Kết quả đã được cập nhật!');
 
         return response()->json(['status'=>true]);
     }

@@ -289,7 +289,7 @@
             activeTabk($('.tab-k li:first-child'));
         });
 
-        // Lưu sắp xếp cặp đấu theo từng round
+        // Lưu sắp xếp cặp đấu theo từng round ở vòng bảng
         $('input.save-round').each(function(index, element){
             var round = $(this).attr('data-round');
             $(document).on('click', '.saveRound'+round, function(e){
@@ -349,7 +349,7 @@
             });
         });
 
-        // Lưu sắp xếp cặp đấu theo từng vòng
+        // Lưu sắp xếp cặp đấu theo từng vòng ở vòng knockout
         $('input.save-round-k').each(function(index, element){
             var roundK = $(this).attr('data-round-k');
             $(document).on('click', '.saveRoundK'+roundK, function(){

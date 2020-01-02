@@ -2,6 +2,7 @@
 @section('head')
     <link rel="stylesheet" href="{{ asset('css/user.css') }}">
     <link rel="stylesheet" href="{{ asset('css/tournament.css') }}">
+    <link rel="stylesheet" href="{{ asset('bower_components/toastr/toastr.min.css') }}">
 
 @endsection
 
@@ -93,6 +94,8 @@
                                                 data-b-logo="{{ isset($clubs->where('id', $match->clubB_id)->first()->logo)?$clubs->where('id', $match->clubB_id)->first()->logo:'' }}"
                                                 data-a-goal="{{ $match->goalA }}"
                                                 data-b-goal="{{ $match->goalB }}"
+                                                data-a-sub-goal="{{ $match->sub_goal_A }}"
+                                                data-b-sub-goal="{{ $match->sub_goal_B }}"
                                                 data-a-yellow="{{ $match->yellow_card_A }}"
                                                 data-b-yellow="{{ $match->yellow_card_B }}"
                                                 data-a-red="{{ $match->red_card_A }}"
@@ -189,6 +192,7 @@
                                     <div id="tab-content">
                                         <div id="result" class="tab1-item">
                                             <div class="text-center col-md-12">
+                                                <!-- Nhập tỷ số chính -->
                                                 <p>Tỷ số</p>
                                                 <div class="col-md-6 goal">
                                                     <input type="number" id="input-goalA" min="0" class="a-goal pull-right form-control" style="width:30%!important">
@@ -196,6 +200,15 @@
                                                 <div class="col-md-6 goal">
                                                     <input type="number" id="input-goalB" min="0" class="b-goal pull-left  form-control" style="width:30%!important">
                                                 </div>
+                                                <!-- Nhập tỷ số phụ -->
+                                                <p>Tỷ số phụ <br><small>(Tỷ số luân lưu giúp phân định thắng thua)</small></p>
+                                                <div class="col-md-6 sub_goal">
+                                                    <input type="number" id="input-subGoalA" min="0" class="a-sub-goal pull-right form-control" style="width:30%!important">
+                                                </div>
+                                                <div class="col-md-6 goal">
+                                                    <input type="number" id="input-subGoalB" min="0" class="b-sub-goal pull-left  form-control" style="width:30%!important">
+                                                </div>
+                                                <!-- Nhập bàn thắng chính-->
                                                 <div class="col-md-6" id="add-goal-a"></div>
                                                 <div class="col-md-6" id="add-goal-b"></div>
                                             </div>
@@ -243,6 +256,8 @@
 @endsection
 
 @section('foot')
+    <script src="{{ asset('bower_components/toastr/toastr.min.js') }}"></script>
+
     <script type="text/javascript">
         $('tr.show-detail').each(function(index, element){
             var matchID = $(this).data('match-id');
@@ -286,6 +301,8 @@
                     // Hiển thị tỷ số:
                     $('#input-goalA').val($(this).data('a-goal'));
                     $('#input-goalB').val($(this).data('b-goal'));
+                    $('#input-subGoalA').val($(this).data('a-sub-goal'));
+                    $('#input-subGoalB').val($(this).data('b-sub-goal'));
                     
                     // Thêm và xóa bàn thắng
                     var add_item_a = '<a class="dynamic item-add-goal-a-'+matchID+' pull-right"><span class="fa fa-plus-circle"></span></a>';
@@ -575,6 +592,8 @@
                         goalsOfMatch.push({
                             goalA: $('#input-goalA').val(),
                             goalB: $('#input-goalB').val(),
+                            subGoalA: $('#input-subGoalA').val(),
+                            subGoalB: $('#input-subGoalB').val(),
                             yellow_card_A: $('#input-yellowA').val(),
                             yellow_card_B: $('#input-yellowB').val(),
                             red_card_A: $('#input-redA').val(),
@@ -676,6 +695,12 @@
                     }
             });
         });
+    </script>
+    <script>
+        toastr.options.positionClass = 'toast-top-right';
+        @if(Session::has('save_result'))
+            toastr.success("{{ Session::get('save_result') }}");
+        @endif
     </script>
 @endsection
 
