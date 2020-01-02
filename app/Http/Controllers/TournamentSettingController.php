@@ -396,7 +396,7 @@ class TournamentSettingController extends Controller
             $matchsKn = $tournament->matchs()->where('stage', 'K')->where('round', $n_club)->get();
             if (count($matchsKn) === 0) {
                 if ($i==$k_rounds) {
-                    // Sắp xếp cặp đấu
+                    // Sắp xếp cặp đấu ở lượt đầu của vòng loại
                     $clubsKn = $clubsToKnockout->take($n_club);
                     $existClub = array();
                     foreach($clubsKn as $key => $club){
@@ -413,6 +413,7 @@ class TournamentSettingController extends Controller
                         }
                     }
                 }else{
+                    // Sắp xếp cặp đấu ở lượt các lượt sau của vòng loại
                     for ($i=1; $i <=$n_match ; $i++){ 
                         $match = new Match();
                         $match->tournament_id = $tournament->id;
@@ -461,13 +462,22 @@ class TournamentSettingController extends Controller
         $tournament = Tournament::where('slug', $slug)->first();
         $groups = $tournament->groups()->get();
         $clubs = $tournament->clubs()->get();
-        // dd($clubs);
+        // Vòng bảng
         $matchsG = $tournament->matchs()->where('stage', 'G')->get();
-        // $matchsK = $tournament->matchs()->get();
-        $number_round = $tournament->groups()->max('number_round');
-
-        return view('settings.schedule', compact('tournament', 'groups', 'clubs', 'matchsG', 'number_round'));
+        $g_round = $tournament->groups()->max('number_round');
+        // Vòng loại trực tiếp
+        $matchsK = $tournament->matchs()->where('stage', 'K')->get();
+        $k_round = (int) (log10($tournament->number_knockout)/log10(2));
+        $clubsToKnockout = $tournament->clubs()->wherePivot('isnext', 1)
+                                                ->orderBy('group_id')
+                                                ->orderBy('g_point', 'desc')
+                                                ->get();
+        $knockoutClubsRanking = $tournament->clubs()->wherePivot('isnext', 1)
+                                                ->orderBy('k_point', 'desc')
+                                                ->get();
+        return view('settings.schedule', compact('tournament', 'groups', 'clubs', 'matchsG', 'g_round', 'matchsK', 'k_round', 'clubsToKnockout', 'knockoutClubsRanking'));
     }
+
     public function saveSchedule(Request $request, $slug)
     {
         $tournament = Tournament::where('slug', $slug)->first();
