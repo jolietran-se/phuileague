@@ -143,10 +143,7 @@ div.tournament-section.tournament-main .submit-create{
         height: 20px;
         width: 20px;
     }
-    input:checked {
-        height: 20px;
-        width: 20px;
-    }
+    
 /* ------------------------------------
 List Tournament Area Start Here 
 ---------------------------------------*/
@@ -194,7 +191,7 @@ p{
 Setting Tournament Area Start Here 
 ---------------------------------------*/
 .setting-section.setting-main{
-    padding: 35px 0px 35px 0px;
+    padding: 15px 0px 25px 0px;
 }
 .nav>li>a {
     padding: 10px 10px;
@@ -420,9 +417,25 @@ div.search-tournament {
     margin-bottom: 3px;
 }
 
+#match-stage #tab-k ul{
+    margin-left: 35%;
+}
+#match-stage #tab-k ul li{
+    float: left;
+    margin-right: 30px;
+}
+#match-stage #tab-k ul li.active{
+    border-bottom: 2px solid #326295;
+}
+#match-stage #tab-k ul li.active a h6{
+    color: #326295;
+    text-decoration: #326295;
+}
+
 #group-match .panel-body div.col{
     padding: 2px;
 }
+
 #group-match .panel-body{
     padding:5px;
 }
@@ -434,10 +447,10 @@ div.search-tournament {
 .round-label p{
     color: #fff;
 }
-#tab{
+#group-match #tab{
     margin-left: 43%;
 }
-#tab ul li{
+#group-match #tab ul li{
     width: 35px;
     height: 35px;
     float: left;
@@ -447,17 +460,20 @@ div.search-tournament {
     text-align: center;
     margin-right: 3px;
 }
-
-#tab ul li.active{
+#group-match #tab ul li.active{
     background: #326295;
 }
-#tab ul li.active a{
+#group-match #tab ul li.active a{
     color: #fff;
+}
+#knockout-match div.col{
+    padding: 2px;
 }
 #tab1{
     margin-bottom: 10px;
     border-bottom: 1px solid #ddd;
 }
+
 #tab1 ul{
     margin-left: 28%;
 }
@@ -471,4 +487,88 @@ div.search-tournament {
 #tab1 ul li.active a h6{
     color: #326295;
     text-decoration: #326295;
+}
+
+
+/* SCHEDULE */
+#schedule-detail div.col{
+    margin-right: 0px;
+}
+#schedule-detail .club-name{
+    white-space: nowrap;
+    width: 130px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+#schedule .stt{
+    width: 100px;
+} 
+
+#showMacthDetail img{
+    width: 100px;
+}
+#showMacthDetail .modal-body .row.header{
+    background:#326295; 
+    color:#fff!important; 
+    padding:10px 0;
+}
+#showMacthDetail .modal-body .row.header #goal{
+    font-size: 40px;
+    margin-top: 7%;
+}
+#showMatchDetail #result input.form-control{
+    width: 30% !important;
+}
+#showMatchDetail #result .form-group.more-goal input{
+    float: left;
+}
+#showMacthDetail span.glyphicon.glyphicon-minus{
+    color: red;
+}
+div.more-yellow, div.more-red{
+    margin: 5px 0!important;
+}
+#tab-k{
+    margin-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+}
+#tab-k ul{
+    margin-left: 35%;
+}
+#tab-k ul li{
+    float: left;
+    margin-right: 30px;
+}
+#tab-k ul li.active{
+    border-bottom: 2px solid #326295;
+}
+#tab-k ul li.active a h6{
+    color: #326295;
+    text-decoration: #326295;
+}
+
+/* RANHKING */
+#ranking #tab{
+    margin-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+}
+#ranking #tab ul{
+    margin-left: 40%;
+}
+#ranking #tab ul li{
+    float: left;
+    margin-right: 30px;
+}
+#ranking #tab ul li.active{
+    border-bottom: 2px solid #326295;
+}
+#ranking #tab ul li.active a h6{
+    color: #326295;
+    text-decoration: #326295;
+}
+#ranking #stage-group{
+    margin-left: 8%;
+}
+#ranking #stage-knockout{
+    margin-left: 8%;
 }

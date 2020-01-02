@@ -44,16 +44,17 @@
                         </div>
                         <br>
                         <div class="tab1-content">
+                            <!-- Vòng bảng -->
                             <div id="group-match" class="tab1-item">
                                 <div id="tab">
                                     <ul class="tab">
-                                        @for ($i=1; $i<=$number_round; $i++)
+                                        @for ($i=1; $i<=$g_round; $i++)
                                             <li><a href="#round{{$i}}">{{$i}}</a></li>
                                         @endfor
                                     </ul>
                                 </div>
                                 <div class="tab-content">
-                                    @for($i=1; $i<=$number_round; $i++)
+                                    @for($i=1; $i<=$g_round; $i++)
                                         <div id="round{{$i}}" class="round-area col-md-12 tab-item">
                                             <div class="col-md-12 round-label"><p class="text-center">VÒNG {{ $i }}</p></div>
                                             @php $index = 1; @endphp
@@ -113,8 +114,90 @@
                                     @endfor
                                 </div>
                             </div>
+                            <!-- Vòng loại trực tiếp -->
                             <div id="knockout-match" class="tab1-item">
-                                1/16| 1/8 |Tứ kết | Bán Kết | Chung kết
+                                <div id="tab-k">
+                                    <ul class="tab-k">
+                                        @for ($i = $k_round; $i >=1 ; $i--)
+                                            <li><a href="#roundK{{ pow(2, $i) }}"><p>
+                                                @if ($i==1)
+                                                    Chung kết
+                                                @elseif($i==2)
+                                                    Bán Kết
+                                                @elseif($i==3)
+                                                    Tứ Kết
+                                                @else 
+                                                    Vòng 1/{{ pow(2, $i) }}
+                                                @endif
+                                            </p></a></li>
+                                        @endfor
+                                    </ul>
+                                </div>
+                                <div id="tab-k-content">
+                                    @for ($i = $k_round; $i >=1 ; $i--)
+                                        <div class="tab-k-item col-md-12" id="roundK{{pow(2, $i)}}">
+                                            @php 
+                                                $n_club = pow(2, $i);
+                                                $n_match = pow(2, $i)/2;
+                                            @endphp
+                                            <div class="col-md-12 round-label"><p class="text-center">
+                                                    @if ($n_match == 4)
+                                                        Vòng Tứ Kết
+                                                    @elseif($n_match == 2)
+                                                        Vòng Bán Kết</p>
+                                                    @elseif($n_match == 1)
+                                                        Vòng Chung Kết
+                                                    @else
+                                                        Vòng 1/{{ $n_match }}
+                                                    @endif
+                                                </p>
+                                            </div>
+                                            @php $indexk = 1; @endphp
+                                            @foreach ($matchsK as $match)
+                                                @if ($match->round == $n_club)
+                                                <div class="col col-md-12 match-detail roundK{{pow(2, $i)}}" data-status="{{ $match->status }}" data-id="{{ $match->id }}">
+                                                    <div class="col-md-1 stt">
+                                                        <small>#{{$indexk}}  Bảng {{$group->name}}</small>
+                                                        @php $indexk++ @endphp
+                                                    </div>
+                                                    <div class="col col-md-2 club-name">
+                                                        @foreach ($clubs as $club)
+                                                            @if ($club->id == $match->clubA_id)
+                                                                <small>{{ $club->name }}</small>
+                                                            @endif
+                                                        @endforeach
+                                                    </div>
+                                                    <div class="col col-md-2 club-name">
+                                                        @foreach ($clubs as $club)
+                                                            @if ($club->id == $match->clubB_id)
+                                                                <small>{{ $club->name }}</small>
+                                                            @endif
+                                                        @endforeach
+                                                    </div>
+                                                    <div class="form-group form">
+                                                        <div class="col col-md-2" style="margin-left: 15px">
+                                                            <input type="text" id="address-{{$match->id}}" value="{{ $match->address}}" placeholder="Sân số..." class="form-control">
+                                                        </div>
+                                                        <div class="col col-md-2">
+                                                            <input type="text" id="date-{{$match->id}}" value="{{ $match->date}}" name="schedule_date" placeholder="Ngày" class="form-control">
+                                                        </div>
+                                                        <div class="col col-md-2 bootstrap-timepicker timepicker">
+                                                            <input type="text" id="time-{{$match->id}}" value="{{ $match->time}}" name="schedule_time" placeholder="Giờ" class="form-control input-small">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                @endif
+                                            @endforeach
+                                            <div id="notification-k"><!-- Thông báo --></div>
+                                            <div class="footer-k">
+                                                <input type="hidden" id="tournament-slug" value="{{ $tournament->slug }}">
+                                                <input type="submit" value="Lưu" class="btn btn-success save-round-k saveRoundK{{pow(2, $i)}}" 
+                                                    data-round-k="{{ pow(2, $i) }}"
+                                                    >
+                                            </div>
+                                        </div>
+                                    @endfor
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -128,20 +211,9 @@
     <script src="{{ asset('bower_components/toastr/toastr.min.js') }}"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
     <script src="https://cdn.jsdelivr.net/bootstrap.timepicker/0.2.6/js/bootstrap-timepicker.min.js"></script>
-
+    
+    <!-- Vòng bảng -->
     <script type="text/javascript">
-        //Selected đội bóng trong trận đó, trận nào đã có kết quả thì không thể thay đổi
-        $('div.match-detail').each(function(index, element){
-            var matchStatus = $(this).attr('data-status');
-            var matchId = $(this).attr('data-id');
-            if(matchStatus == "close"){
-                $('select.'+matchId).attr("disabled", true);
-            }
-            $('select.form-control').each(function(index1,element){
-                var clubID =  $(this).attr('data-id');
-                $(this).val(clubID);
-            });
-        });
         // Tab
         $(document).ready(function(){
             function activeTab1(obj)
@@ -219,7 +291,7 @@
                     });
                 });
 
-                //Lưu thông tin
+                // Lưu thông tin
                 var slug = $('#tournament-slug').val();
                 url = " {{ route('setting.save-schedule', ":slug") }}";
                 url = url.replace(':slug', slug);
@@ -242,6 +314,72 @@
                 });
             });
         });
+    </script>
+
+    <!-- Vòng loại trực tiếp -->
+    <script type="text/javascript">
+         // Tab vòng loại trực tiếp
+         $(document).ready(function(){
+            function activeTabk(obj)
+            {
+                $('#tab-k ul li').removeClass('active');
+                $(obj).addClass('active');
+                var id = $(obj).find('a').attr('href');
+                $('.tab-k-item').hide();
+                $(id).show();
+            }
+            $('.tab-k li').click(function(){
+                activeTabk(this);
+                return false;
+            });
+            activeTabk($('.tab-k li:first-child'));
+        });
+
+        // Lưu thông tin
+        $('input.save-round-k').each(function(index, element){
+            var round = $(this).attr('data-round-k');
+            $(document).on('click', '.saveRoundK'+round, function(e){
+                console.log(round);
+                // Lấy dữ liệu từng lượt
+                var schedules = [];
+                $('div.match-detail.roundK'+round).each(function(){
+                    var matchId = $(this).attr('data-id');
+                    var address = $('input#address-'+matchId).val();
+                    var date = $('input#date-'+matchId).val();
+                    var time = $('input#time-'+matchId).val();
+                    schedules.push({
+                        matchId: matchId,
+                        address: address,
+                        date: date,
+                        time: time,
+                    });
+                });
+                console.log(schedules);
+
+                // Lưu thông tin
+                var slug = $('#tournament-slug').val();
+                url = " {{ route('setting.save-schedule', ":slug") }}";
+                url = url.replace(':slug', slug);
+                $.ajax({
+                    type: "POST", 
+                    dataType: "json", 
+                    url: url,
+                    data: {
+                        schedules:schedules,
+                        _token: '{{csrf_token()}}'
+                    },
+                    success: function(response) {
+                        if (response.status == "success"){
+                            console.log(response);
+                        } else {
+                            console.log(response);
+                        }
+                        location.reload();
+                    }
+                });
+            });
+        });
+
     </script>
     <script>
         toastr.options.positionClass = 'toast-top-right';
