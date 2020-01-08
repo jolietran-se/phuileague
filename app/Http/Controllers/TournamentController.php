@@ -53,6 +53,7 @@ class TournamentController extends Controller
             $tournament->save();
         }
     }
+
     /* Cắt logo */ 
     public function imageCrop(Request $request)
     {   

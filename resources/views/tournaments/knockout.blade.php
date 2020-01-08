@@ -51,17 +51,17 @@
                         <div class="tab-k-item" id="roundK{{pow(2, $i)}}">
                             @php 
                                 $n_club = pow(2, $i);
-                                $n_match = pow(2, $i)/2;
+                                // $n_match = pow(2, $i)/2;
                             @endphp
                             <table class="table table-striped" style="border: 1px solid #326295;">
                                 <tr style="background: #326295; color:#fff">
                                     <td colspan="5" class="text-center"> 
-                                        @if ($n_match == 4)
+                                        @if ($n_club == 8)
                                             <p>Vòng Tứ Kết</p>
-                                        @elseif($n_match == 2)
+                                        @elseif($n_club == 4)
                                             <p>Vòng Bán Kết</p>
-                                        @elseif($n_match == 1)
-                                            <p>Vòng CK</p>
+                                        @elseif($n_club == 2)
+                                            <p>Vòng Chung Kết</p>
                                         @else
                                             <p>Vòng 1/{{ $n_match }}</p>
                                         @endif

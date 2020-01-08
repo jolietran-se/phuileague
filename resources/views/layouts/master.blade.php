@@ -8,7 +8,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- Place favicon.ico in the root directory -->
-    {{-- <link rel="shortcut icon" type="image/x-icon" href="'images/fav.png') }}">     --}}
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('images/logo/phuileague.png') }}">    
     <!-- bootstrap v3.3.6 css -->
     <link rel="stylesheet" href="{{ asset('bower_components/bootstrap/dist/css/bootstrap.min.css') }}">
     <!-- font-awesome css -->

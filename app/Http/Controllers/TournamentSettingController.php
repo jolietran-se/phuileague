@@ -165,33 +165,37 @@ class TournamentSettingController extends Controller
             }else if($n % $m != 0){
                 $n_club =floor($n/$m);
                 $j = $n % $m;
-                if($j >= $n_club/2 +1){
-                    // Thêm 1 bảng
-                    $m = $m+1;
-                    $tournament->number_group = $m;
-                    $tournament->save();
-                    // m bảng đầu có $n_club đội, bảng cuối có $j đội 
-                    $n_club_m = $n_club; 
-                    $n_club_1 = $j;
-                    // Thêm mới các bảng:
-                    for ($i=0; $i < $m ; $i++) { 
-                        $group = new Group();
-                        $group->tournament_id = $tournament->id;
-                        $group->name = $alpha[$i];
-                        $group->save();
-                    }
-                    $groups = Group::where('tournament_id', $tournament->id)->get();
-                    foreach ($groups as $key => $group) {
-                        if($key != $m-1){
-                            $group->number_club = (int) $n_club;
-                            $group->number_match = (int) $n_club*($n_club-1)/2;
-                        }else{
-                            $group->number_club = (int) $j;
-                            $group->number_match = (int) $j*($j-1)/2;
-                        }
-                        $group->save();
-                    }
-                }else{
+                /* Nếu số dư đội bóng lớn hơn một nửa số nguyên các đội trong một bảng */
+                // if($j >= $n_club/2 +1){
+                //     // Thêm 1 bảng
+                //     $m = $m+1;
+                //     $tournament->number_group = $m;
+                //     $tournament->save();
+                //     // m bảng đầu có $n_club đội, bảng cuối có $j đội 
+                //     $n_club_m = $n_club; 
+                //     $n_club_1 = $j;
+                //     // Thêm mới các bảng:
+                //     for ($i=0; $i < $m ; $i++) { 
+                //         $group = new Group();
+                //         $group->tournament_id = $tournament->id;
+                //         $group->name = $alpha[$i];
+                //         $group->save();
+                //     }
+                //     $groups = Group::where('tournament_id', $tournament->id)->get();
+                //     foreach ($groups as $key => $group) {
+                //         if($key != $m-1){
+                //             $group->number_club = (int) $n_club;
+                //             $group->number_match = (int) $n_club*($n_club-1)/2;
+                //         }else{
+                //             $group->number_club = (int) $j;
+                //             $group->number_match = (int) $j*($j-1)/2;
+                //         }
+                //         $group->save();
+                //     }
+                // }
+
+                /* Nếu số dư đội bóng bất kỳ */
+                // else{
                     // m-j bảng đầu sẽ có $n_club đội, j bảng cuối có $n_club+1 đội 
                     $n_club_mj = $n_club;
                     $n_club_j = $n_club+1;
@@ -215,7 +219,7 @@ class TournamentSettingController extends Controller
                         }
                         $group->save();
                     }
-                }
+                // }
             }
 
             $groups = Group::where('tournament_id', $tournament->id)->get();

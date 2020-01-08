@@ -25,6 +25,7 @@ mix.styles(['resources/sass/magnific-popup.css'], 'public/css/magnific-popup.css
    .styles(['resources/sass/home.css'], 'public/css/home.css')
    .styles(['resources/sass/user.css'], 'public/css/user.css')
    .styles(['resources/sass/tournament.css'], 'public/css/tournament.css')
+   .styles(['resources/sass/login.css'], 'public/css/login.css')
    .styles(['resources/sass/club.css'], 'public/css/club.css');
 
 mix.js('resources/js/main.js', 'public/js/main.js')

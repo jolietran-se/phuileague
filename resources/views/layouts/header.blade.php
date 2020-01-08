@@ -26,13 +26,15 @@
     <div class="header-middle-area menu-sticky">
         <div class="container">
             <div class="row">
-                <div class="col-md-10 col-sm-12 col-xs-12 mobile-menu pull-right">
+                <div class="col-md-4">
+                    <a href="{{ route('home') }}" style="height: 50px"><img src="{{ asset('images/logo/phuileague.png') }}" style="height: 80px; overflow:true"></a>
+                </div>
+                <div class="col-md-8 col-sm-12 col-xs-12 mobile-menu pull-right">
                     <div class="main-menu">
                         <nav class="rs-menu">
                             <ul class="nav-menu">
                                 <!-- Home -->
-                                <li class="current-menu-item current_page_item"><a href="{{ route('home') }}">{{ trans('header.home') }}</a></li>
-                                
+                                <li><a href="{{ route('home') }}">{{ trans('header.home') }}</a></li>
                                 <!-- Tìm giải đấu -->
                                 <li><a href="{{ route('tournament.list') }}">{{ trans('header.tournament_search') }}</a></li>
                                 <!-- Tạo giải đấu -->
@@ -53,9 +55,7 @@
                                             <li><a href="{{ route('user.tournaments',['username' => Auth::user()->username]) }}">{{ trans('header.your_tournament') }}</a></li> 
                                             <li><a href="{{ route('user.clubs',['username' => Auth::user()->username]) }}">{{ trans('header.your_club') }}</a></li>
                                             <li>
-                                                <a href="{{ route('logout') }}"
-                                                    onclick="event.preventDefault();
-                                                                    document.getElementById('logout-form').submit();">
+                                                <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                                     {{ __('Đăng xuất') }}
                                                 </a>
                                                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
@@ -66,7 +66,7 @@
                                     </li>
                                 @endguest
                             </ul>
-                       </nav>
+                        </nav>
                    </div>
                </div>
             </div>
