@@ -128,15 +128,15 @@
                                 @foreach ($knockoutClubsRanking as $club)
                                     <tr class="text-center">
                                         <td>
-                                            @if($index1 == 1)
+                                            {{-- @if($index1 == 1)
                                                 <b>Quán quân</b>
                                             @elseif($index1==2)
                                                 <b>Á Quân</b>
                                             @elseif($index1==3)
                                                 <b>Hạng Ba</b>
-                                            @else
+                                            @else --}}
                                                 {{ $index1 }} 
-                                            @endif
+                                            {{-- @endif --}}
                                             @php $index1++; @endphp
                                         </td>
                                         <td class="text-left">
