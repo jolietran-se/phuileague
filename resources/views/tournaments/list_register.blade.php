@@ -293,14 +293,17 @@
     <!-- Notification-->
     <script>
         toastr.options.positionClass = 'toast-bottom-right';
-        @if(Session::has('register_success'))
-            toastr.success("{{ Session::get('register_success') }}");
+        @if(Session::has('signup_success'))
+            toastr.success("{{ Session::get('signup_success') }}");
         @endif
-        @if(Session::has('register_fail'))
-            toastr.warning("{{ Session::get('register_fail') }}");
+        @if(Session::has('signup_fail'))
+            toastr.warning("{{ Session::get('signup_fail') }}");
         @endif
-        @if(Session::has('end-sign-up'))
-            toastr.info("{{ Session::get('end-sign-up') }}");
+        @if(Session::has('end-signup'))
+            toastr.info("{{ Session::get('end-signup') }}");
+        @endif
+        @if(Session::has('no-end-signup'))
+            toastr.info("{{ Session::get('no-end-signup') }}");
         @endif
     </script>
     <!-- Thay đổi trạng thái-->
@@ -407,7 +410,7 @@
                         $('#endModal').modal('hide');
                         location.reload();
                     }, error: function(xhr, textStatus, thrownError) {
-                        console.log('error');
+                        console.log('error-end-signup');
                         toastr.info("Đã xảy ra lỗi");
                     },
                 });

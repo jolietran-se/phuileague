@@ -136,113 +136,12 @@ class TournamentSettingController extends Controller
     public function groupstage($slug)
     {
         $tournament = Tournament::where('slug', $slug)->first();
-        $n = $tournament->number_club;
-        $m = $tournament->number_group;
-        $k = $tournament->number_knockout;
-        $r = $tournament->number_round;
-        // Nếu giải đấu chưa được sắp xếp bảng đấu thì thêm mới bảng
-        $groups = Group::where('tournament_id', $tournament->id)->get();
-        $alpha = range('A', 'Z');
-        // Số đội mỗi bảng, số trận mỗi vòng đấu và số đội vào vòng knockout ở mỗi bảng;
-        if (count($groups) == 0 && $tournament->tournament_type_id==3) {
-            if ($n % $m == 0) {
-                $n_club = $n/$m;
-                $n_match = $n_club*($n_club-1)/2;
-                // Thêm mới các bảng:
-                for ($i=0; $i < $m ; $i++) { 
-                    $group = new Group();
-                    $group->tournament_id = $tournament->id;
-                    $group->name = $alpha[$i];
-                    $group->save();
-                }
-                $groups = Group::where('tournament_id', $tournament->id)->get();
-                foreach ($groups as $group) {
-                    $group->number_match = $n_match;
-                    $group->number_club = $n_club;
-                    $group->number_round = $n_match*2/$n_club;
-                    $group->save();
-                }
-            }else if($n % $m != 0){
-                $n_club =floor($n/$m);
-                $j = $n % $m;
-                /* Nếu số dư đội bóng lớn hơn một nửa số nguyên các đội trong một bảng */
-                // if($j >= $n_club/2 +1){
-                //     // Thêm 1 bảng
-                //     $m = $m+1;
-                //     $tournament->number_group = $m;
-                //     $tournament->save();
-                //     // m bảng đầu có $n_club đội, bảng cuối có $j đội 
-                //     $n_club_m = $n_club; 
-                //     $n_club_1 = $j;
-                //     // Thêm mới các bảng:
-                //     for ($i=0; $i < $m ; $i++) { 
-                //         $group = new Group();
-                //         $group->tournament_id = $tournament->id;
-                //         $group->name = $alpha[$i];
-                //         $group->save();
-                //     }
-                //     $groups = Group::where('tournament_id', $tournament->id)->get();
-                //     foreach ($groups as $key => $group) {
-                //         if($key != $m-1){
-                //             $group->number_club = (int) $n_club;
-                //             $group->number_match = (int) $n_club*($n_club-1)/2;
-                //         }else{
-                //             $group->number_club = (int) $j;
-                //             $group->number_match = (int) $j*($j-1)/2;
-                //         }
-                //         $group->save();
-                //     }
-                // }
-
-                /* Nếu số dư đội bóng bất kỳ */
-                // else{
-                    // m-j bảng đầu sẽ có $n_club đội, j bảng cuối có $n_club+1 đội 
-                    $n_club_mj = $n_club;
-                    $n_club_j = $n_club+1;
-                    // Số trận: 
-                    $n_match = pow($n_club, 2);
-                    // Thêm mới các bảng:
-                    for ($i=0; $i < $m ; $i++) { 
-                        $group = new Group();
-                        $group->tournament_id = $tournament->id;
-                        $group->name = $alpha[$i];
-                        $group->save();
-                    }
-                    $groups = Group::where('tournament_id', $tournament->id)->get();
-                    foreach ($groups as $key => $group) {
-                        if($key < $m-$j){
-                            $group->number_club = (int) $n_club;
-                            $group->number_match = (int) $n_club*($n_club-1)/2;
-                        }else{
-                            $group->number_club = (int)  $n_club+1;
-                            $group->number_match = (int) $n_club*($n_club+1)/2;
-                        }
-                        $group->save();
-                    }
-                // }
-            }
-
-            $groups = Group::where('tournament_id', $tournament->id)->get();
-            $groupIDs = array();
-            foreach ($groups as $group) {
-                for($i=0; $i<$group->number_club; $i++){
-                    $groupIDs[] = $group->id;
-                }
-            }
-            // Xếp các đội vào các bảng
-            $clubs = ClubTournament::where('tournament_id', $tournament->id)->get();
-            // dd($clubs);
-            foreach($clubs as $key => $club){
-                $club->group_id = $groupIDs[$key];
-                $club->save();
-            }
-        }
-
         $groups = Group::where('tournament_id', $tournament->id)->get();
         $clubs = ClubTournament::where('tournament_id', $tournament->id)->get();
 
         return view('settings.group_stage', compact('tournament', 'groups', 'clubs'));
     }
+    
     // Sắp xếp lại bảng đấu
     public function sortGroup(Request $request, $slug){
         Log::info('start');
@@ -289,81 +188,84 @@ class TournamentSettingController extends Controller
             
             $group->save();
         }
-        // Lập lịch thi đấu mới: 
+        // Xếp cặp thi đấu mới: 
         foreach($groups as $group){
             $group_clubs = ClubTournament::where('tournament_id', $tournament->id)
                                         ->where('group_id', $group->id)
                                         ->get();
             $n = count($group_clubs);
-
-            if ($n%2 == 0) {
-                for($j=1; $j<=$group->number_round; $j++){
-                    $exits = array();
-                    for($i=1; $i<= $n; $i++){
-                        // Lập lịch với số đội là 2n
-                        $r = $j;        // số vòng đấu
-                        $m = $n-1;      // số chia
-                        $sum = $r+$m;   // tổng x và y 
-                        $x = $i;        // x
-                        if(!in_array($x, $exits)){
-                            $y = $sum-$x;
-                            if($x == $y){
-                                $y = $n;
-                            }elseif($y>$n){
-                                $y = $r-$x;
+            for ($round=0; $round <=$tournament->number_round ; $round++) { 
+                if ($n%2 == 0) {
+                    for($j=1; $j<=$group->number_round; $j++){
+                        $max_tour_round = $group->number_round*$tournament->number_round;
+                        $max_group_round = $groups->max('number_round');
+                        $exits = array();
+                        for($i=1; $i<= $n; $i++){
+                            // Lập lịch với số đội là 2n
+                            $r = $j;        // số vòng đấu
+                            $m = $n-1;      // số chia
+                            $sum = $r+$m;   // tổng x và y 
+                            $x = $i;        // x
+                            if(!in_array($x, $exits)){
+                                $y = $sum-$x;
+                                if($x == $y){
+                                    $y = $n;
+                                }elseif($y>$n){
+                                    $y = $r-$x;
+                                }
+                                $exits[] = $x;
+                                $exits[] = $y;
+                                if($x!=$y && $j+$max_group_round*$round <= $max_tour_round){
+                                    // Tạo mới trận đấu
+                                    $match = new Match();
+                                    $match->tournament_id = $tournament->id;
+                                    $match->group_id = $group->id;
+                                    $match->stage = "G";
+                                    $match->round = $j+$max_group_round*$round;
+                                    $match->clubA_id = $group_clubs[$x-1]->club_id;
+                                    $match->clubB_id = $group_clubs[$y-1]->club_id;
+                                    $match->status = "active";
+                                    $match->save();
+                                }
                             }
-                            $exits[] = $x;
-                            $exits[] = $y;
-                            if($x!=$y){
-                                // Tạo mới trận đấu
-                                $match = new Match();
-                                $match->tournament_id = $tournament->id;
-                                $match->group_id = $group->id;
-                                $match->stage = "G";
-                                $match->round = $j;
-                                $match->clubA_id = $group_clubs[$x-1]->club_id;
-                                $match->clubB_id = $group_clubs[$y-1]->club_id;
-                                $match->status = "active";
-                                $match->save();
+                        }
+                    }
+                }else{
+                    $n = $n+1;
+                    $t = "";
+                    for($j=1; $j<=$group->number_round; $j++){
+                        $exits1 = array();
+                        for($i=1; $i<= $n; $i++){
+                            $r = $j;        
+                            $m = $n-1;      
+                            $sum = $r+$m;   
+                            $x = $i;
+                            if(!in_array($x, $exits1)){
+                                $y = $sum-$x;
+                                if($x == $y){
+                                    $y = $n;
+                                }elseif($y>$n){
+                                    $y = $r-$x;
+                                }
+                                $exits1[] = $x;
+                                $exits1[] = $y;
+                                if($x!=$y && $x!=$n && $y!=$n && $j+$max_group_round*$round <= $max_tour_round){
+                                    $t = $t."round: $j ".$x.$y."|";
+                                    // Tạo mới trận đấu
+                                    $match = new Match();
+                                    $match->tournament_id = $tournament->id;
+                                    $match->group_id = $group->id;
+                                    $match->stage = "G";
+                                    $match->round = $j+$max_group_round*$round;
+                                    $match->clubA_id = $group_clubs[$x-1]->club_id;
+                                    $match->clubB_id = $group_clubs[$y-1]->club_id;
+                                    $match->status = "active";
+                                    $match->save();
+                                }
                             }
                         }
                     }
                 }
-            }else{
-                $n = $n+1;
-                $t = "";
-                for($j=1; $j<=$group->number_round; $j++){
-                    $exits1 = array();
-                    for($i=1; $i<= $n; $i++){
-                        $r = $j;        
-                        $m = $n-1;      
-                        $sum = $r+$m;   
-                        $x = $i;
-                        if(!in_array($x, $exits1)){
-                            $y = $sum-$x;
-                            if($x == $y){
-                                $y = $n;
-                            }elseif($y>$n){
-                                $y = $r-$x;
-                            }
-                            $exits1[] = $x;
-                            $exits1[] = $y;
-                            if($x!=$y && $x!=$n && $y!=$n){
-                                $t = $t."round: $j ".$x.$y."|";
-                                // Tạo mới trận đấu
-                                $match = new Match();
-                                $match->tournament_id = $tournament->id;
-                                $match->group_id = $group->id;
-                                $match->stage = "G";
-                                $match->round = $j;
-                                $match->clubA_id = $group_clubs[$x-1]->club_id;
-                                $match->clubB_id = $group_clubs[$y-1]->club_id;
-                                $match->save();
-                            }
-                        }
-                    }
-                }
-
             }
         }
 

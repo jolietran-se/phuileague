@@ -47,13 +47,13 @@
                 <hr>
             </div>
             <div class="col-md-12" id="list-match">
-                @for($i=1; $i<= $groups->max('number_round'); $i++)
+                @for($i=1; $i<= $groups->max('number_round')*$tournament->number_round; $i++)
                     <div id="round{{$i}}" class="round-area col-md-12 tab-item">
                         <div class="round-label"><p class="text-center">VÒNG {{ $i }}</p></div>
                         @php $index = 1; @endphp
                         <table class="table table-striped">
                             @foreach ($groups as $group)
-                                @if ($group->number_round >= $i)
+                                @if ($group->number_round*$tournament->number_round >= $i)
                                     @foreach ($matchs as $match)
                                         @if ($match->round == $i && $match->group_id == $group->id && $match->stage=="G")
                                             <datalist id="players-a-{{$match->id}}">

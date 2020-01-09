@@ -48,18 +48,18 @@
                             <div id="group-match" class="tab1-item">
                                 <div id="tab">
                                     <ul class="tab">
-                                        @for ($i=1; $i<=$g_round; $i++)
+                                        @for ($i=1; $i<=$g_round*$tournament->number_round; $i++)
                                             <li><a href="#round{{$i}}">{{$i}}</a></li>
                                         @endfor
                                     </ul>
                                 </div>
                                 <div class="tab-content">
-                                    @for($i=1; $i<=$g_round; $i++)
+                                    @for($i=1; $i<=$g_round*$tournament->number_round; $i++)
                                         <div id="round{{$i}}" class="round-area col-md-12 tab-item">
                                             <div class="col-md-12 round-label"><p class="text-center">VÒNG {{ $i }}</p></div>
                                             @php $index = 1; @endphp
                                             @foreach ($groups as $group)
-                                                @if ($group->number_round >= $i)
+                                                @if ($group->number_round*$tournament->number_round >= $i)
                                                     <div id="group-{{ $group->name }}" data-id="{{ $group->id }}" class="col-md-12 group groupRound{{$i}}">
                                                         <div class="group-container">
                                                             <div class="panel-body">

@@ -7,6 +7,7 @@ use App\Http\Requests\TournamentRequest;
 use App\Http\Requests\RegisterRequest;
 use Illuminate\Support\Str;
 use App\Tournament;
+use App\Group;
 use App\User;
 use App\Club;
 use App\Player;
@@ -100,7 +101,7 @@ class TournamentController extends Controller
             $tournament->score_draw = $request->score_draw;
             $tournament->score_lose = $request->score_lose;
         }
-        // Thêm các giá tị ở hình thức 3
+        // Thêm các giá trị ở hình thức 3
         if($type == 03){
             $tournament->number_group = $request->number_group;
             $tournament->number_knockout = $request->number_knockout;
@@ -141,7 +142,7 @@ class TournamentController extends Controller
         $userID = isset(Auth::user()->id)?Auth::user()->id:0;
         $userClubs = Club::where('owner_id', $userID)->get();
         
-        if($tournament->status !=4){
+        if($tournament->status != 4){
             $this->checkDate($tournament);
         }
         
@@ -154,8 +155,8 @@ class TournamentController extends Controller
 
         return view('tournaments.list_register', compact('tournament', 'userID', 'userClubs', 'number_consider', 'number_allow', 'number_reject'));
     }
-
-    public function register(RegisterRequest $request, $slug)
+    // Đăng ký tham gia
+    public function signUp(RegisterRequest $request, $slug)
     {   
         $tournament = Tournament::where('slug', $slug)->first();
 
@@ -165,15 +166,16 @@ class TournamentController extends Controller
         foreach ($registed as $club){
             if($club->club_id == $request->club_id) $flag = false;
         }
+
         if($flag == true){
             $club_tour = new ClubTournament();
             $club_tour->tournament_id = $tournament->id;
             $club_tour->club_id = $request->club_id;
             $club_tour->status = 0; // trạng thái chờ phê duyệt
             $club_tour->save();
-            Session::flash('register_success', "Đăng ký thành công");
+            Session::flash('signup_success', "Đăng ký thành công");
         }else{
-            Session::flash('register_fail', "Đội bóng đã nằm trong danh sách đăng ký");
+            Session::flash('signup_fail', "Đội bóng đã nằm trong danh sách đăng ký");
         }
         
         return redirect()->route('tournament.listregister', $tournament->slug);
@@ -181,7 +183,6 @@ class TournamentController extends Controller
     // Cho phép tham gia
     public function actionAllow(Request $request, $slug)
     {
-
         $clubID = $request->clubID;
         $tournamentID = $request->tournamentID;
         // Lưu đội bóng vào danh sách
@@ -191,30 +192,7 @@ class TournamentController extends Controller
         $club_tournament->status = 1;
         $club_tournament->save();
         
-        // Lưu thông tin các cầu thủ trong đội hình chính
-        $players = Player::where('club_id', $clubID)
-                            ->where('ismain', 1)
-                            ->orderBy('uniform_number')
-                            ->get();
-        if(count($players) != 0){
-            foreach ($players as $player) {
-                $tournament_player = new TournamentPlayer();
-                $tournament_player->club_tournament_id = $club_tournament->id ;
-                $tournament_player->player_id = $player->id ;
-                $tournament_player->name = $player->name ;
-                $tournament_player->avatar = $player->avatar ;
-                $tournament_player->front_idcard = $player->front_idcard ;
-                $tournament_player->backside_idcard = $player->backside_idcard ;
-                $tournament_player->uniform_number = $player->uniform_number ;
-                $tournament_player->uniform_name = $player->uniform_name ;
-                $tournament_player->position = $player->position ;
-                $tournament_player->role = $player->role ;
-                $tournament_player->phone = $player->phone ;
-                $tournament_player->birthday = $player->birthday ;
-                $tournament_player->save();
-            }
-        }
-        // tổng số đội tham gia giải đấu
+        // Tổng số đội tham gia giải đấu
         $clubs = ClubTournament::where('tournament_id', $tournamentID)
                                 ->where('status', 1)
                                 ->get();
@@ -238,13 +216,6 @@ class TournamentController extends Controller
         $club_tournament->status = 2;
         $club_tournament->save();
         
-        // Xóa thông tin các cầu thủ tham gia giải
-        $players = TournamentPlayer::where('club_tournament_id', $club_tournament->id)->get();
-        if(count($players)!=0){
-            foreach ($players as $player) {
-                $player->delete();
-            }
-        }
         // tổng số đội tham gia giải đấu
         $clubs = ClubTournament::where('tournament_id', $tournamentID)
                                 ->where('status', 1)
@@ -270,18 +241,104 @@ class TournamentController extends Controller
     public function endSignUp(Request $request, $slug)
     {
         $tournament = Tournament::where('slug', $slug)->first();
-        $tournament->status = 4;
-        $tournament->register_permission = "off";
-        
-        $clubs = ClubTournament::where('tournament_id', $tournament->id)->get();
-        foreach($clubs as $club){
-            if($club->status != 1) $club->delete();
+        $allowClubs = ClubTournament::where('tournament_id', $tournament->id)
+                                    ->where('status', 1)
+                                    ->get();
+        if (count($allowClubs)< 6 || count($allowClubs)/$tournament->number_group<3 ) {
+            Session::flash('no-end-signup', 'Số đội bóng không thể nhỏ hơn 6 hoặc mỗi bảng đấu không thể có ít hơn 3 đội!');
+
+            return response()->json(['status'=>false]);
+        }else{
+            // Xóa các đội đã bị từ chối
+            $rejectClubs = ClubTournament::where('tournament_id', $tournament->id)
+                                    ->where('status', 0)
+                                    ->orWhere('status', 2)
+                                    ->get();
+            foreach($rejectClubs as $club){
+                $club->delete();
+            }
+            
+            /* SẮP XẾP BẢNG ĐẤU*/
+            if( $tournament->tournament_type_id == 3){
+                // Số đội mỗi bảng, số bảng đấu
+                $n = $tournament->number_club;
+                $m = $tournament->number_group;
+
+                $groups = Group::where('tournament_id', $tournament->id)->get();
+                foreach($groups as $group){
+                    $group->delete();
+                }
+                $alpha = range('A', 'Z');
+                
+                if ($n % $m == 0) {
+                    $n_club = $n/$m;
+                    $n_match = $n_club*($n_club-1)/2;
+                    // Thêm mới các bảng:
+                    for ($i=0; $i < $m ; $i++) { 
+                        $group = new Group();
+                        $group->tournament_id = $tournament->id;
+                        $group->name = $alpha[$i];
+                        $group->save();
+                    }
+                    $groups = Group::where('tournament_id', $tournament->id)->get();
+                    foreach ($groups as $group) {
+                        $group->number_match = $n_match;
+                        $group->number_club = $n_club;
+                        $group->number_round = $n_match*2/$n_club;
+                        $group->save();
+                    }
+                }else if($n % $m != 0){
+                    $n_club =floor($n/$m);
+                    $j = $n % $m;
+                    // m-j bảng đầu sẽ có $n_club đội, j bảng cuối có $n_club+1 đội 
+                    $n_club_mj = $n_club;
+                    $n_club_j = $n_club+1;
+                    // Số trận: 
+                    $n_match = pow($n_club, 2);
+                    // Thêm mới các bảng:
+                    for ($i=0; $i < $m ; $i++) { 
+                        $group = new Group();
+                        $group->tournament_id = $tournament->id;
+                        $group->name = $alpha[$i];
+                        $group->save();
+                    }
+                    $groups = Group::where('tournament_id', $tournament->id)->get();
+                    foreach ($groups as $key => $group) {
+                        if($key < $m-$j){
+                            $group->number_club = (int) $n_club;
+                            $group->number_match = (int) $n_club*($n_club-1)/2;
+                        }else{
+                            $group->number_club = (int)  $n_club+1;
+                            $group->number_match = (int) $n_club*($n_club+1)/2;
+                        }
+                        $group->save();
+                    }
+                }
+                // Danh sách id các bảng đấu
+                $groups = Group::where('tournament_id', $tournament->id)->get();
+                $groupIDs = array();
+                foreach ($groups as $group) {
+                    for($i=0; $i<$group->number_club; $i++){
+                        $groupIDs[] = $group->id;
+                    }
+                }
+                // Xếp các đội vào các bảng
+                $clubs = ClubTournament::where('tournament_id', $tournament->id)->get();
+                // dd($clubs);
+                foreach($clubs as $key => $club){
+                    $club->group_id = $groupIDs[$key];
+                    $club->save();
+                }
+            }
+
+            // Thay đổi trạng thái
+            $tournament->status = 4;
+            $tournament->register_permission = "off";
+            $tournament->save();
+            Session::flash('end-signup', 'Giải đấu đã chuyển sang trạng thái hoạt động!');
+
+            return response()->json(['status'=>true]);
         }
-        $tournament->save();
-
-        Session::flash('end-sign-up', 'Giải đấu đã chuyển sang trạng thái hoạt động!');
-
-        return response()->json(['status'=>true]);
     }
     
     /* View Vòng bảng */ 
@@ -536,7 +593,7 @@ class TournamentController extends Controller
 
         $knockoutClubsRanking = $tournament->clubs()->wherePivot('isnext', 1)
                                             ->orderBy('k_point', 'desc')
-                                            ->get();
+                                            ->get();    
         
         return view('tournaments.ranking', compact('tournament', 'userID', 'groups', 'groupClubsRanking', 'knockoutClubsRanking'));
     }
