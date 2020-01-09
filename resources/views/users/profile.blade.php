@@ -143,11 +143,11 @@
         $('#image').on('change', function () { 
         var reader = new FileReader();
             reader.onload = function (e) {
-            resize.croppie('bind',{
-                url: e.target.result
-            }).then(function(){
-                console.log('jQuery bind complete');
-            });
+                resize.croppie('bind',{
+                    url: e.target.result
+                }).then(function(){
+                    console.log('jQuery bind complete');
+                });
             }
             reader.readAsDataURL(this.files[0]);
         });
@@ -158,7 +158,7 @@
                 type: 'canvas',
                 size: 'viewport'
             }).then(function (img) {
-                // console.log(username);
+                console.log(img);
                 $.ajax({
                     url: '{!! route("user.crop-avatar") !!}',
                     dataType : 'json',
