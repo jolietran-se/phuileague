@@ -59,49 +59,47 @@
                                             <div class="col-md-12 round-label"><p class="text-center">VÒNG {{ $i }}</p></div>
                                             @php $index = 1; @endphp
                                             @foreach ($groups as $group)
-                                                @if ($group->number_round*$tournament->number_round >= $i)
-                                                    <div id="group-{{ $group->name }}" data-id="{{ $group->id }}" class="col-md-12 group groupRound{{$i}}">
-                                                        <div class="group-container">
-                                                            <div class="panel-body">
-                                                                @foreach ($matchsG as $match)
-                                                                    @if ($match->round == $i && $match->group_id == $group->id && $match->stage=="G")
-                                                                        <div class="col col-md-12 match-detail round{{$i}}" data-status="{{ $match->status }}" data-id="{{ $match->id }}">
-                                                                            <div class="col-md-1 stt">
-                                                                                <small>#{{$index}}  Bảng {{$group->name}}</small>
-                                                                                @php $index++ @endphp
+                                                <div id="group-{{ $group->name }}" data-id="{{ $group->id }}" class="col-md-12 group groupRound{{$i}}">
+                                                    <div class="group-container">
+                                                        <div class="panel-body">
+                                                            @foreach ($matchsG as $match)
+                                                                @if ($match->round == $i && $match->group_id == $group->id && $match->stage=="G")
+                                                                    <div class="col col-md-12 match-detail round{{$i}}" data-status="{{ $match->status }}" data-id="{{ $match->id }}">
+                                                                        <div class="col-md-1 stt">
+                                                                            <small>#{{$index}}  Bảng {{$group->name}}</small>
+                                                                            @php $index++ @endphp
+                                                                        </div>
+                                                                        <div class="col col-md-2 club-name">
+                                                                            @foreach ($clubs as $club)
+                                                                                @if ($club->id == $match->clubA_id)
+                                                                                    <small>{{ $club->name }}</small>
+                                                                                @endif
+                                                                            @endforeach
+                                                                        </div>
+                                                                        <div class="col col-md-2 club-name">
+                                                                            @foreach ($clubs as $club)
+                                                                                @if ($club->id == $match->clubB_id)
+                                                                                    <small>{{ $club->name }}</small>
+                                                                                @endif
+                                                                            @endforeach
+                                                                        </div>
+                                                                        <div class="form-group form">
+                                                                            <div class="col col-md-2" style="margin-left: 15px">
+                                                                                <input type="text" id="address-{{$match->id}}" value="{{ $match->address}}" placeholder="Sân số..." class="form-control">
                                                                             </div>
-                                                                            <div class="col col-md-2 club-name">
-                                                                                @foreach ($clubs as $club)
-                                                                                    @if ($club->id == $match->clubA_id)
-                                                                                        <small>{{ $club->name }}</small>
-                                                                                    @endif
-                                                                                @endforeach
+                                                                            <div class="col col-md-2">
+                                                                                <input type="text" id="date-{{$match->id}}" value="{{ $match->date}}" name="schedule_date" placeholder="Ngày" class="form-control">
                                                                             </div>
-                                                                            <div class="col col-md-2 club-name">
-                                                                                @foreach ($clubs as $club)
-                                                                                    @if ($club->id == $match->clubB_id)
-                                                                                        <small>{{ $club->name }}</small>
-                                                                                    @endif
-                                                                                @endforeach
-                                                                            </div>
-                                                                            <div class="form-group form">
-                                                                                <div class="col col-md-2" style="margin-left: 15px">
-                                                                                    <input type="text" id="address-{{$match->id}}" value="{{ $match->address}}" placeholder="Sân số..." class="form-control">
-                                                                                </div>
-                                                                                <div class="col col-md-2">
-                                                                                    <input type="text" id="date-{{$match->id}}" value="{{ $match->date}}" name="schedule_date" placeholder="Ngày" class="form-control">
-                                                                                </div>
-                                                                                <div class="col col-md-2 bootstrap-timepicker timepicker">
-                                                                                    <input type="text" id="time-{{$match->id}}" value="{{ $match->time}}" name="schedule_time" placeholder="Giờ" class="form-control  input-small">
-                                                                                </div>
+                                                                            <div class="col col-md-2 bootstrap-timepicker timepicker">
+                                                                                <input type="text" id="time-{{$match->id}}" value="{{ $match->time}}" name="schedule_time" placeholder="Giờ" class="form-control  input-small">
                                                                             </div>
                                                                         </div>
-                                                                    @endif
-                                                                @endforeach
-                                                            </div>
+                                                                    </div>
+                                                                @endif
+                                                            @endforeach
                                                         </div>
                                                     </div>
-                                                @endif
+                                                </div>
                                             @endforeach
                                             <div id="notification" class="col-md-12"><!-- Thông báo --></div>
                                             <div class="footer col-md-12">
