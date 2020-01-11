@@ -267,7 +267,7 @@
                 activeTab($('.tab1 li:first-child'));
 
                 /*--------------------------------------*/ 
-                /* Thêm bàn thắng và cập nhật bàn thắng */ 
+                /* Thêm và cập nhật bàn thắng */ 
                 /*--------------------------------------*/ 
                     // Hiển thị tỷ số:
                     $('#input-goalA').val($(this).data('a-goal'));
