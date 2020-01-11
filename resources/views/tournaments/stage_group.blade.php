@@ -42,87 +42,85 @@
         @if ($tournament->tournament_type_id == 3)
         <div class="container" id="content">
             <div class="col-md-12">
-                <small><b>Giai đoạn đấu vòng tròn có:</b> {{ count($groups) }} bảng đấu và {{ $groups->sum('number_match') }} trận đấu.</small><br>
+                <small><b>Giai đoạn đấu vòng tròn có:</b> {{ count($groups) }} bảng đấu và {{ $groups->sum('number_match')*$tournament->number_round }} trận đấu thi đấu trong {{ $tournament->number_round }} lượt.</small><br>
                 <small><b>Giai đoạn đấu loại trực tiếp có: </b>{{ $tournament->number_knockout }} đội vượt qua vòng bảng và {{ $tournament->number_knockout - 1 }} trận đấu.</small>
                 <hr>
             </div>
             <div class="col-md-12" id="list-match">
+                @php $index = 1; @endphp
                 @for($i=1; $i<= $groups->max('number_round')*$tournament->number_round; $i++)
                     <div id="round{{$i}}" class="round-area col-md-12 tab-item">
                         <div class="round-label"><p class="text-center">VÒNG {{ $i }}</p></div>
-                        @php $index = 1; @endphp
                         <table class="table table-striped">
                             @foreach ($groups as $group)
-                                @if ($group->number_round*$tournament->number_round >= $i)
-                                    @foreach ($matchs as $match)
-                                        @if ($match->round == $i && $match->group_id == $group->id && $match->stage=="G")
-                                            <datalist id="players-a-{{$match->id}}">
-                                                @foreach ($clubs->where('id',$match->clubA_id)->first()->players()->where('ismain',1)->get() as $player)
-                                                    <option data-id="{{$player->id}}" value="{{ $player->name }}"></option>
-                                                @endforeach
-                                            </datalist>
-                                            <datalist id="players-b-{{$match->id}}">
-                                                @foreach ($clubs->where('id',$match->clubB_id)->first()->players()->where('ismain',1)->get() as $player)
-                                                    <option data-id="{{ $player->id }}" value="{{ $player->name }}"></option> 
-                                                @endforeach
-                                            </datalist>
-                                            <tr class="show-detail show-detail-{{$match->id}}" id="show-match-{{$match->id}}" role="button" 
-                                                data-match-id="{{ $match->id }}"
-                                                data-a-id="{{ $match->clubA_id }}"
-                                                data-b-id="{{ $match->clubB_id }}"
-                                                data-a-name="{{ $clubs->where('id', $match->clubA_id)->first()->name }}"
-                                                data-b-name="{{ $clubs->where('id', $match->clubB_id)->first()->name }}"
-                                                data-a-logo="{{ $clubs->where('id', $match->clubA_id)->first()->logo }}"
-                                                data-b-logo="{{ $clubs->where('id', $match->clubB_id)->first()->logo }}"
-                                                data-a-goal="{{ $match->goalA }}"
-                                                data-b-goal="{{ $match->goalB }}"
-                                                data-a-yellow="{{ $match->yellow_card_A }}"
-                                                data-b-yellow="{{ $match->yellow_card_B }}"
-                                                data-a-red="{{ $match->red_card_A }}"
-                                                data-b-red="{{ $match->red_card_B }}"
-                                                data-address="{{ $match->address }}"
-                                                data-date="{{ $match->date }}"
-                                                data-time="{{ $match->time }}"
-                                                data-stage="{{ $match->stage }}"
-                                                data-round="{{ $match->round }}"
-                                                data-list-goal-a = {{ $match->goals()->where('club_id', $match->clubA_id)->get() }}
-                                                data-list-goal-b = {{ $match->goals()->where('club_id', $match->clubB_id)->get() }}
-                                                data-list-yellow-a = {{ $match->cards()->where('club_id', $match->clubA_id)->where('isredcard', 0)->get() }}
-                                                data-list-yellow-b = {{ $match->cards()->where('club_id', $match->clubB_id)->where('isredcard', 0)->get() }}
-                                                data-list-red-a = {{ $match->cards()->where('club_id', $match->clubA_id)->where('isredcard', 1)->get() }}
-                                                data-list-red-b = {{ $match->cards()->where('club_id', $match->clubB_id)->where('isredcard', 1)->get() }}
-                                            >
-                                                <td style="width:20%"><small>#{{$index}}  Bảng {{$group->name}}</small></td>
-                                                <td style="width:25%" class="text-right">
-                                                    <small>{{ $clubs->where('id', $match->clubA_id)->first()->name }}</small>
-                                                    @if (isset($clubs->where('id', $match->clubA_id)->first()->logo))
-                                                        <img src="{{ asset('storage/club-logos/').'/'.$clubs->where('id', $match->clubA_id)->first()->logo }}" alt="" class="img-circle" style="width:30px">
-                                                    @else 
-                                                        <img src="{{ asset('storage/club-logos/logo_default.jpg') }}" alt="" class="img-circle" style="width:30px">
-                                                    @endif
-                                                </td >
-                                                <td style="width:10%" class="text-center">
-                                                    <small>{{ isset($match->goalA)?$match->goalA:"..." }}</small>
-                                                    -
-                                                    <small>{{ isset($match->goalB)?$match->goalB:"..." }}</small>
-                                                </td>
-                                                <td style="width:25%">
-                                                    @if (isset($clubs->where('id', $match->clubB_id)->first()->logo))
-                                                        <img src="{{ asset('storage/club-logos/').'/'.$clubs->where('id', $match->clubB_id)->first()->logo }}" alt="" class="img-circle" style="width:30px">
-                                                    @else 
-                                                        <img src="{{ asset('storage/club-logos/logo_default.jpg') }}" alt="" class="img-circle" style="width:30px">
-                                                    @endif
-                                                    <small>{{ $clubs->where('id', $match->clubB_id)->first()->name }}</small>
-                                                </td>
-                                                <td style="width:20%" class="text-right">
-                                                    <small>{{ isset($match->time)?$match->time:"--:-- --"}}</small>
-                                                    <small>{{ isset($match->date)?$match->date:"--/--/----" }}</small>
-                                                </td>
-                                            </tr>
-                                        @php $index++ @endphp
-                                        @endif
-                                    @endforeach
-                                @endif
+                                @foreach ($matchs as $match)
+                                    @if ($match->round == $i && $match->group_id == $group->id && $match->stage=="G")
+                                        <datalist id="players-a-{{$match->id}}">
+                                            @foreach ($clubs->where('id',$match->clubA_id)->first()->players()->where('ismain',1)->get() as $player)
+                                                <option data-id="{{$player->id}}" value="{{ $player->name }}"></option>
+                                            @endforeach
+                                        </datalist>
+                                        <datalist id="players-b-{{$match->id}}">
+                                            @foreach ($clubs->where('id',$match->clubB_id)->first()->players()->where('ismain',1)->get() as $player)
+                                                <option data-id="{{ $player->id }}" value="{{ $player->name }}"></option> 
+                                            @endforeach
+                                        </datalist>
+                                        <tr class="show-detail show-detail-{{$match->id}}" id="show-match-{{$match->id}}" role="button" 
+                                            data-match-id="{{ $match->id }}"
+                                            data-a-id="{{ $match->clubA_id }}"
+                                            data-b-id="{{ $match->clubB_id }}"
+                                            data-a-name="{{ $clubs->where('id', $match->clubA_id)->first()->name }}"
+                                            data-b-name="{{ $clubs->where('id', $match->clubB_id)->first()->name }}"
+                                            data-a-logo="{{ $clubs->where('id', $match->clubA_id)->first()->logo }}"
+                                            data-b-logo="{{ $clubs->where('id', $match->clubB_id)->first()->logo }}"
+                                            data-a-goal="{{ $match->goalA }}"
+                                            data-b-goal="{{ $match->goalB }}"
+                                            data-a-yellow="{{ $match->yellow_card_A }}"
+                                            data-b-yellow="{{ $match->yellow_card_B }}"
+                                            data-a-red="{{ $match->red_card_A }}"
+                                            data-b-red="{{ $match->red_card_B }}"
+                                            data-address="{{ $match->address }}"
+                                            data-date="{{ $match->date }}"
+                                            data-time="{{ $match->time }}"
+                                            data-stage="{{ $match->stage }}"
+                                            data-round="{{ $match->round }}"
+                                            data-list-goal-a = {{ $match->goals()->where('club_id', $match->clubA_id)->get() }}
+                                            data-list-goal-b = {{ $match->goals()->where('club_id', $match->clubB_id)->get() }}
+                                            data-list-yellow-a = {{ $match->cards()->where('club_id', $match->clubA_id)->where('isredcard', 0)->get() }}
+                                            data-list-yellow-b = {{ $match->cards()->where('club_id', $match->clubB_id)->where('isredcard', 0)->get() }}
+                                            data-list-red-a = {{ $match->cards()->where('club_id', $match->clubA_id)->where('isredcard', 1)->get() }}
+                                            data-list-red-b = {{ $match->cards()->where('club_id', $match->clubB_id)->where('isredcard', 1)->get() }}
+                                        >
+                                            <td style="width:20%"><small>#{{$index}}  Bảng {{$group->name}}</small></td>
+                                            <td style="width:25%" class="text-right">
+                                                <small>{{ $clubs->where('id', $match->clubA_id)->first()->name }}</small>
+                                                @if (isset($clubs->where('id', $match->clubA_id)->first()->logo))
+                                                    <img src="{{ asset('storage/club-logos/').'/'.$clubs->where('id', $match->clubA_id)->first()->logo }}" alt="" class="img-circle" style="width:30px">
+                                                @else 
+                                                    <img src="{{ asset('storage/club-logos/logo_default.jpg') }}" alt="" class="img-circle" style="width:30px">
+                                                @endif
+                                            </td >
+                                            <td style="width:10%" class="text-center">
+                                                <small>{{ isset($match->goalA)?$match->goalA:"..." }}</small>
+                                                -
+                                                <small>{{ isset($match->goalB)?$match->goalB:"..." }}</small>
+                                            </td>
+                                            <td style="width:25%">
+                                                @if (isset($clubs->where('id', $match->clubB_id)->first()->logo))
+                                                    <img src="{{ asset('storage/club-logos/').'/'.$clubs->where('id', $match->clubB_id)->first()->logo }}" alt="" class="img-circle" style="width:30px">
+                                                @else 
+                                                    <img src="{{ asset('storage/club-logos/logo_default.jpg') }}" alt="" class="img-circle" style="width:30px">
+                                                @endif
+                                                <small>{{ $clubs->where('id', $match->clubB_id)->first()->name }}</small>
+                                            </td>
+                                            <td style="width:20%" class="text-right">
+                                                <small>{{ isset($match->time)?$match->time:"--:-- --"}}</small>
+                                                <small>{{ isset($match->date)?$match->date:"--/--/----" }}</small>
+                                            </td>
+                                        </tr>
+                                    @php $index++ @endphp
+                                    @endif
+                                @endforeach
                             @endforeach
                         </table>
                     </div>

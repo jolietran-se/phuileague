@@ -42,7 +42,7 @@
         <div class="container" id="content">
             @if ($tournament->tournament_type_id === 3)
                 <div class="col-md-12">
-                    <small><b>Giai đoạn đấu vòng tròn có:</b> {{ count($groups) }} bảng đấu và {{ $groups->sum('number_match') }} trận đấu.</small><br>
+                    <small><b>Giai đoạn đấu vòng tròn có:</b> {{ count($groups) }} bảng đấu, {{ $groups->sum('number_match') }} trận đấu.</small><br>
                     <small><b>Giai đoạn đấu loại trực tiếp có: </b>{{ $tournament->number_knockout }} đội vượt qua vòng bảng và {{ $tournament->number_knockout - 1 }} trận đấu.</small>
                     <hr>
                 </div>

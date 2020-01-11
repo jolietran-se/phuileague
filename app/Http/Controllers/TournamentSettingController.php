@@ -189,16 +189,18 @@ class TournamentSettingController extends Controller
             $group->save();
         }
         // Xếp cặp thi đấu mới: 
-        foreach($groups as $group){
-            $group_clubs = ClubTournament::where('tournament_id', $tournament->id)
-                                        ->where('group_id', $group->id)
-                                        ->get();
-            $n = count($group_clubs);
-            for ($round=0; $round <=$tournament->number_round ; $round++) { 
-                if ($n%2 == 0) {
+        for ($round=0; $round < $tournament->number_round ; $round++) {
+            $max_group_round = $groups->max('number_round');
+            $max_tour_round = $max_group_round*$tournament->number_round; 
+            Log::info('tour-round'.$round);
+
+            foreach($groups as $group){
+                $group_clubs = ClubTournament::where('tournament_id', $tournament->id)
+                                            ->where('group_id', $group->id)
+                                            ->get();
+                $n = count($group_clubs);
+                if($n % 2 == 0) {
                     for($j=1; $j<=$group->number_round; $j++){
-                        $max_tour_round = $group->number_round*$tournament->number_round;
-                        $max_group_round = $groups->max('number_round');
                         $exits = array();
                         for($i=1; $i<= $n; $i++){
                             // Lập lịch với số đội là 2n
@@ -215,12 +217,14 @@ class TournamentSettingController extends Controller
                                 }
                                 $exits[] = $x;
                                 $exits[] = $y;
+                                // if($x!=$y){
                                 if($x!=$y && $j+$max_group_round*$round <= $max_tour_round){
                                     // Tạo mới trận đấu
                                     $match = new Match();
                                     $match->tournament_id = $tournament->id;
                                     $match->group_id = $group->id;
                                     $match->stage = "G";
+                                    // $match->round = $j;
                                     $match->round = $j+$max_group_round*$round;
                                     $match->clubA_id = $group_clubs[$x-1]->club_id;
                                     $match->clubB_id = $group_clubs[$y-1]->club_id;
@@ -233,6 +237,7 @@ class TournamentSettingController extends Controller
                 }else{
                     $n = $n+1;
                     $t = "";
+                    Log::info($group->number_round);
                     for($j=1; $j<=$group->number_round; $j++){
                         $exits1 = array();
                         for($i=1; $i<= $n; $i++){
@@ -249,13 +254,17 @@ class TournamentSettingController extends Controller
                                 }
                                 $exits1[] = $x;
                                 $exits1[] = $y;
+
+                                // if($x!=$y && $x!=$n && $y!=$n){
                                 if($x!=$y && $x!=$n && $y!=$n && $j+$max_group_round*$round <= $max_tour_round){
                                     $t = $t."round: $j ".$x.$y."|";
+                                    Log::info("round: $j ".$x.$y."|");
                                     // Tạo mới trận đấu
                                     $match = new Match();
                                     $match->tournament_id = $tournament->id;
                                     $match->group_id = $group->id;
                                     $match->stage = "G";
+                                    // $match->round = $j;
                                     $match->round = $j+$max_group_round*$round;
                                     $match->clubA_id = $group_clubs[$x-1]->club_id;
                                     $match->clubB_id = $group_clubs[$y-1]->club_id;
@@ -281,6 +290,7 @@ class TournamentSettingController extends Controller
         $groups = $tournament->groups()->get();
         $clubs = $tournament->clubs()->get();
         $matchsG = $tournament->matchs()->where('stage', 'G')->get();
+        // dd($matchsG);
         $number_round = $tournament->groups()->max('number_round');
 
         // các đội vào vòng knockout

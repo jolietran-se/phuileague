@@ -59,42 +59,40 @@
                                             <div class="col-md-12 round-label"><p class="text-center">VÒNG {{ $i }}</p></div>
                                             @php $index = 1; @endphp
                                             @foreach ($groups as $group)
-                                                @if ($group->number_round*$tournament->number_round >= $i)
-                                                    <div id="group-{{ $group->name }}" data-id="{{ $group->id }}" class="col-md-12 group groupRound{{$i}}">
-                                                        <div class="group-container">
-                                                            <div class="page-header"><h6>BẢNG {{ $group->name }}</h6> </div>
-                                                            <div class="panel-body">
-                                                                @foreach ($matchsG as $match)
-                                                                    @if ($match->round == $i && $match->group_id == $group->id && $match->stage=="G")
-                                                                        <div class="col col-md-12 match-detail round{{$i}}" data-status="{{ $match->status }}" data-id="{{ $match->id }}">
-                                                                            <div class="col col-md-2">
-                                                                                #{{ $index }} @php $index++ @endphp
-                                                                            </div>
-                                                                            <div class="col col-md-5">
-                                                                                <select id="{{$match->id}}clubAId" class="form-control {{ $match->id }}" data-id="{{ $match->clubA_id }}">
-                                                                                    @foreach ($tournament->clubs as $club)
-                                                                                        @if ($club->pivot->group_id == $group->id)
-                                                                                            <option value="{{ $club->id }}"><small>{{ $club->name }}</small></option>
-                                                                                        @endif
-                                                                                    @endforeach
-                                                                                </select>
-                                                                            </div>
-                                                                            <div class="col col-md-5">
-                                                                                <select id="{{$match->id}}clubBId" class="form-control {{ $match->id }}" data-id="{{ $match->clubB_id }}">
-                                                                                    @foreach ($tournament->clubs as $club)
-                                                                                        @if ($club->pivot->group_id == $group->id)
-                                                                                            <option value="{{ $club->id }}"><small>{{ $club->name }}</small></option>
-                                                                                        @endif
-                                                                                    @endforeach
-                                                                                </select>
-                                                                            </div>
+                                                <div id="group-{{ $group->name }}" data-id="{{ $group->id }}" class="col-md-12 group groupRound{{$i}}">
+                                                    <div class="group-container">
+                                                        <div class="page-header"><h6>BẢNG {{ $group->name }}</h6> </div>
+                                                        <div class="panel-body">
+                                                            @foreach ($matchsG as $match)
+                                                                @if ($match->round == $i && $match->group_id == $group->id && $match->stage=="G")
+                                                                    <div class="col col-md-12 match-detail round{{$i}}" data-status="{{ $match->status }}" data-id="{{ $match->id }}">
+                                                                        <div class="col col-md-2">
+                                                                            #{{ $index }} @php $index++ @endphp
                                                                         </div>
-                                                                    @endif
-                                                                @endforeach
-                                                            </div>
+                                                                        <div class="col col-md-5">
+                                                                            <select id="{{$match->id}}clubAId" class="form-control {{ $match->id }}" data-id="{{ $match->clubA_id }}">
+                                                                                @foreach ($tournament->clubs as $club)
+                                                                                    @if ($club->pivot->group_id == $group->id)
+                                                                                        <option value="{{ $club->id }}"><small>{{ $club->name }}</small></option>
+                                                                                    @endif
+                                                                                @endforeach
+                                                                            </select>
+                                                                        </div>
+                                                                        <div class="col col-md-5">
+                                                                            <select id="{{$match->id}}clubBId" class="form-control {{ $match->id }}" data-id="{{ $match->clubB_id }}">
+                                                                                @foreach ($tournament->clubs as $club)
+                                                                                    @if ($club->pivot->group_id == $group->id)
+                                                                                        <option value="{{ $club->id }}"><small>{{ $club->name }}</small></option>
+                                                                                    @endif
+                                                                                @endforeach
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                @endif
+                                                            @endforeach
                                                         </div>
                                                     </div>
-                                                @endif
+                                                </div>
                                             @endforeach
                                             <div id="notification" class="col-md-12"><!-- Thông báo --></div>
                                             <div class="footer col-md-12">
