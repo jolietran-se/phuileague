@@ -337,7 +337,7 @@
             });
         /*End Upload logo*/
 
-        /* Show form-group after click tab-list*/
+        /* Hiển thị form sau khi chọn hình thức*/
         $(document).ready(function(){
             $("#01").show();
             var x = document.getElementById("type01");
