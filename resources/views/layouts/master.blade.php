@@ -48,6 +48,7 @@
     <script src="{{ asset('bower_components/wow/dist/wow.min.js') }}"></script>
     <!-- Slick js ******************* -->
     <script src="{{ asset('bower_components/slick/dist/slick.min.js') }}"></script> 
+    
     <!-- masonry js -->
     {{-- <script src="{{ asset('bower_components/masonry-layout/masonry.js') }}"></script> --}}
     <!-- magnific-popup js -->
